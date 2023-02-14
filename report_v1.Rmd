@@ -776,7 +776,7 @@ stop_hours_popup <- paste0((
     
      "<span style='font-weight: bold;'>Council District Representative:</span> ", council_district_hours$representat)), "</br></br>",
   
-      "<span style='font-weight: bold;'>Total Hours spent on Officer-Initiated Stops:</span> ",  scales::comma(council_district_hours$stop_time_cap, accuracy = 1)
+      "<span style='font-weight: bold;'>Total Hours spent on Officer-Initiated Stops:</span> ",  scales::comma(council_district_hours$hours_count_cap, accuracy = 1)
   
     
   
@@ -786,16 +786,16 @@ stop_hours_popup <- paste0((
 
 
 #palette purples
-pal_stop_hours <- colorQuantile("Blues",council_district_hours$stop_time_cap, n = 5)
+pal_stop_hours <- colorQuantile("Blues",council_district_hours$hours_count_cap, n = 5)
 
 
 leaflet(width = "100%", height = "495px") %>%
   # add Long beach district layer with stop rates
   addPolygons(data =  council_district_hours,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 1, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(stop_hours_popup),
-              fillColor = ~pal_stop_hours(stop_time_cap), highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE), group = "") %>%
+              fillColor = ~pal_stop_hours(hours_count_cap), highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE), group = "") %>%
  
   ## add legend for stop hours
-  addLegend(position = "bottomleft", pal = pal_stop_hours, values = council_district_hours$stop_time_cap, opacity = .5, title = "Total Hours Spent on a Stop", na.label = NA, labFormat = function(type, cuts, p) {
+  addLegend(position = "bottomleft", pal = pal_stop_hours, values = council_district_hours$hours_count_cap, opacity = .5, title = "Total Hours Spent on a Stop", na.label = NA, labFormat = function(type, cuts, p) {
                                       n = length(cuts)
                                   paste0(scales::comma(cuts, accuracy = 1)[-n], " &ndash; ", scales::comma(cuts, accuracy = 1)[-1])
                                  }) %>%
