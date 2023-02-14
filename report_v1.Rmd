@@ -73,24 +73,7 @@ source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
 #read in table
 df<-dbGetQuery(con, "SELECT * FROM report_timespent_cfs_stop")
 
-# apply lollypop chart function
-
-fx_lollichart(
-df, #name of dataframe
-order_var=df$hours_rate_cap, #variable you're sorting by
-x='label', # x or independent variables
-y='hours_rate_cap', # y or dependent variable
-top_finding=paste0("Sheriffs spend nearly 4x more hours on officer-initiated stops compared to calls for service"), # this is the top finding from the chart that gets used like a title
-chart_title= paste0("Percent of Hours spent on Calls for Service versus Officer-Initiated Stops"), 
-tooltip_text=list(headerFormat="",pointFormat = "<b>{point.hours_rate_cap:.1f}%</b> of hours are spent on <b>{point.label}</b>, or a total of {point.hours_count_cap:,.1f} hours"), 
-chart_caption = paste0(sourcenote),
-yaxis_label = "{value}%", #format for your y axis labels
-export_data_label=list(pointFormat='{point.hours_rate_cap:.1f}% of hours')) # format for your data labels on export images
-
-
-
-#### Chart 2: Donut ####
-
+# create donut chart
 
 df %>%
   hchart(
@@ -118,6 +101,23 @@ df %>%
     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(sourcenote))))),
     filename = paste0("Police spend nearly 4x more hours on officer-initiated stops compared to calls for service","_Catalyst California, catalystcalifornia.org, 2023.")
   )
+
+# apply lollypop chart function
+
+# fx_lollichart(
+# df, #name of dataframe
+# order_var=df$hours_rate_cap, #variable you're sorting by
+# x='label', # x or independent variables
+# y='hours_rate_cap', # y or dependent variable
+# top_finding=paste0("Sheriffs spend nearly 4x more hours on officer-initiated stops compared to calls for service"), # this is the top finding from the chart that gets used like a title
+# chart_title= paste0("Percent of Hours spent on Calls for Service versus Officer-Initiated Stops"), 
+# tooltip_text=list(headerFormat="",pointFormat = "<b>{point.hours_rate_cap:.1f}%</b> of hours are spent on <b>{point.label}</b>, or a total of {point.hours_count_cap:,.1f} hours"), 
+# chart_caption = paste0(sourcenote),
+# yaxis_label = "{value}%", #format for your y axis labels
+# export_data_label=list(pointFormat='{point.hours_rate_cap:.1f}% of hours')) # format for your data labels on export images
+# 
+# 
+
 
 
 
@@ -162,7 +162,9 @@ export_data_label=list(pointFormat='{point.stop_rate:.1f} per 1K') # format for 
 )
 ```
 
-### Stops are made based on racial profiling not risk for crime
+### Stops are made based on racial profiling not risk for crime {.tabset}
+
+#### Time spent on stops by stop reason
 
 ```{r, echo=FALSE}
 
@@ -198,43 +200,45 @@ export_data_label=list(pointFormat='{point.stop_time_hrs_cap:.1f}% of hours')) #
 
 
 #### Item Chart ####
-
-col <-c(meteorite, lavender, orange, peridot, "#BE3075", "#EB001F","#000000")
-
-hchart(
-  df,
-  "item",
-  height='100%',
-  width='50%',
-  hcaes(
-    name = stop_reason_short,
-    y = stop_rate,
-    label = stop_reason_short,
-    color = col
-  ),
-  name = "Stop Rate (Hours)",
-  showInLegend = TRUE,
-  size = "20%",
-    center = list("50%", "75%")
-       # startAngle = -100,
-       # endAngle  = 100
-) %>%
-  hc_title(text = "The majority of hours spent on traffic stops result in citations, warnings, or no action")%>%
-    hc_caption(
-    text = paste0(sourcenote)) %>% 
-  hc_add_theme(cc_theme)%>%
-    hc_exporting(
-    enabled = TRUE, sourceWidth=900, sourceHeight=600, 
-    chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.stop_rate:.1f}%')))))),
-    filename = paste0("Hours spent on stops by stop reason","_Catalyst California, catalystcalifornia.org, 2023.")
-  )%>%
-           hc_legend(title=list(text="Reason for Stop"), 
-                     enable = TRUE, labelFormat = '{name} <span style="opacity: 0.4">{stop_rate:.1f}%</span>')
-
-
+# 
+# col <-c(meteorite, lavender, orange, peridot, "#BE3075", "#EB001F","#000000")
+# 
+# hchart(
+#   df,
+#   "item",
+#   height='100%',
+#   width='50%',
+#   hcaes(
+#     name = stop_reason_short,
+#     y = stop_rate,
+#     label = stop_reason_short,
+#     color = col
+#   ),
+#   name = "Stop Rate (Hours)",
+#   showInLegend = TRUE,
+#   size = "20%",
+#     center = list("50%", "75%")
+#        # startAngle = -100,
+#        # endAngle  = 100
+# ) %>%
+#   hc_title(text = "The majority of hours spent on traffic stops result in citations, warnings, or no action")%>%
+#     hc_caption(
+#     text = paste0(sourcenote)) %>% 
+#   hc_add_theme(cc_theme)%>%
+#     hc_exporting(
+#     enabled = TRUE, sourceWidth=900, sourceHeight=600, 
+#     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.stop_rate:.1f}%')))))),
+#     filename = paste0("Hours spent on stops by stop reason","_Catalyst California, catalystcalifornia.org, 2023.")
+#   )%>%
+#            hc_legend(title=list(text="Reason for Stop"), 
+#                      enable = TRUE, labelFormat = '{name} <span style="opacity: 0.4">{stop_rate:.1f}%</span>')
+# 
+# 
 
 
 ```
+
+#### Time spent on traffic stops by result of traffic stop
 
 ```{r, echo=FALSE}
 
@@ -250,8 +254,8 @@ df_traffic<-df%>%
   filter(grepl('Traffic Violation',stop_reason_short))%>%
   arrange(-hours_rate)
 
-col <-c(meteorite, lavender, orange, peridot, "#BE3075", "#EB001F", "#64A12D", "#FFED00",
-          "#000000")
+col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A", "#211447",
+          "#FF9E0D")
 
 #### Item Chart 1: Traffic Stops + Results -total hours ####
 
@@ -291,7 +295,6 @@ hchart(
 
 #### Item Chart 2: Traffic Stops + Results -rate of hours (/100) ####
 
-
 hchart(
   df_traffic,
   "item",
@@ -325,6 +328,7 @@ hchart(
 
 ```
 
+#### Rate of hours spent on traffic stops by result of stop by race/ethnicity of person stopped
 
 ```{r, echo=FALSE}
 
