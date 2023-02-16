@@ -84,9 +84,9 @@ df %>%
      center = c(50, 50), 
     )%>% 
   hc_title(text = "Police spend nearly 4x more hours on officer-initiated stops compared to calls for service",
-                 textAlign="left")%>%
+ align="left")%>%
    hc_subtitle(text = "Percent of ours spent on calls for service versus officer-initiated stops",
-                     textAlign="left") %>%
+                     align="left") %>%
   hc_caption(
     text = paste0(sourcenote))%>%
   hc_plotOptions(
@@ -257,49 +257,12 @@ df_traffic<-df%>%
 col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A", "#211447",
           "#FF9E0D")
 
-#### Item Chart 1: Traffic Stops + Results -total hours ####
 
+#### Item Chart 1: Traffic Stops + Results -rate of hours (/100) ####
 
-hchart(
+hc<-hchart(
   df_traffic,
   "item",
-  height='100%',
-  width='50%',
-  hcaes(
-    name = stop_result_short,
-    y = hours_count,
-    label = stop_result_short,
-    color = col
-  ),
-  name = "Total Hours",
-  showInLegend = TRUE,
-  size = "20%",
-    center = list("50%", "75%")
-       # startAngle = -100,
-       # endAngle  = 100
-) %>%
-  hc_title(text = "The majority of hours spent on traffic stops result in citations, warnings, or no action")%>%
-  
-    hc_caption(
-    text = paste0(sourcenote)) %>% 
-  hc_add_theme(cc_theme)%>%
-    hc_exporting(
-    enabled = TRUE, sourceWidth=900, sourceHeight=600, 
-    chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_count:.1f}')))))),
-    filename = paste0("The majority of hours spent on traffic stops result in citations, warnings, or no action","_Catalyst California, catalystcalifornia.org, 2023.")
-  )%>%
-  hc_legend(title=list(text="Result of Stop"), 
-              enable = TRUE, labelFormat = '{name} <span style="opacity: 0.4">{hours_count:.1f}</span>')
-
-
-
-#### Item Chart 2: Traffic Stops + Results -rate of hours (/100) ####
-
-hchart(
-  df_traffic,
-  "item",
-  height='100%',
-  width='50%',
   hcaes(
     name = stop_result_short,
     y = hours_rate,
@@ -308,10 +271,10 @@ hchart(
   ),
   name = "Percent of hours",
   showInLegend = TRUE,
-  size = "20%",
-    center = list("50%", "75%")
-       # startAngle = -100,
-       # endAngle  = 100
+  size = "100%"
+    # center = list("50%", "88%"),
+    #     startAngle = -100,
+    #     endAngle  = 100
 ) %>%
   hc_title(text = "The majority of hours spent on traffic stops result in citations, warnings, or no action")%>%
   hc_caption(
@@ -324,6 +287,48 @@ hchart(
   )%>%
            hc_legend(title=list(text="Result of Stop"), 
                      enable = TRUE, labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}%</span>')
+
+# add in margins so the graph isn't cut off
+
+hc %>%
+  hc_chart(
+    marginRight = 100,
+    marginLeft=100
+  )
+
+#### Item Chart 2: Traffic Stops + Results -total hours ####
+# 
+# 
+# hchart(
+#   df_traffic,
+#   "item",
+#   height='100%',
+#   width='50%',
+#   hcaes(
+#     name = stop_result_short,
+#     y = hours_count,
+#     label = stop_result_short,
+#     color = col
+#   ),
+#   name = "Total Hours",
+#   showInLegend = TRUE,
+#   size = "20%",
+#     center = list("50%", "75%")
+#        # startAngle = -100,
+#        # endAngle  = 100
+# ) %>%
+#   hc_title(text = "The majority of hours spent on traffic stops result in citations, warnings, or no action")%>%
+#   
+#     hc_caption(
+#     text = paste0(sourcenote)) %>% 
+#   hc_add_theme(cc_theme)%>%
+#     hc_exporting(
+#     enabled = TRUE, sourceWidth=900, sourceHeight=600, 
+#     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_count:.1f}')))))),
+#     filename = paste0("The majority of hours spent on traffic stops result in citations, warnings, or no action","_Catalyst California, catalystcalifornia.org, 2023.")
+#   )%>%
+#   hc_legend(title=list(text="Result of Stop"), 
+#               enable = TRUE, labelFormat = '{name} <span style="opacity: 0.4">{hours_count:.1f}</span>')
 
 
 ```
