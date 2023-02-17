@@ -44,6 +44,7 @@ high_injury_motor_intersections <- st_read(con, query = "SELECT * FROM data.high
 high_injury_ped_corridors  <- st_read(con, query = "SELECT * FROM data.high_injury_ped_corridors")
 high_injury_ped_intersections <- st_read(con, query = "SELECT * FROM data.high_injury_ped_intersections")
 report_timespent_officerinitiated_cd_stop <- st_read(con, query = "SELECT * FROM data.report_timespent_officerinitiated_cd_stop")
+report_traffic_stoprates_cd_race_person <- dbGetQuery(con, "SELECT * FROM data.report_traffic_stoprates_cd_race_person") 
 ## Source the Chart Template
 
 source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
@@ -699,7 +700,7 @@ colors_function <- function(colors, sizes, borders, shapes) {
 
 ###
 
-# colors according to our brand guide:
+# colors according to our brand guide: https://catalystcalifornia.sharepoint.com/sites/Portal/AP%20Projects/Forms/AllItems.aspx?FolderCTID=0x012000EF0283621C7FE048A8E68512F119353B&id=%2Fsites%2FPortal%2FAP%20Projects%2FCommunications%2FCatalyst%20California%2FBranding%20Materials%20%2B%20Templates%2FVisual%20Brand%20Guide%2FCatalyst%20California%20Brand%20Guide%5FSeptember%202022%2Epdf&viewid=1aaeb4a9%2D2232%2D41c7%2Da71c%2D727af9e1f5d7&parent=%2Fsites%2FPortal%2FAP%20Projects%2FCommunications%2FCatalyst%20California%2FBranding%20Materials%20%2B%20Templates%2FVisual%20Brand%20Guide
 #2BC433
 #362178
 #F25922
@@ -714,27 +715,24 @@ demographic_popup <- paste0((
   label = paste0(
     "The racial makeup of Council District  <span style='font-size: 12px; font-weight: bold;'>",  
     
-    council_district_demographics$council_num, "</span> consists of <span style='font-size: 12px; font-weight: bold;'><br>",
+    council_district_demographics$council_num, "</span> consists of: <span style='font-size: 12px; font-weight: bold;'>",
     
-    council_district_demographics$aian_rate,"</span> American Indian and Alaska Native, <span style='font-size: 12px; font-weight: bold;'>",  
+   scales::percent(council_district_demographics$aian_rate),"</span> American Indian and Alaska Native </br> <span style='font-size: 12px; font-weight: bold;'>",
     
-    council_district_demographics$latinx_rate, "</span> Latinx,  <span style='font-size: 12px; font-weight: bold;'>",
+    scales::percent(council_district_demographics$latinx_rate), "</span>Latinx </br>  <span style='font-size: 12px; font-weight: bold;'>",
     
-    council_district_demographics$mesa_rate, "</span> Middle Eastern or South Asian, <span style='font-size: 12px; font-weight: bold;'>",
+    scales::percent(council_district_demographics$mesa_rate), " </span> Middle Eastern or South Asian </br> <span style='font-size: 12px; font-weight: bold;'>",
     
-    council_district_demographics$nh_asian_rate,"</span> Asian,    <span style='font-size: 12px; font-weight: bold;'>",  
+    scales::percent(council_district_demographics$nh_asian_rate)," </span>Asian  </br>  <span style='font-size: 12px; font-weight: bold;'>",  
     
-    council_district_demographics$nh_black_rate,"</span> Black,    <span style='font-size: 12px; font-weight: bold;'>", 
+    scales::percent(council_district_demographics$nh_black_rate)," </span> Black </br>   <span style='font-size: 12px; font-weight: bold;'>", 
     
-    council_district_demographics$nh_other_rate,"</span> Other, <span style='font-size: 12px; font-weight: bold;'>", 
+    scales::percent(council_district_demographics$nh_twoormor_rate)," </span> Two or More </br><span style='font-size: 12px; font-weight: bold;'>", 
     
-    council_district_demographics$nh_twoormor_rate,"</span> Two or More, <span style='font-size: 12px; font-weight: bold;'>", 
+    scales::percent(council_district_demographics$nh_white_rate), "</span>White </br> <span style='font-size: 12px; font-weight: bold;'>",  
     
-    council_district_demographics$nh_white_rate, "</span> White,  <span style='font-size: 12px; font-weight: bold;'>",  
-    
-    council_district_demographics$nhpi_rate, "</span> Native Hawaiian or Pacific Islander.")
+    scales::percent(council_district_demographics$nhpi_rate), "</span> and Native Hawaiian or Pacific Islander.")
 ))
-
 
 
 
@@ -744,7 +742,7 @@ demographic_popup <- paste0((
 leaflet(width = "100%", height = "495px") %>%
   
   # add Long beach district layer with stop rates
-  addPolygons(data = council_district_demographics, label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", opacity = 1, fill=F, #popup = ~paste0(demographic_popup), 
+  addPolygons(data = council_district_demographics, label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", opacity = 1, fill=F, popup = ~paste0(demographic_popup), 
             weight = 2, smoothFactor = 0.5,  highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
   
   
@@ -786,14 +784,31 @@ leaflet(width = "100%", height = "495px") %>%
   
   ## add Legend
   
-  addLegend(position = "bottomleft",   title = "LBPD Traffic Stops", labels = c("Each Dot Represents 10 Traffic Officer-Initiated Stops by Race/Ethnicity"), colors = colors_function(colors = "#332985", sizes = "12", shapes = "circle", borders = NULL) ) %>%
+  addLegend(position = "bottomleft",   title = "", group = "Black", labels = c("Black traffic stop count"), colors = colors_function(colors ="#CEEA01", sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+    addLegend(position = "bottomleft",   title = "", group = "White", labels = c("White traffic stop count"), colors = colors_function(colors ="#2BC433", sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+   addLegend(position = "bottomleft",   title = "", group = "AIAN", labels = c("AIAN traffic stop count"), colors = colors_function(colors ="#FF9E0D", sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+   addLegend(position = "bottomleft",   title = "", group = "Latinx", labels = c("Latinx traffic stop count"), colors = colors_function(colors ="#177FEB", sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+   addLegend(position = "bottomleft",   title = "", group = "MESA", labels = c("MESA traffic stop count"), colors = colors_function(colors ="#2BC433", sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+   addLegend(position = "bottomleft",   title = "", group = "Asian", labels = c("Asian traffic stop count"), colors = colors_function(colors ="#FFCC00", sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+   addLegend(position = "bottomleft",   title = "", group = "Two or More Races", labels = c("Two or More Races traffic stop count"), colors = colors_function(colors ="#362178", sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+   addLegend(position = "bottomleft",   title = "", group = "NHPI", labels = c("NHPI traffic stop count"), colors = colors_function(colors ="#2BC433", sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+  
+   addLegend(position = "bottomleft",   title = "Each dot represents 10 traffic stops by race/ethnicity", colors = NA, labels = "Note:Each dot does not represent the actual location of a stop. Rather, this map summarizes the distribution of traffic stops by council district and race.") %>%
   
   #base and view
   
   addProviderTiles("CartoDB.Positron")%>%
   setView(-118.1888, 	33.77091	, zoom = 11) %>%
   
-  hideGroup(c( "Latinx", "White","Asian", "Two or More Races", "AIAN", "NHPI", "MESA"))  #base and view 
+  hideGroup(c( "Latinx", "White","Asian", "Two or More Races", "AIAN", "NHPI", "MESA", "Black"))  #base and view 
 
 
 
@@ -856,9 +871,6 @@ leaflet(width = "100%", height = "495px") %>%
 
 ### Traffic stops do not correlate to safer streets with fewer injuries.
 
-```{r}
-
-```
 
 
 
@@ -989,21 +1001,19 @@ high_injury_ped_corridors_line_sf <- st_as_sf(high_injury_ped_corridors_line_sf)
 # merge stop rates by council district shape-file -----------------------------------
 council_district$council_num <- as.character(council_district$council_num) # change council number to character to merge
 
-
-## make data into wide format;
-df <- report_stoprates_cd_race_person %>% select(council_num, race, pop_count, stop_count, stop_rate) %>%  pivot_wider(
+df <- report_traffic_stoprates_cd_race_person %>% select(council_num, race, pop_count, traffic_stop_count, traffic_stop_rate) %>%  pivot_wider(
   names_from = race,
   names_glue = "{race}_{.value}",
-  values_from = c(pop_count:stop_rate)
+  values_from = c(pop_count:traffic_stop_rate)
 )
 
-## get rate by council number
+## get traffic stop rate by council number
+council_district$council_num <- as.character(council_district$council_num)
 council_district_rate <- council_district %>% 
   left_join(
     df
   ) 
 
-pal_total <- colorQuantile("Blues", council_district_rate$traffic_stop_rate, n = 5)
 
 
 ###############
@@ -1014,14 +1024,14 @@ high_injury_motor_intersections_popup <- paste0((
   label = paste0(
     "There are approximately <span style='font-weight: bold;'>", high_injury_motor_intersections_spdf$num_killed_or_seriously_injured, "</span> killed or seriously injured, <span style='font-size: 12px; font-weight: bold;'>",  
     high_injury_motor_intersections_spdf$num_vehicle_crashes, "</span> Vehicle Crash(es), and <span style='font-size: 12px; font-weight: bold;'>", high_injury_motor_intersections_spdf$num_motorcycle_crashes,"</span> motorcycle crash(es) at the intersection of <span style='font-size: 12px; font-weight: bold;'>",  
-    high_injury_motor_intersections_spdf$address, "</span>. This intersection ranks Number <span style='font-size: 12px; font-weight: bold;'> ", high_injury_motor_intersections_spdf$rank, "</span> out of 20 High-Injury Motor Vehicle and Motorcycle Intersections.")))
+    high_injury_motor_intersections_spdf$address,".")))
 
 
 high_injury_ped_corridors_popup <- paste0((
   label = paste0(
     "There are approximately <span style='font-weight: bold;'>", high_injury_ped_corridors_line_sf$num_killed_or_seriously_injured, "</span> killed or seriously injured and <span style='font-size: 12px; font-weight: bold;'>",  
     high_injury_ped_corridors_line_sf$num_crashes, "</span> Pedestrian or Bicycle Crash(es), at corridor <span style='font-size: 12px; font-weight: bold;'>",
-    high_injury_motor_corridors_line_sf$corridor, "</span>. This corridor runs from <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_corridors_line_sf$address_1, "</span> to <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_corridors_line_sf$address_2, ".This corridor ranks Number <span style='font-size: 12px; font-weight: bold;'> ", high_injury_ped_corridors_line_sf$rank, "</span> out of 20 High-Injury Pedestrian and Bicycle Corridors.")))
+    high_injury_motor_corridors_line_sf$corridor, "</span>. This corridor runs from <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_corridors_line_sf$address_1, "</span> to <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_corridors_line_sf$address_2, ".")))
 
 
 
@@ -1032,7 +1042,7 @@ high_injury_motor_corridors_popup <- paste0((
   label = paste0(
     "There are approximately <span style='font-weight: bold;'>", high_injury_motor_corridors_line_sf$num_killed_or_seriously_injured, "</span> killed or seriously injured and <span style='font-size: 12px; font-weight: bold;'>",  
     high_injury_motor_corridors_line_sf$num_crashes, "</span> Vehicle or Motorcycle Crash(es), at corridor <span style='font-size: 12px; font-weight: bold;'>",
-    high_injury_motor_corridors_line_sf$corridor, "</span>. This corridor runs from <span style='font-size: 12px; font-weight: bold;'>", high_injury_motor_corridors_line_sf$address_1, "</span> to <span style='font-size: 12px; font-weight: bold;'>", high_injury_motor_corridors_line_sf$address_2, ".This corridor ranks Number <span style='font-size: 12px; font-weight: bold;'> ", high_injury_motor_corridors_line_sf$rank, "</span> out of 20 High-Injury Motor Vehicle and Motorcycle Corridors.")))
+    high_injury_motor_corridors_line_sf$corridor, "</span>. This corridor runs from <span style='font-size: 12px; font-weight: bold;'>", high_injury_motor_corridors_line_sf$address_1, "</span> to <span style='font-size: 12px; font-weight: bold;'>", high_injury_motor_corridors_line_sf$address_2,".")))
 
 
 
@@ -1041,7 +1051,7 @@ high_injury_ped_intersections_popup <- paste0((
   label = paste0(
     "There are approximately <span style='font-weight: bold;'>", high_injury_ped_intersections_spdf$num_killed_or_seriously_injured, "</span> killed or seriously injured, <span style='font-size: 12px; font-weight: bold;'>",  
     high_injury_ped_intersections_spdf$num_ped_crashes, "</span> Pedestrian Crash(es), and <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_intersections_spdf$num_bike_crashes,"</span> bike crash(es) at the intersection of <span style='font-size: 12px; font-weight: bold;'>",  
-    high_injury_ped_intersections_spdf$address, "</span>. This intersection ranks Number <span style='font-size: 12px; font-weight: bold;'> ", high_injury_ped_intersections_spdf$rank, "</span> out of 20 High-Injury Pedestrian and Bicycle Crashes in Long Beach.")))
+    high_injury_ped_intersections_spdf$address,".")))
 
 
 
@@ -1050,18 +1060,19 @@ high_injury_ped_intersections_popup <- paste0((
 
 
 #palette purples
-pal_stop <- colorQuantile("Blues", council_district_rate$total_stop_rate, n = 5)
+
+pal_total <- colorQuantile("Blues", council_district_rate$total_traffic_stop_rate, n = 5)
 
 
 leaflet(width = "100%", height = "495px") %>%
   
   
   # add Long beach district layer with stop rates
-  addPolygons(data = council_district_rate,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 1, smoothFactor = 0.5,  opacity = 1, fillOpacity = 2,  fillColor = ~pal_stop(total_stop_rate), highlight = highlightOptions(color = "white", weight = 3, bringToFront = FALSE), group = "Council Districts") %>%
+  addPolygons(data = council_district_rate,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 1, smoothFactor = 0.5,  opacity = 1, fillOpacity = 2,  fillColor = ~pal_total(total_traffic_stop_rate), highlight = highlightOptions(color = "white", weight = 3, bringToFront = FALSE), group = "Council Districts") %>%
   
   ## add motor intersections
   addCircleMarkers(data = high_injury_motor_intersections_spdf, lat = ~lat, lng = ~lon,
-                   group="Motor",
+                   group="High Injury Motor Intersections/Corridors",
                    popup= ~paste0(high_injury_motor_intersections_popup),
                    label= ~htmlEscape(paste0("High Injury Motor Vehicle/Motorcycle Intersection")),
                    weight = 2, fillOpacity = 1, radius=3,
@@ -1070,28 +1081,28 @@ leaflet(width = "100%", height = "495px") %>%
   
   ## add pedestrian/bike intersections
   addCircleMarkers(data = high_injury_ped_intersections_spdf, lat = ~lat, lng = ~lon,
-                   group="Pedestrian/Bike",
+                   group="High Injury Pedestrian or Bike Intersections/Corridors",
                    popup= ~paste0(high_injury_ped_intersections_popup),
-                   label= ~htmlEscape(paste0("High Injury Pedestrian/Bike Intersections")),
+                   label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
                    weight = 2, fillOpacity = 1, radius=3,
-                   color="black",  fillColor= "red", stroke = TRUE
+                   color="black",  fillColor= "red", stroke = TRUE 
   ) %>%
   
   ## add motor corridors 
-  addPolylines(data = high_injury_motor_corridors_line_sf, group = "Motor",
+  addPolylines(data = high_injury_motor_corridors_line_sf, group = "High Injury Motor Intersections/Corridors",
                popup= ~paste0(high_injury_motor_corridors_popup),
-               label= ~htmlEscape(paste0("High Injury Motor Vehicle/Motorcycle Corridors")),
+               label= ~htmlEscape(paste0("High Injury Motor Intersections/Corridors")),
                color = "yellow", weight = 3, opacity = 2) %>%
   
   ## add pedestrian/bike corridors
-  addPolylines(data = high_injury_ped_corridors_line_sf, group = "Pedestrian/Bike",
+  addPolylines(data = high_injury_ped_corridors_line_sf, group = "High Injury Pedestrian or Bike Intersections/Corridors",
                popup= ~paste0(high_injury_ped_corridors_popup),
-               label= ~htmlEscape(paste0("High Injury Pedestrian/Bike Corridors")),
+               label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
                color = "red", weight = 3, opacity = 2) %>%
   
   
   ## add legend for stop rate
-  addLegend(layerId = "Total", position = "bottomleft", group = "Total", pal = pal_total, values = council_district_rate$total_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By Council District Per 1K Total Residents", na.label = NA, labFormat = function(type, cuts, p) {
+  addLegend(layerId = "Total", position = "bottomleft", group = "Total", pal = pal_total, values = council_district_rate$total_traffic_stop_rate, opacity = .5, title = "Officer-Initiated Traffic Stop Rate By Council District Per 1K Total Residents", na.label = NA, labFormat = function(type, cuts, p) {
     n = length(cuts)
     paste0(cuts[-n], " &ndash; ", cuts[-1])
   })  %>%
@@ -1099,7 +1110,7 @@ leaflet(width = "100%", height = "495px") %>%
   #layer control
   
   addLayersControl(overlayGroups =  
-                     c("Motor", "Pedestrian/Bike"), 
+                     c("High Injury Motor Intersections/Corridors", "High Injury Pedestrian or Bike Intersections/Corridors"), 
                    options = layersControlOptions(collapsed = FALSE)) %>%  
   
   #  htmlwidgets::onRender("
@@ -1115,6 +1126,7 @@ leaflet(width = "100%", height = "495px") %>%
   
   hideGroup(c("Pedestrian/Bike"))
 ```
+
 
 
 
