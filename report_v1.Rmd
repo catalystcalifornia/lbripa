@@ -268,7 +268,7 @@ hc<-hchart(
   width='50%',
   hcaes(
     name = stop_result_short,
-    y = hours_rate,
+    y = hours_count,
     label = stop_result_short,
     color = col
   ),
@@ -407,263 +407,265 @@ traffic%>%
 
 ### There is a higher rate of stops in northern and central Long Beach. {.tabset .tabset-pills}
 
-#### Choropleth
 
 ```{r, echo = FALSE}
+#### DS ####
+#### Choropleth ( Commented out because we are proceeding with point density)
+
+
 #### DS ####
 
 
 ##### Map - stop rates or counts by council district #####
 
-council_district$council_num <- as.character(council_district$council_num) # change council number to character to merge
+####council_district$council_num <- as.character(council_district$council_num) # change council number to character to merge
 
 
 
 
 ## make data into wide format;
-df <- report_stoprates_cd_race_person %>% select(council_num, race, pop_count, stop_count, stop_rate) %>%  pivot_wider(
-  names_from = race,
-  names_glue = "{race}_{.value}",
-  values_from = c(pop_count:stop_rate)
-)
+####df <- report_stoprates_cd_race_person %>% select(council_num, race, pop_count, stop_count, stop_rate) %>%  pivot_wider(
+####  names_from = race,
+####  names_glue = "{race}_{.value}",
+####  values_from = c(pop_count:stop_rate)
+####)
 
 
 ## get rate by council number
 
-council_district_rate <- council_district %>% 
-  left_join(
-    df
-  ) 
+####council_district_rate <- council_district %>% 
+####  left_join(
+####    df
+####  ) 
 
 ## only keep last name of rep
-council_district_rate <- council_district_rate %>% mutate(representat = gsub(".* ", "", representat))
+####council_district_rate <- council_district_rate %>% mutate(representat = gsub(".* ", "", representat))
 
 
 #palette purples
 ## Total
-pal_total <- colorQuantile("Blues", council_district_rate$total_stop_rate, n = 5)
-total_stop_popup <- paste0((
-  label = paste0(
-    "For every 1K <span style='font-weight: bold;'>Total</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$total_stop_rate , "</span>  people, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_rate$total_stop_count), "</span> people. ")))
+##pal_total <- colorQuantile("Blues", council_district_rate$total_stop_rate, n = 5)
+##total_stop_popup <- paste0((
+#  label = paste0(
+#    "For every 1K <span style='font-weight: bold;'>Total</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span #style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$total_stop_rate , "</span>  people, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_rate$total_stop_count), #"</span> people. ")))
 
 
 
 
 ## Latinx
-pal_latinx <- colorQuantile("Blues", council_district_rate$latinx_stop_rate, n = 5)
-latinx_stop_popup <- paste0((
-  label = paste0(
-    "For every 1K <span style='font-weight: bold;'>Latinx</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$latinx_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>Latinx</span>, a total of <span style='font-size: 12px; font-weight: bold;'> ",  scales::comma(council_district_rate$latinx_stop_count), "</span> people. ")))
+#pal_latinx <- colorQuantile("Blues", council_district_rate$latinx_stop_rate, n = 5)
+#latinx_stop_popup <- paste0((
+#  label = paste0(
+#    "For every 1K <span style='font-weight: bold;'>Latinx</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span #style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$latinx_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>Latinx</span>, a total of <span style='font-size: 12px; font-weight: bold;'> #",  scales::comma(council_district_rate$latinx_stop_count), "</span> people. ")))
 
 
 ## Nh White
-pal_nh_white <- colorQuantile("Blues", council_district_rate$nh_white_stop_rate, n = 5)
+#pal_nh_white <- colorQuantile("Blues", council_district_rate$nh_white_stop_rate, n = 5)
 
-nh_white_stop_popup <- paste0((
-  label = paste0(
-    "For every 1K <span style='font-weight: bold;'>White</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$nh_white_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>White</span>, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_rate$nh_white_stop_count), "</span> people. ")))
+#nh_white_stop_popup <- paste0((
+#label = paste0(
+#    "For every 1K <span style='font-weight: bold;'>White</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span #style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$nh_white_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>White</span>, a total of <span style='font-size: 12px; font-weight: bold;'> #", scales::comma(council_district_rate$nh_white_stop_count), "</span> people. ")))
 
 
 ## Nh Black
-pal_nh_black <- colorQuantile("Blues", council_district_rate$nh_black_stop_rate, n = 5)
+#pal_nh_black <- colorQuantile("Blues", council_district_rate$nh_black_stop_rate, n = 5)
 
-nh_black_stop_popup <- paste0((
-  label = paste0(
-    "For every 1K <span style='font-weight: bold;'>Black</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$nh_black_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>Black</span>, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_rate$nh_black_stop_count), "</span> people. ")))
+#nh_black_stop_popup <- paste0((
+#  label = paste0(
+#    "For every 1K <span style='font-weight: bold;'>Black</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span #style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$nh_black_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>Black</span>, a total of <span style='font-size: 12px; font-weight: bold;'> #", scales::comma(council_district_rate$nh_black_stop_count), "</span> people. ")))
 
 
 
 
 ## Nh Asian
-pal_nh_asian <- colorQuantile("Blues", council_district_rate$nh_asian_stop_rate, n = 5)
+#pal_nh_asian <- colorQuantile("Blues", council_district_rate$nh_asian_stop_rate, n = 5)
 
-nh_asian_stop_popup <- paste0((
-  label = paste0(
-    "For every 1K <span style='font-weight: bold;'>Asian</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$nh_asian_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>Asian</span>, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_rate$nh_asian_stop_count), "</span> people. ")))
+#nh_asian_stop_popup <- paste0((
+#  label = paste0(
+#    "For every 1K <span style='font-weight: bold;'>Asian</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span #style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$nh_asian_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>Asian</span>, a total of <span style='font-size: 12px; font-weight: bold;'> #", scales::comma(council_district_rate$nh_asian_stop_count), "</span> people. ")))
 
 
 ## Nh Two or mor
-pal_nh_twoormor <- colorQuantile("Blues", council_district_rate$nh_twoormor_stop_rate, n = 5)
+#pal_nh_twoormor <- colorQuantile("Blues", council_district_rate$nh_twoormor_stop_rate, n = 5)
 
-nh_twoormor_stop_popup <- paste0((
-  label = paste0(
-    "For every 1K <span style='font-weight: bold;'>Two or More Races</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",   
-    council_district_rate$nh_twoormor_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>Two or More Races</span>, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_rate$nh_twoormor_stop_count), "</span> people. ")))
+#nh_twoormor_stop_popup <- paste0((
+#  label = paste0(
+#    "For every 1K <span style='font-weight: bold;'>Two or More Races</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span #style='font-size: 12px; font-weight: bold;'>",   
+#    council_district_rate$nh_twoormor_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>Two or More Races</span>, a total of <span style='font-size: 12px; #font-weight: bold;'> ", scales::comma(council_district_rate$nh_twoormor_stop_count), "</span> people. ")))
 
 
 #council_district_rate$aian_stop_rate,
 
 ## AIAN
-pal_aian <- colorQuantile("Blues", council_district_rate$aian_stop_rate, n = 5)
+#pal_aian <- colorQuantile("Blues", council_district_rate$aian_stop_rate, n = 5)
 
-aian_stop_popup <- paste0((
-  label = paste0(
-    "For every 1K <span style='font-weight: bold;'>American Indian and Alaska Native</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$aian_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>American Indian and Alaska Native</span>, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_rate$aian_stop_count), "</span> people. ")))
+#aian_stop_popup <- paste0((
+#  label = paste0(
+#    "For every 1K <span style='font-weight: bold;'>American Indian and Alaska Native</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span #style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$aian_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>American Indian and Alaska Native</span>, a total of <span style='font-size: #12px; font-weight: bold;'> ", scales::comma(council_district_rate$aian_stop_count), "</span> people. ")))
 
 
 #council_district_rate$nhpi_stop_rate,
 ## NHPI
-pal_nhpi <- colorQuantile("Blues", council_district_rate$nhpi_stop_rate, n = 5)
+#pal_nhpi <- colorQuantile("Blues", council_district_rate$nhpi_stop_rate, n = 5)
 
-nhpi_stop_popup <- paste0((
-  label = paste0(
-    "For every 1K <span style='font-weight: bold;'>Native Hawaiian or Pacific Islander</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$nhpi_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>Native Hawaiian or Pacific Islander</span>, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_rate$nhpi_stop_count), "</span> people. ")))
+#nhpi_stop_popup <- paste0((
+#  label = paste0(
+#    "For every 1K <span style='font-weight: bold;'>Native Hawaiian or Pacific Islander</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span #style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$nhpi_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>Native Hawaiian or Pacific Islander</span>, a total of <span style='font-size: #12px; font-weight: bold;'> ", scales::comma(council_district_rate$nhpi_stop_count), "</span> people. ")))
 
 
 
 #council_district_rate$mesa_stop_rate,
 ## MESA
 
-pal_mesa <- colorQuantile("Blues", council_district_rate$mesa_stop_rate, n = 5)
-mesa_stop_popup <- paste0((
-  label = paste0(
-    "For every 1K <span style='font-weight: bold;'>Middle Eastern or South Asian</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",  
-    council_district_rate$mesa_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>Middle Eastern or South Asian</span>, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_rate$mesa_stop_count), "</span> people. ")))
+#pal_mesa <- colorQuantile("Blues", council_district_rate$mesa_stop_rate, n = 5)
+#mesa_stop_popup <- paste0((
+#  label = paste0(
+#    "For every 1K <span style='font-weight: bold;'>Middle Eastern or South Asian</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_rate$representat,"</span>), LBPD stopped <span #style='font-size: 12px; font-weight: bold;'>",  
+#    council_district_rate$mesa_stop_rate , "</span>  people identified as <span style='font-weight: bold;'>Middle Eastern or South Asian</span>, a total of <span style='font-size: 12px; #font-weight: bold;'> ", scales::comma(council_district_rate$mesa_stop_count), "</span> people. ")))
 
 
 
 
 
 
-leaflet(width = "100%", height = "495px") %>%
-  
-  
-  # add Long beach district layer with stop rates
-  
-  ## Total Choropleth
-  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "Total",  weight = 1, smoothFactor = 0.5,  opacity = 1,fillOpacity = 2, popup = ~paste0(total_stop_popup), fillColor = ~pal_total(total_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
-  
-  
-  ## add legend for Total stop rate
-  addLegend(layerId = "Total", position = "bottomleft", group = "Total", pal = pal_total, values = council_district_rate$total_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By Council District Per 1K Total Residents", na.label = NA, labFormat = function(type, cuts, p) {
-    n = length(cuts)
-    paste0(cuts[-n], " &ndash; ", cuts[-1])
-  }) %>%
-  
-  ## Latinx choropleth
-  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "Latinx",  weight = 1, smoothFactor = 0.5,  opacity = 1, fillOpacity = 2, popup = ~paste0(latinx_stop_popup), fillColor = ~pal_latinx(latinx_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
-  
-  ## add legend for Latinx Stop Rate
-  addLegend(layerId = "Latinx", position = "bottomleft", group = "Latinx", pal = pal_latinx, values = council_district_rate$latinx_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By Council District Per 1K Latinx Residents", na.label = NA, labFormat = function(type, cuts, p) {
-    n = length(cuts)
-    paste0(cuts[-n], " &ndash; ", cuts[-1])
-  }) %>%
-  
-  
-  ## Nh White choropleth
-  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "White",  weight = 1, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(nh_white_stop_popup), fillColor = ~pal_nh_white(nh_white_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
-  
-  
-  ## add legend for Nh White Stop Rate
-  addLegend(layerId = "White", position = "bottomleft", group = "White", pal = pal_nh_white, values = council_district_rate$nh_white_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By Council District Per 1K White Residents", na.label = NA, labFormat = function(type, cuts, p) {
-    n = length(cuts)
-    paste0(cuts[-n], " &ndash; ", cuts[-1])
-  }) %>%
-  
-  
-  ## Nh Black choropleth
-  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "Black",  weight = 1, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(nh_black_stop_popup), fillColor = ~pal_nh_black(nh_black_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
-  
-  
-  ## add legend for Nh White Stop Rate
-  addLegend(layerId = "Black", position = "bottomleft", group = "Black", pal = pal_nh_black, values = council_district_rate$nh_black_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By Council District Per 1K Black Residents", na.label = NA,labFormat = function(type, cuts, p) {
-    n = length(cuts)
-    paste0(cuts[-n], " &ndash; ", cuts[-1])
-  }) %>%
-  
-  
-  ## Nh Asian choropleth
-  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "Asian",  weight = 1, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(nh_asian_stop_popup), fillColor = ~pal_nh_asian(nh_asian_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
-  
-  
-  ## add legend for Nh Asian Stop Rate
-  addLegend(layerId = "Asian", position = "bottomleft", group = "Asian", pal = pal_nh_asian, values = council_district_rate$nh_asian_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By Council District Per 1K Asian Residents", na.label = NA, labFormat = function(type, cuts, p) {
-    n = length(cuts)
-    paste0(cuts[-n], " &ndash; ", cuts[-1])
-  }) %>%
-  
-  
-  ## Nh two_or_more choropleth
-  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "Two or More",  weight = 1, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(nh_twoormor_stop_popup), fillColor = ~pal_nh_twoormor(nh_twoormor_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
-  
-  
-  ## add legend for Nh two_or_more Stop Rate
-  addLegend(layerId = "Two or More", position = "bottomleft", group = "Two or More", pal = pal_nh_twoormor, values = council_district_rate$nh_twoormor_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By Council District Per 1K Two or More Residents", na.label = NA,labFormat = function(type, cuts, p) {
-    n = length(cuts)
-    paste0(cuts[-n], " &ndash; ", cuts[-1])
-  }) %>%
-  
-  
-  ## AIAN choropleth
-  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "AIAN",  weight = 1, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(aian_stop_popup), fillColor = ~pal_aian(aian_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
-  
-  
-  ## add legend for AIAN Stop Rate
-  addLegend(layerId = "AIAN", position = "bottomleft", group = "AIAN", pal = pal_aian, values = council_district_rate$aian_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By Council District Per 1K AIAN Residents", na.label = NA,labFormat = function(type, cuts, p) {
-    n = length(cuts)
-    paste0(cuts[-n], " &ndash; ", cuts[-1])
-  }) %>%
-  
-  
-  ## MESA choropleth
-  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "AIAN",  weight = 1, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(aian_stop_popup), fillColor = ~pal_aian(aian_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
-  
-  
-  ## add legend for MESA Stop Rate
-  addLegend(layerId = "AIAN", position = "bottomleft", group = "AIAN", pal = pal_aian, values = council_district_rate$aian_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By Council District Per 1K AIAN Residents", na.label = NA, labFormat = function(type, cuts, p) {
-    n = length(cuts)
-    paste0(cuts[-n], " &ndash; ", cuts[-1])
-  }) %>%
-  
-  ## NHPI choropleth
-  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "NHPI",  weight = 1, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(nhpi_stop_popup), fillColor = ~pal_nhpi(nhpi_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
-  
-  
-  ## add legend for NHPI Stop Rate
-  addLegend(layerId = "NHPI", position = "bottomleft", group = "NHPI", pal = pal_nhpi, values = council_district_rate$nhpi_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By Council District Per 1K NHPI Residents", na.label = NA,labFormat = function(type, cuts, p) {
-    n = length(cuts)
-    paste0(cuts[-n], " &ndash; ", cuts[-1])
-  }) %>%
-  
-  
-  ## MESA choropleth
-  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "MESA",  weight = 1, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(mesa_stop_popup), fillColor = ~pal_mesa(mesa_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
-  
-  
-  ## add legend for MESA Stop Rate
-  addLegend(layerId = "MESA", position = "bottomleft", group = "MESA", pal = pal_mesa, values = council_district_rate$mesa_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By Council District Per 1K MESA Residents", na.label = NA, labFormat = function(type, cuts, p) {
-    n = length(cuts)
-    paste0(cuts[-n], " &ndash; ", cuts[-1])
-  }) %>%
-  
-  
-  addLayersControl(overlayGroups = c("Total", "Latinx", "White", "Black", "Asian", "Two or More", "AIAN", "NHPI", "MESA"),
-                   options = layersControlOptions(collapsed = FALSE)) %>% 
-  
-  
-  #default only show one group and turn others off -currently default shows Total first. We can change this easily if Hilton has preferences
-  
-  hideGroup(c( "Latinx", "White", "Black", "Asian", "Two or More", "AIAN", "NHPI", "MESA")) %>%  #base and view 
-  
-  addProviderTiles("CartoDB.Positron")%>%
-  setView(-118.1888, 	33.77091	, zoom = 11)
+#leaflet(width = "100%", height = "495px") %>%
 
+
+# add Long beach district layer with stop rates
+
+## Total Choropleth
+#  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "Total",  weight = 1, smoothFactor = 0.5,  opacity = #1,fillOpacity = 2, popup = ~paste0(total_stop_popup), fillColor = ~pal_total(total_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = #FALSE)) %>%
+
+
+## add legend for Total stop rate
+# addLegend(layerId = "Total", position = "bottomleft", group = "Total", pal = pal_total, values = council_district_rate$total_stop_rate, opacity = .5, title = "Officer-Initiated Stop #Rate By Council District Per 1K Total Residents", na.label = NA, labFormat = function(type, cuts, p) {
+#    n = length(cuts)
+#    paste0(cuts[-n], " &ndash; ", cuts[-1])
+#  }) %>%
+
+## Latinx choropleth
+#  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "Latinx",  weight = 1, smoothFactor = 0.5,  opacity = 1, #fillOpacity = 2, popup = ~paste0(latinx_stop_popup), fillColor = ~pal_latinx(latinx_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = # FALSE)) %>%
+
+## add legend for Latinx Stop Rate
+#  addLegend(layerId = "Latinx", position = "bottomleft", group = "Latinx", pal = pal_latinx, values = council_district_rate$latinx_stop_rate, opacity = .5, title = "Officer-Initiated Stop #Rate By Council District Per 1K Latinx Residents", na.label = NA, labFormat = function(type, cuts, p) {
+#    n = length(cuts)
+#    paste0(cuts[-n], " &ndash; ", cuts[-1])
+#  }) %>%
+
+
+## Nh White choropleth
+#  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "White",  weight = 1, smoothFactor = 0.5, opacity = 1, #fillOpacity = 2, popup = ~paste0(nh_white_stop_popup), fillColor = ~pal_nh_white(nh_white_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, #sendToBack = FALSE)) %>%
+
+
+## add legend for Nh White Stop Rate
+# addLegend(layerId = "White", position = "bottomleft", group = "White", pal = pal_nh_white, values = council_district_rate$nh_white_stop_rate, opacity = .5, title = "Officer-Initiated #Stop Rate By Council District Per 1K White Residents", na.label = NA, labFormat = function(type, cuts, p) {
+#    n = length(cuts)
+#    paste0(cuts[-n], " &ndash; ", cuts[-1])
+#  }) %>%
+
+
+## Nh Black choropleth
+#  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "Black",  weight = 1, smoothFactor = 0.5, opacity = 1, #fillOpacity = 2, popup = ~paste0(nh_black_stop_popup), fillColor = ~pal_nh_black(nh_black_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, #sendToBack = FALSE)) %>%
+
+
+## add legend for Nh White Stop Rate
+# addLegend(layerId = "Black", position = "bottomleft", group = "Black", pal = pal_nh_black, values = council_district_rate$nh_black_stop_rate, opacity = .5, title = "Officer-Initiated #Stop Rate By Council District Per 1K Black Residents", na.label = NA,labFormat = function(type, cuts, p) {
+#  n = length(cuts)
+#    paste0(cuts[-n], " &ndash; ", cuts[-1])
+# }) %>%
+
+
+## Nh Asian choropleth
+#  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "Asian",  weight = 1, smoothFactor = 0.5, opacity = 1, #fillOpacity = 2, popup = ~paste0(nh_asian_stop_popup), fillColor = ~pal_nh_asian(nh_asian_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, #sendToBack = FALSE)) %>%
+
+
+## add legend for Nh Asian Stop Rate
+#  addLegend(layerId = "Asian", position = "bottomleft", group = "Asian", pal = pal_nh_asian, values = council_district_rate$nh_asian_stop_rate, opacity = .5, title = "Officer-Initiated #Stop Rate By Council District Per 1K Asian Residents", na.label = NA, labFormat = function(type, cuts, p) {
+#    n = length(cuts)
+#    paste0(cuts[-n], " &ndash; ", cuts[-1])
+#  }) %>%
+
+
+## Nh two_or_more choropleth
+#  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "Two or More",  weight = 1, smoothFactor = 0.5, opacity = # 1, fillOpacity = 2, popup = ~paste0(nh_twoormor_stop_popup), fillColor = ~pal_nh_twoormor(nh_twoormor_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = # TRUE, sendToBack = FALSE)) %>%
+
+
+## add legend for Nh two_or_more Stop Rate
+#  addLegend(layerId = "Two or More", position = "bottomleft", group = "Two or More", pal = pal_nh_twoormor, values = council_district_rate$nh_twoormor_stop_rate, opacity = .5, title = #"Officer-Initiated Stop Rate By Council District Per 1K Two or More Residents", na.label = NA,labFormat = function(type, cuts, p) {
+#    n = length(cuts)
+#    paste0(cuts[-n], " &ndash; ", cuts[-1])
+#  }) %>%
+
+
+## AIAN choropleth
+# addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "AIAN",  weight = 1, smoothFactor = 0.5, opacity = 1, # # fillOpacity = 2, popup = ~paste0(aian_stop_popup), fillColor = ~pal_aian(aian_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = #FALSE)) %>%
+
+
+## add legend for AIAN Stop Rate
+#  addLegend(layerId = "AIAN", position = "bottomleft", group = "AIAN", pal = pal_aian, values = council_district_rate$aian_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By # Council District Per 1K AIAN Residents", na.label = NA,labFormat = function(type, cuts, p) {
+#   n = length(cuts)
+#    paste0(cuts[-n], " &ndash; ", cuts[-1])
+# }) %>%
+
+
+## MESA choropleth
+#  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "AIAN",  weight = 1, smoothFactor = 0.5, opacity = 1, # fillOpacity = 2, popup = ~paste0(aian_stop_popup), fillColor = ~pal_aian(aian_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = # FALSE)) %>%
+
+
+## add legend for MESA Stop Rate
+#  addLegend(layerId = "AIAN", position = "bottomleft", group = "AIAN", pal = pal_aian, values = council_district_rate$aian_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By #Council District Per 1K AIAN Residents", na.label = NA, labFormat = function(type, cuts, p) {
+#   n = length(cuts)
+#  paste0(cuts[-n], " &ndash; ", cuts[-1])
+#  }) %>%
+
+## NHPI choropleth
+# addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "NHPI",  weight = 1, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(nhpi_stop_popup), fillColor = ~pal_nhpi(nhpi_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
+
+
+## add legend for NHPI Stop Rate
+#  addLegend(layerId = "NHPI", position = "bottomleft", group = "NHPI", pal = pal_nhpi, values = council_district_rate$nhpi_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By # Council District Per 1K NHPI Residents", na.label = NA,labFormat = function(type, cuts, p) {
+#    n = length(cuts)
+#    paste0(cuts[-n], " &ndash; ", cuts[-1])
+#  }) %>%
+
+
+## MESA choropleth
+#  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", group = "MESA",  weight = 1, smoothFactor = 0.5, opacity = 1, # fillOpacity = 2, popup = ~paste0(mesa_stop_popup), fillColor = ~pal_mesa(mesa_stop_rate), highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = # FALSE)) %>%
+
+
+## add legend for MESA Stop Rate
+#  addLegend(layerId = "MESA", position = "bottomleft", group = "MESA", pal = pal_mesa, values = council_district_rate$mesa_stop_rate, opacity = .5, title = "Officer-Initiated Stop Rate By #Council District Per 1K MESA Residents", na.label = NA, labFormat = function(type, cuts, p) {
+#    n = length(cuts)
+#    paste0(cuts[-n], " &ndash; ", cuts[-1])
+#  }) %>%
+
+
+#  addLayersControl(overlayGroups = c("Total", "Latinx", "White", "Black", "Asian", "Two or More", "AIAN", "NHPI", "MESA"),
+#                   options = layersControlOptions(collapsed = FALSE)) %>% 
+
+
+#  #default only show one group and turn others off -currently default shows Total first. We can change this easily if Hilton has preferences
+
+#  hideGroup(c( "Latinx", "White", "Black", "Asian", "Two or More", "AIAN", "NHPI", "MESA")) %>%  #base and view 
+
+#  addProviderTiles("CartoDB.Positron")%>%
+# setView(-118.1888, 	33.77091	, zoom = 11)
 
 
 ```
@@ -674,12 +676,32 @@ leaflet(width = "100%", height = "495px") %>%
 #### Point Density
 
 ```{r}
+## make council number a character file
+council_district$council_num <- as.character(council_district$council_num) # change council number to character to merge
+
 ## merge with council district shape-file
 council_district_count <-  council_district %>% 
   left_join(
     report_stoprates_cd_race_person
   ) 
 
+
+
+# get demographics by council district
+df_demographics <- population_race_cd %>% select(cd, race, count, rate) %>%  pivot_wider(
+  names_from = race,
+  names_glue = "{race}_{.value}",
+  values_from = c(count:rate)
+)
+
+## merge df_demographics with council_district-- get council_district_demographics
+council_district_demographics <- council_district %>% 
+  left_join(
+    df_demographics, by = c("council_num" = "cd")
+  ) 
+
+## only keep last name of rep
+####council_district_rate <- council_district_rate %>% mutate(representat = gsub(".* ", "", representat))
 
 
 # convert to scattered dots for plotting
@@ -707,48 +729,92 @@ colors_function <- function(colors, sizes, borders, shapes) {
   shapes <- gsub("square", "0%", shapes)
   paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:3px solid ", borders, "; border-radius:", shapes)
 }
+
 ###
+
+# colors according to our brand guide:
+#2BC433
+#362178
+#F25922
+#CEEA01
+#177FEB
+#FF9E0D
+#FFCC00
+#733256
+
+### Pop-ups ### ---------------
+demographic_popup <- paste0((
+  label = paste0(
+    "The racial makeup of Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+    
+    council_district_demographics$council_num, "</span> consists of <span style='font-size: 12px; font-weight: bold;'><br>",
+    
+    council_district_demographics$aian_rate,"</span> American Indian and Alaska Native, <span style='font-size: 12px; font-weight: bold;'>",  
+    
+    council_district_demographics$latinx_rate, "</span> Latinx,  <span style='font-size: 12px; font-weight: bold;'>",
+    
+    council_district_demographics$mesa_rate, "</span> Middle Eastern or South Asian, <span style='font-size: 12px; font-weight: bold;'>",
+    
+    council_district_demographics$nh_asian_rate,"</span> Asian,    <span style='font-size: 12px; font-weight: bold;'>",  
+    
+    council_district_demographics$nh_black_rate,"</span> Black,    <span style='font-size: 12px; font-weight: bold;'>", 
+    
+    council_district_demographics$nh_other_rate,"</span> Other, <span style='font-size: 12px; font-weight: bold;'>", 
+    
+    council_district_demographics$nh_twoormor_rate,"</span> Two or More, <span style='font-size: 12px; font-weight: bold;'>", 
+    
+    council_district_demographics$nh_white_rate, "</span> White,  <span style='font-size: 12px; font-weight: bold;'>",  
+    
+    council_district_demographics$nhpi_rate, "</span> Native Hawaiian or Pacific Islander.")
+))
+
+
+
+
+
+
 
 leaflet(width = "100%", height = "495px") %>%
   
   # add Long beach district layer with stop rates
-  addPolygons(data = council_district_rate, label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", opacity = 1, fill=F,  weight = 2, smoothFactor = 0.5,  highlight = highlightOptions(color = "white", weight = 7, bringToFront = FALSE, sendToBack = FALSE)) %>%
+  addPolygons(data = council_district_demographics, label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", opacity = 1, fill=F, #popup = ~paste0(demographic_popup), 
+            weight = 2, smoothFactor = 0.5,  highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
   
   
   ## add NH Black Stops
   
-  addCircleMarkers(data = nh_black_dots, popup = ~paste0(" <span style='font-size: 14px; font-weight: bold;'> 10 <span style='font-size: 14px; font-weight: bold;'>", race_label_long, " Drivers Stopped by LBPD"), group = "Black", label = NULL, weight = 2, fillOpacity = 1, radius = 3.5, color="white",  fillColor= "#332985", stroke = TRUE) %>% 
+  addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#CEEA01", stroke = TRUE) %>% 
   
   ## add NH White Stops
   
-  addCircleMarkers(data = nh_white_dots,popup = ~paste0(" <span style='font-size: 14px; font-weight: bold;'> 10 <span style='font-size: 14px; font-weight: bold;'>", race_label_long, " Drivers Stopped by LBPD"), group = "White", label = NULL, weight = 2, fillOpacity = 1, radius = 3.5, color="white",  fillColor= "#332985", stroke = TRUE) %>% 
+  addCircleMarkers(data = nh_white_dots, group = "White", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#2BC433", stroke = TRUE) %>% 
   
   
   ### add AIAN dots 
   
-  addCircleMarkers(data = aian_dots, popup = ~paste0(" <span style='font-size: 14px; font-weight: bold;'> 10 <span style='font-size: 14px; font-weight: bold;'>", race_label_long, " Drivers Stopped by LBPD"), group = "AIAN", label = NULL, weight = 2, fillOpacity = 1, radius = 3.5, color="white",  fillColor= "#332985", stroke = TRUE) %>% 
+  addCircleMarkers(data = aian_dots,  group = "AIAN", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#FF9E0D", stroke = TRUE) %>% 
   
   ### add latinx dots
   
-  addCircleMarkers(data = latinx_dots, popup = ~paste0(" <span style='font-size: 14px; font-weight: bold;'> 10 <span style='font-size: 14px; font-weight: bold;'>", race_label_long, " Drivers Stopped by LBPD"), group = "Latinx", label = NULL, weight = 2, fillOpacity = 1, radius = 3.5, color="white",  fillColor= "#332985", stroke = TRUE) %>% 
+  addCircleMarkers(data = latinx_dots, group = "Latinx", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#177FEB", stroke = TRUE) %>% 
   
   ### add MESA dots
   
-  addCircleMarkers(data = mesa_dots, popup = ~paste0(" <span style='font-size: 14px; font-weight: bold;'> 10 <span style='font-size: 14px; font-weight: bold;'>", race_label_long, " Drivers Stopped by LBPD"), group = "MESA", label = NULL, weight = 2, fillOpacity = 1, radius = 3.5, color="white",  fillColor= "#332985", stroke = TRUE) %>% 
+  addCircleMarkers(data = mesa_dots, group = "MESA", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#F25922", stroke = TRUE) %>% 
   
   ### add nh asian dots
   
-  addCircleMarkers(data = nh_asian_dots, popup = ~paste0(" <span style='font-size: 14px; font-weight: bold;'> 10 <span style='font-size: 14px; font-weight: bold;'>", race_label_long, " Drivers Stopped by LBPD"), group = "Asian", label = NULL, weight = 2, fillOpacity = 1, radius = 3.5, color="white",  fillColor= "#332985", stroke = TRUE) %>% 
+  addCircleMarkers(data = nh_asian_dots, group = "Asian", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#FFCC00", stroke = TRUE) %>% 
   
   ### add nh two or more dots
   
-  addCircleMarkers(data = nh_twoormor_dots, popup = ~paste0(" <span style='font-size: 14px; font-weight: bold;'> 10 <span style='font-size: 14px; font-weight: bold;'>", race_label_long, " Drivers Stopped by LBPD"), group = "Two or More Races", label = NULL, weight = 2, fillOpacity = 1, radius = 3.5, color="white",  fillColor= "#332985", stroke = TRUE) %>% 
+  addCircleMarkers(data = nh_twoormor_dots, group = "Two or More Races", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#362178", stroke = TRUE) %>% 
   
   ### add nhpi dots
   
-  addCircleMarkers(data = nhpi_dots, popup = ~paste0(" <span style='font-size: 14px; font-weight: bold;'> 10 <span style='font-size: 14px; font-weight: bold;'>", race_label_long, " Drivers Stopped by LBPD"), group = "NHPI", label = NULL, weight = 2, fillOpacity = 1, radius = 3.5, color="white",  fillColor= "#332985", stroke = TRUE) %>% 
+  addCircleMarkers(data = nhpi_dots, group = "NHPI", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#733256", stroke = TRUE) %>% 
   
-  addLayersControl(baseGroups = c("Black", "White", "AIAN", "Latinx", "MESA","Asian", "Two or More Races", "NHPI"),
+  addLayersControl(overlayGroups = c("Black", "White", "AIAN", "Latinx", "MESA","Asian", "Two or More Races", "NHPI"),
                    options = layersControlOptions(collapsed = FALSE))  %>%
   
   ## add Legend
@@ -758,7 +824,9 @@ leaflet(width = "100%", height = "495px") %>%
   #base and view
   
   addProviderTiles("CartoDB.Positron")%>%
-  setView(-118.1888, 	33.77091	, zoom = 11)
+  setView(-118.1888, 	33.77091	, zoom = 11) %>%
+  
+  hideGroup(c( "Latinx", "White","Asian", "Two or More Races", "AIAN", "NHPI", "MESA"))  #base and view 
 
 
 
@@ -820,6 +888,11 @@ leaflet(width = "100%", height = "495px") %>%
 ## Stops detract from safety for our communities.
 
 ### Traffic stops do not correlate to safer streets with fewer injuries.
+
+```{r}
+
+```
+
 
 
 ```{r, echo=FALSE}
@@ -963,6 +1036,7 @@ council_district_rate <- council_district %>%
     df
   ) 
 
+pal_total <- colorQuantile("Blues", council_district_rate$traffic_stop_rate, n = 5)
 
 
 ###############
