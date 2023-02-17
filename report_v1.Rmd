@@ -1,5 +1,5 @@
 ---
-  title: "Disparities in LBPD's Practices"
+title: "Disparities in LBPD's Practices"
 subtitle: "DRAFT"
 author: "Catalyst California"
 output: 
@@ -138,29 +138,29 @@ report_stoprates_race_person$stop_count <- as.character(formattable::comma(repor
 
 # Apply Chart
 
-fx_lollichart(
-  
-  df=report_stoprates_race_person, #name of dataframe
-  
-  order_var=report_stoprates_race_person$rate, #variable you're sorting by
-  
-  x='race_label_short', # x or independent variables
-  
-  y='stop_rate', # y or dependent variable
-  
-  # z='count',#not working right now so ignore
-  
-  top_finding=paste0("Black, NHPI, and MESA people are stopped by LBPD at higher rates."), # this is the top finding from the chart that gets used like a title
-  
-  chart_title= paste0("Number of Officer-initiated Stops per 1K of Same Population by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
-  
-  tooltip_text=list(headerFormat="",pointFormat = "For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate:.1f}</b> people identified as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:.1f}</b> people."), # customize your tooltip as a statement, calling out rate and count
-  
-  chart_caption = paste0(racenote,"<br>", sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
-  
-  yaxis_label = "{value}", #format for your y axis labels
-  export_data_label=list(pointFormat='{point.stop_rate:.1f} per 1K') # format for your data labels on export images
-)
+# fx_lollichart(
+#   
+#   df=report_stoprates_race_person, #name of dataframe
+#   
+#   order_var=report_stoprates_race_person$rate, #variable you're sorting by
+#   
+#   x='race_label_short', # x or independent variables
+#   
+#   y='stop_rate', # y or dependent variable
+#   
+#   # z='count',#not working right now so ignore
+#   
+#   top_finding=paste0("Black, NHPI, and MESA people are stopped by LBPD at higher rates."), # this is the top finding from the chart that gets used like a title
+#   
+#   chart_title= paste0("Number of Officer-initiated Stops per 1K of Same Population by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
+#   
+#   tooltip_text=list(headerFormat="",pointFormat = "For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate:.1f}</b> people identified as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:.1f}</b> people."), # customize your tooltip as a statement, calling out rate and count
+#   
+#   chart_caption = paste0(racenote,"<br>", sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
+#   
+#   yaxis_label = "{value}", #format for your y axis labels
+#   export_data_label=list(pointFormat='{point.stop_rate:.1f} per 1K') # format for your data labels on export images
+# )
 ```
 
 ### Stops are made based on racial profiling not risk for crime {.tabset}
@@ -183,22 +183,22 @@ df<-dbGetQuery(con, "SELECT * FROM report_timespent_reason_stop")%>%
 
 # Apply Chart 
 
-fx_lollichart(
-  df, #name of dataframe
-  order_var=df$hours_rate, #variable you're sorting by
-  x='stop_reason_short', # x or independent variables
-  y='hours_rate', # y or dependent variable
-  
-  top_finding=paste0("Officers spend most of their time on traffic stops and stops for reasonable suspicion"), # this is the top finding from the chart that gets used like a title
-  
-  chart_title= paste0("Hours spent on stops by stop reason"), # this is the more standard chart title that gets used as a subtitle
-  
-  tooltip_text=list(headerFormat="",pointFormat = "<b>{hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours"), # customize your tooltip as a statement, calling out rate and count
-  
-  chart_caption = paste0(sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
-  yaxis_label = "{value}%", #format for your y axis labels
-  export_data_label=list(pointFormat='{point.stop_time_hrs_cap:.1f}% of hours')) # format for your data labels on export images
-
+# fx_lollichart(
+#   df, #name of dataframe
+#   order_var=df$hours_rate, #variable you're sorting by
+#   x='stop_reason_short', # x or independent variables
+#   y='hours_rate', # y or dependent variable
+#   
+#   top_finding=paste0("Officers spend most of their time on traffic stops and stops for reasonable suspicion"), # this is the top finding from the chart that gets used like a title
+#   
+#   chart_title= paste0("Hours spent on stops by stop reason"), # this is the more standard chart title that gets used as a subtitle
+#   
+#   tooltip_text=list(headerFormat="",pointFormat = "<b>{hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours"), # customize your tooltip as a statement, calling out rate and count
+#   
+#   chart_caption = paste0(sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
+#   yaxis_label = "{value}%", #format for your y axis labels
+#   export_data_label=list(pointFormat='{point.stop_time_hrs_cap:.1f}% of hours')) # format for your data labels on export images
+# 
 
 #### Item Chart ####
 # 
@@ -1086,29 +1086,29 @@ leaflet(width = "100%", height = "495px") %>%
 
 # Apply Chart
 
-fx_lollichart(
-  
-  df=report_hitrates_race_person, #name of dataframe
-  
-  order_var=report_stoprates_race_person$hit_rates, #variable you're sorting by
-  
-  x='race_label_short', # x or independent variables
-  
-  y='hit_rates', # y or dependent variable
-  
-  # z='count',#not working right now so ignore
-  
-  top_finding=paste0("Traffic stops translate to unnecessary searches that harm BIPOC communities."), # this is the top finding from the chart that gets used like a title
-  
-  chart_title= paste0("Number of Unnecessary searches among traffic stops by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
-  
-  tooltip_text=list(headerFormat="",pointFormat = "For every 100 traffic violation stops of people identified as <b>{point.race_label_long:.1f}</b> in Long Beach, LBPD did not find contraband/evidence in <b>{point.hit_rates:.1f}</b> % of these stops,  a total of <b>{point.evidence_not_found:.1f}</b> unnecessary searches."), # customize your tooltip as a statement, calling out rate and count
-  
-  chart_caption = paste0(racenote,"<br>", sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
-  
-  yaxis_label = "{value}", #format for your y axis labels
-  export_data_label=list(pointFormat='{point.hit_rates:.1f}%') # format for your data labels on export images
-)
+# fx_lollichart(
+#   
+#   df=report_hitrates_race_person, #name of dataframe
+#   
+#   order_var=report_stoprates_race_person$hit_rates, #variable you're sorting by
+#   
+#   x='race_label_short', # x or independent variables
+#   
+#   y='hit_rates', # y or dependent variable
+#   
+#   # z='count',#not working right now so ignore
+#   
+#   top_finding=paste0("Traffic stops translate to unnecessary searches that harm BIPOC communities."), # this is the top finding from the chart that gets used like a title
+#   
+#   chart_title= paste0("Number of Unnecessary searches among traffic stops by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
+#   
+#   tooltip_text=list(headerFormat="",pointFormat = "For every 100 traffic violation stops of people identified as <b>{point.race_label_long:.1f}</b> in Long Beach, LBPD did not find contraband/evidence in <b>{point.hit_rates:.1f}</b> % of these stops,  a total of <b>{point.evidence_not_found:.1f}</b> unnecessary searches."), # customize your tooltip as a statement, calling out rate and count
+#   
+#   chart_caption = paste0(racenote,"<br>", sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
+#   
+#   yaxis_label = "{value}", #format for your y axis labels
+#   export_data_label=list(pointFormat='{point.hit_rates:.1f}%') # format for your data labels on export images
+# )
 
 
 
