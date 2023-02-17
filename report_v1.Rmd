@@ -1030,7 +1030,7 @@ high_injury_ped_corridors_popup <- paste0((
   label = paste0(
     "There are approximately <span style='font-weight: bold;'>", high_injury_ped_corridors_line_sf$num_killed_or_seriously_injured, "</span> killed or seriously injured and <span style='font-size: 12px; font-weight: bold;'>",  
     high_injury_ped_corridors_line_sf$num_crashes, "</span> Pedestrian or Bicycle Crash(es), at corridor <span style='font-size: 12px; font-weight: bold;'>",
-    high_injury_motor_corridors_line_sf$corridor, "</span>. This corridor runs from <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_corridors_line_sf$address_1, "</span> to <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_corridors_line_sf$address_2, ".")))
+    high_injury_ped_corridors_line_sf$corridor, "</span>. This corridor runs from <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_corridors_line_sf$address_1, "</span> to <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_corridors_line_sf$address_2, ".")))
 
 
 
@@ -1074,7 +1074,7 @@ leaflet(width = "100%", height = "495px") %>%
                    group="High Injury Motor Intersections/Corridors",
                    popup= ~paste0(high_injury_motor_intersections_popup),
                    label= ~htmlEscape(paste0("High Injury Motor Vehicle/Motorcycle Intersection")),
-                   weight = 2, fillOpacity = 1, radius=3,
+                   weight = 4, fillOpacity = 1, radius=3,
                    color="black",  fillColor= "yellow", stroke = TRUE
   ) %>%
   
@@ -1083,7 +1083,7 @@ leaflet(width = "100%", height = "495px") %>%
                    group="High Injury Pedestrian or Bike Intersections/Corridors",
                    popup= ~paste0(high_injury_ped_intersections_popup),
                    label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
-                   weight = 2, fillOpacity = 1, radius=3,
+                   weight = 4, fillOpacity = 1, radius=3,
                    color="black",  fillColor= "red", stroke = TRUE 
   ) %>%
   
@@ -1091,6 +1091,7 @@ leaflet(width = "100%", height = "495px") %>%
   addPolylines(data = high_injury_motor_corridors_line_sf, group = "High Injury Motor Intersections/Corridors",
                popup= ~paste0(high_injury_motor_corridors_popup),
                label= ~htmlEscape(paste0("High Injury Motor Intersections/Corridors")),
+               
                color = "yellow", weight = 3, opacity = 2) %>%
   
   ## add pedestrian/bike corridors
