@@ -1097,7 +1097,7 @@ leaflet(width = "100%", height = "495px") %>%
                    group="High Injury Motor Intersections/Corridors",
                    popup= ~paste0(high_injury_motor_intersections_popup),
                    label= ~htmlEscape(paste0("High Injury Motor Vehicle/Motorcycle Intersection")),
-                   weight = 5, fillOpacity = 1, radius=3,
+                   weight = 2, fillOpacity = 1, radius=3,
                     color = "black", fillColor= "yellow", stroke = TRUE
   ) %>%
   
@@ -1106,7 +1106,7 @@ leaflet(width = "100%", height = "495px") %>%
                    group="High Injury Pedestrian or Bike Intersections/Corridors",
                    popup= ~paste0(high_injury_ped_intersections_popup),
                    label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
-                   weight = 5, fillOpacity = 1, radius=3,
+                   weight = 2, fillOpacity = 1, radius=3,
                    color="black",  fillColor= "red", stroke = TRUE
   ) %>%
   
