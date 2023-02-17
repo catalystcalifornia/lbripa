@@ -268,7 +268,7 @@ hc<-hchart(
   width='50%',
   hcaes(
     name = stop_result_short,
-    y = hours_count,
+    y = hours_rate,
     label = stop_result_short,
     color = col
   ),
