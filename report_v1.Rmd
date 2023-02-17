@@ -134,11 +134,11 @@ hc_add_theme(cc_theme)%>%
 
 ##### Chart - stop rates per 1K by race for LB #####
 # add a comma to stop count
-report_stoprates_race_person$stop_count <- as.character(formattable::comma(report_stoprates_race_person$stop_count,0))
+# report_stoprates_race_person$stop_count <- as.character(formattable::comma(report_stoprates_race_person$stop_count,0))
 
 # Apply Chart
 
-fx_lollichart(
+fx_barbubblechart(
 
   db=report_stoprates_race_person, #name of dataframe
 
@@ -148,7 +148,7 @@ fx_lollichart(
 
   y='stop_rate', # y or dependent variable
 
-  # z='count',#not working right now so ignore
+  z='stop_count',
 
   top_finding=paste0("Black, NHPI, and MESA people are stopped by LBPD at higher rates."), # this is the top finding from the chart that gets used like a title
 
