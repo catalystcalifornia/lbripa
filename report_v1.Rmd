@@ -45,6 +45,7 @@ high_injury_ped_corridors  <- st_read(con, query = "SELECT * FROM data.high_inju
 high_injury_ped_intersections <- st_read(con, query = "SELECT * FROM data.high_injury_ped_intersections")
 report_timespent_officerinitiated_cd_stop <- st_read(con, query = "SELECT * FROM data.report_timespent_officerinitiated_cd_stop")
 report_traffic_stoprates_cd_race_person <- dbGetQuery(con, "SELECT * FROM data.report_traffic_stoprates_cd_race_person") 
+population_race_cd <-  dbGetQuery(con, "SELECT * FROM data.population_race_cd") 
 ## Source the Chart Template
 
 source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
@@ -243,7 +244,7 @@ fx_lollichart(
 
 ```{r, echo=FALSE}
 
-```{r, echo=FALSE}
+
 
 
 #read in table
@@ -1072,15 +1073,32 @@ leaflet(width = "100%", height = "495px") %>%
   
   
   # add Long beach district layer with stop rates
-  addPolygons(data = council_district_rate,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 1, smoothFactor = 0.5,  opacity = 1, fillOpacity = 2,  fillColor = ~pal_total(total_traffic_stop_rate), highlight = highlightOptions(color = "white", weight = 3, bringToFront = FALSE), group = "Council Districts") %>%
+  addPolygons(data = council_district_rate,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 2, smoothFactor = 0.5,  opacity = 1, fillOpacity = 2,  fillColor = ~pal_total(total_traffic_stop_rate), highlight = highlightOptions(color = "white", weight = 3, bringToFront = FALSE), group = "Council Districts") %>%
+  
+  
+  ## add motor corridors 
+  addPolylines(data = high_injury_motor_corridors_line_sf, group = "High Injury Motor Intersections/Corridors",
+               popup= ~paste0(high_injury_motor_corridors_popup),
+               label= ~htmlEscape(paste0("High Injury Motor Intersections/Corridors")),
+               highlight = highlightOptions(weight = 4, color = "yellow", opacity = 2, bringToFront = TRUE),  
+              color = "yellow", weight = 3, opacity = 2) %>%
+  
+  ## add pedestrian/bike corridors
+  addPolylines(data = high_injury_ped_corridors_line_sf, group = "High Injury Pedestrian or Bike Intersections/Corridors",
+               popup= ~paste0(high_injury_ped_corridors_popup),
+               label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
+               highlight = highlightOptions(weight = 4, color = "red", opacity = 2, bringToFront = TRUE),
+               color = "red", weight = 3, opacity = 2) %>%
+  
+  
   
   ## add motor intersections
   addCircleMarkers(data = high_injury_motor_intersections_spdf, lat = ~lat, lng = ~lon,
                    group="High Injury Motor Intersections/Corridors",
                    popup= ~paste0(high_injury_motor_intersections_popup),
                    label= ~htmlEscape(paste0("High Injury Motor Vehicle/Motorcycle Intersection")),
-                   weight = 4, fillOpacity = 1, radius=3,
-                   color="black",  fillColor= "yellow", stroke = TRUE
+                   weight = 5, fillOpacity = 1, radius=3,
+                    color = "black", fillColor= "yellow", stroke = TRUE
   ) %>%
   
   ## add pedestrian/bike intersections
@@ -1088,22 +1106,10 @@ leaflet(width = "100%", height = "495px") %>%
                    group="High Injury Pedestrian or Bike Intersections/Corridors",
                    popup= ~paste0(high_injury_ped_intersections_popup),
                    label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
-                   weight = 4, fillOpacity = 1, radius=3,
-                   color="black",  fillColor= "red", stroke = TRUE 
+                   weight = 5, fillOpacity = 1, radius=3,
+                   color="black",  fillColor= "red", stroke = TRUE
   ) %>%
   
-  ## add motor corridors 
-  addPolylines(data = high_injury_motor_corridors_line_sf, group = "High Injury Motor Intersections/Corridors",
-               popup= ~paste0(high_injury_motor_corridors_popup),
-               label= ~htmlEscape(paste0("High Injury Motor Intersections/Corridors")),
-               
-               color = "yellow", weight = 3, opacity = 2) %>%
-  
-  ## add pedestrian/bike corridors
-  addPolylines(data = high_injury_ped_corridors_line_sf, group = "High Injury Pedestrian or Bike Intersections/Corridors",
-               popup= ~paste0(high_injury_ped_corridors_popup),
-               label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
-               color = "red", weight = 3, opacity = 2) %>%
   
   
   ## add legend for stop rate
