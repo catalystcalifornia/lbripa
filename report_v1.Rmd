@@ -63,7 +63,8 @@ source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
 
 ## LBPD spends most of their time racially profiling communities
 
-### Most time is sent on officer-initiated stops, not responding to calls for service
+Most time is sent on officer-initiated stops, not responding to calls for service or concerns from the community. 
+
 
 ```{r, echo=FALSE}
 #### JZ ####
