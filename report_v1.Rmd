@@ -243,6 +243,8 @@ fx_lollichart(
 
 ```{r, echo=FALSE}
 
+```{r, echo=FALSE}
+
 
 #read in table
 
@@ -269,7 +271,7 @@ hc<-hchart(
   tooltip = list(pointFormat = "Percent of hours: {point.hours_rate:.1f}%"),
   hcaes(
     name = stop_result_short,
-    y = hours_count,
+    y = hours_rate,
     label = stop_result_short,
     color = col
   ),
@@ -303,6 +305,9 @@ hc %>%
 
 
 ```
+
+
+
 
 #### Rate of hours spent on traffic stops by result of stop by race/ethnicity of person stopped
 
