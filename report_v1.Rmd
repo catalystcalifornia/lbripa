@@ -646,8 +646,6 @@ traffic%>%
 
 
 
-#### Point Density
-
 ```{r}
 ## make council number a character file
 council_district$council_num <- as.character(council_district$council_num) # change council number to character to merge
@@ -826,42 +824,38 @@ leaflet(width = "100%", height = "495px") %>%
 ```{r, echo=FALSE}
 #### DS ####
 
-##### Map - hours spent by council district #####
-council_district_hours <- council_district %>% 
+##### Map - officer initiated stops that resulted with no action  by council district #####
+council_district_noaction <- council_district %>% 
   mutate(council_num=as.character(council_num))%>% #added this mutation because 'council_num' needs to be the same type for both dfs in order to be the join key
   left_join(
     report_timespent_officerinitiated_cd_stop
   ) 
 
-stop_hours_popup <- paste0((
-  label = paste0(
-    "<div class='leaflet-popup-scrolled' style='max-width:800px;max-height:200px'>
-    <span style='font-weight: bold;'>Council Number:</span> ", council_district_hours$council_num, "</br>",
-    
-    "<span style='font-weight: bold;'>Council District Representative:</span> ", council_district_hours$representat)), "</br></br>",
-  
-  "<span style='font-weight: bold;'>Total Hours spent on Officer-Initiated Stops:</span> ",  scales::comma(council_district_hours$hours_count_cap, accuracy = 1)
-  
-  
-  
-)
+
+
+
+hours_rate_noaction_cap_popup <- paste0((
+label = paste0(
+   "In Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+ council_district_noaction$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>",council_district_noaction$representat,"</span>), the total rate of LBPD Hours spent on officer-initiated stops that resulted in no action is <span style='font-size: 12px; font-weight: bold;'>",  
+ scales::comma(council_district_noaction$hours_rate_noaction_cap, accuracy = 0.1), "</span>%, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_noaction$hours_count_noaction_cap, accuracy = 0.1), "</span> hours.")))
 
 
 
 
 #palette purples
-pal_stop_hours <- colorQuantile("Blues",council_district_hours$hours_count_cap, n = 5)
+pal_stop_hours_rate_noaction_cap <- colorQuantile("Blues",council_district_noaction$hours_rate_noaction_cap, n = 5)
 
 
 leaflet(width = "100%", height = "495px") %>%
   # add Long beach district layer with stop rates
-  addPolygons(data =  council_district_hours,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 1, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(stop_hours_popup),
-              fillColor = ~pal_stop_hours(hours_count_cap), highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE), group = "") %>%
+  addPolygons(data =  council_district_noaction,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 2, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(hours_rate_noaction_cap_popup),
+              fillColor = ~pal_stop_hours_rate_noaction_cap(hours_rate_noaction_cap), highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE), group = "") %>%
   
   ## add legend for stop hours
-  addLegend(position = "bottomleft", pal = pal_stop_hours, values = council_district_hours$hours_count_cap, opacity = .5, title = "Total Hours Spent on a Stop", na.label = NA, labFormat = function(type, cuts, p) {
+  addLegend(position = "bottomleft", pal = pal_stop_hours_rate_noaction_cap, values = council_district_noaction$hours_rate_noaction_cap, opacity = .5, title = "Percent of hours spent on officer initiated stops that result in no action out of all total hours spent on officer-initiated stops", na.label = NA, labFormat = function(type, cuts, p) {
     n = length(cuts)
-    paste0(scales::comma(cuts, accuracy = 1)[-n], " &ndash; ", scales::comma(cuts, accuracy = 1)[-1])
+    paste0(scales::comma(cuts, accuracy = .1)[-n], " &ndash; ", scales::comma(cuts, accuracy = .1)[-1], "%")
   }) %>%
   
   
@@ -870,7 +864,9 @@ leaflet(width = "100%", height = "495px") %>%
   
   addProviderTiles("CartoDB.Positron")%>%
   setView(	-118.1888, 	33.77091	, zoom = 11)
+
 ```
+
 
 ## Stops detract from safety for our communities.
 
@@ -1080,15 +1076,15 @@ leaflet(width = "100%", height = "495px") %>%
   addPolylines(data = high_injury_motor_corridors_line_sf, group = "High Injury Motor Intersections/Corridors",
                popup= ~paste0(high_injury_motor_corridors_popup),
                label= ~htmlEscape(paste0("High Injury Motor Intersections/Corridors")),
-               highlight = highlightOptions(weight = 4, color = "yellow", opacity = 2, bringToFront = TRUE),  
-              color = "yellow", weight = 3, opacity = 2) %>%
+             
+              color = "yellow", weight = 4, opacity = 2) %>%
   
   ## add pedestrian/bike corridors
   addPolylines(data = high_injury_ped_corridors_line_sf, group = "High Injury Pedestrian or Bike Intersections/Corridors",
                popup= ~paste0(high_injury_ped_corridors_popup),
                label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
-               highlight = highlightOptions(weight = 4, color = "red", opacity = 2, bringToFront = TRUE),
-               color = "red", weight = 3, opacity = 2) %>%
+              
+               color = "red", weight = 4, opacity = 2) %>%
   
   
   
@@ -1097,7 +1093,7 @@ leaflet(width = "100%", height = "495px") %>%
                    group="High Injury Motor Intersections/Corridors",
                    popup= ~paste0(high_injury_motor_intersections_popup),
                    label= ~htmlEscape(paste0("High Injury Motor Vehicle/Motorcycle Intersection")),
-                   weight = 2, fillOpacity = 1, radius=3,
+                   weight = 2, fillOpacity = 1, radius=4,
                     color = "black", fillColor= "yellow", stroke = TRUE
   ) %>%
   
@@ -1106,7 +1102,7 @@ leaflet(width = "100%", height = "495px") %>%
                    group="High Injury Pedestrian or Bike Intersections/Corridors",
                    popup= ~paste0(high_injury_ped_intersections_popup),
                    label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
-                   weight = 2, fillOpacity = 1, radius=3,
+                   weight = 2, fillOpacity = 1, radius=4,
                    color="black",  fillColor= "red", stroke = TRUE
   ) %>%
   
