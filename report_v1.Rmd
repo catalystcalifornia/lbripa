@@ -5,10 +5,10 @@ author: "Catalyst California"
 output: 
   html_document:
   toc: yes
-toc_depth: 2
-toc_float:
-  collapsed: true
-smooth_scroll: true
+  toc_depth: 2
+  toc_float:
+    collapsed: true
+    smooth_scroll: true
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 ---
   
@@ -53,13 +53,13 @@ source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
 
 ```
 
-> LBPD spends more time and money racially profiling folks in North and Central (these two geographic locations are there by example, they could also be District 8 & 9) Long Beach than they spend actually protecting the community. Most of this profiling is conducted via traffic stops. These stops do not make the community safer, and they mean the LBPD spends less time responding to calls for service.
+> **Through-Line: LBPD spends more time and money racially profiling folks in North and Central (these two geographic locations are there by example, they could also be District 8 & 9) Long Beach than they spend actually protecting the community. Most of this profiling is conducted via traffic stops. These stops do not make the community safer, and they mean the LBPD spends less time responding to calls for service.**
 
 # The Context
 
--   Low-income, BIPOC areas of LB have been disproportionately impacted by policing and have historically had the fewest resources for other services.
+Communities of color in Long Beach have historically been subjected to over-policing and racial profiling by law enforcement. This trend continues today where people of color are more likely to be stopped by LBPD for minor reasons to profile and harass them.
 
--   Inequities in LBPD's practices call for investments in alternatives.
+Examining data from the Racial & Identity Profiling Act we find that LBPD spends most of their time on officer-initiated stops for traffic reasons. These stops do not add up to preventing or detecting serious crimes. Instead, they subject low-income communities of Long Beach to undue policing. These communities disproportionately impacted by policing are the same communitie4s that have historically had the fewest resources for other services. The inequities and ineffectiveness of these practices demand investments in alternatives in the city.
 
 # The Data
 
