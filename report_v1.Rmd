@@ -2,13 +2,12 @@
 title: "Disparities in LBPD's Practices"
 subtitle: "DRAFT"
 author: "Catalyst California"
-output: 
+output:
   html_document:
-  toc: yes
-  toc_depth: 2
-  toc_float:
-    collapsed: true
-    smooth_scroll: true
+    code_folding: hide
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 ---
   
@@ -59,13 +58,17 @@ source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
 
 Communities of color in Long Beach have historically been subjected to over-policing and racial profiling by law enforcement. This trend continues today where people of color are more likely to be stopped by LBPD for minor reasons to profile and harass them.
 
-Examining data from the Racial & Identity Profiling Act we find that LBPD spends most of their time on officer-initiated stops for traffic reasons. These stops do not add up to preventing or detecting serious crimes. Instead, they subject low-income communities of Long Beach to undue policing. These communities disproportionately impacted by policing are the same communitie4s that have historically had the fewest resources for other services. The inequities and ineffectiveness of these practices demand investments in alternatives in the city.
+Examining data from the Racial & Identity Profiling Act (RIPA), we find that LBPD spends most of their time on stopping people for purported traffic reasons. These stops do not make communities safer. Instead, they subject low-income communities of Long Beach to undue contact with the police. These are the same communities that have historically had the fewest resources for other services in the city. The inequities in and ineffectiveness of these practices demand investments in alternatives.
 
 # The Data
 
 ## LBPD spends most of their time racially profiling communities
 
-Most time is sent on officer-initiated stops, not responding to calls for service or concerns from the community. 
+We find that LBPD spends more time on stops made during their patrol time (referred to as officer-initiated stops) than stops made in response to calls from the community. The type of stops and results of these stops show evidence of racial profiling.
+
+### Most time is spent on officer-initiated stops not on  responding to concerns from the community.   
+
+Nearly 80% of time officers spent on stops are spent on officer-initiated stops. This translates to just 1 in 5 hours spent on responding to calls for service, or concerns from the community. 
 
 
 ```{r, echo=FALSE}
@@ -86,9 +89,9 @@ df %>%
      innerSize="65%",
      center = c(50, 50), 
     )%>% 
-  hc_title(text = "Police spend nearly 4x more hours on officer-initiated stops compared to calls for service",
+  hc_title(text = "Four in five hours are spent on officer-initiated stops not calls for service",
  align="left")%>%
-   hc_subtitle(text = "Percent of ours spent on calls for service versus officer-initiated stops",
+   hc_subtitle(text = "Percent of hours spent on calls for service versus officer-initiated stops",
                      align="left") %>%
   hc_caption(
     text = paste0(sourcenote))%>%
@@ -126,7 +129,9 @@ hc_add_theme(cc_theme)%>%
 
 ```
 
-### Stops disproportionately impact people of color across the city
+### These stops disproportionately impact people of color across the city.
+
+People of color are more likely to be impacted by this high occurrence of officer-initiated stops. As a part of RIPA data collection, officers are required to report the race of the person they stopped, based on the officer's perception. The data show LBPD officers stop Black, Native Hawaiian or Pacific Islander, and Middle Eastern or South African peoples in Long Beach at the highest rates. In 2019, LBPD officers stopped 169 Black people for every one thousand Black people in Long Beach. And while White people make up a much larger share of the Long Beach population, more Black people are stopped by LBPD than White people.
 
 ```{r, echo=FALSE}
 #### DS ####
@@ -138,6 +143,8 @@ hc_add_theme(cc_theme)%>%
 # add a comma to stop count
 
 # Apply Chart
+
+report_stoprates_race_person<-report_stoprates_race_person%>%filter(race!="total")
 
 fx_barbubblechart(
 
@@ -166,7 +173,9 @@ fx_barbubblechart(
 
 ### Stops are made based on racial profiling not risk for crime {.tabset}
 
-#### Time spent on stops by stop reason
+Officers are required to report the reason why they stopped a person and the result of that stop, e.g. whether a person received a citation, was arrested, or no consequence or action was necessary. We analyze the time spent on officer-initiated stops by stop reason and then by stop result to determine if officers are making stops that help prevent a serious threat to community safety. Stops are made mainly for minor traffic reasons that are resolved with a citation or warning, or no action at all. Then, we narrow in on traffic stops that resulted in no action to see if traffic stops of people of color are more likely to result in some consequence for safety. In the end, these stops show more evidence of racial profiling than protecting the safety of communities. While LBPD is more likely to stop Black people and other people of color, a sizable share of these stops are traffic stops have no or minor implications for community safety. In 2019, over 1 in 5 traffic stops of Black people resulted in no action.
+
+#### Time spent on stops by reason
 
 ```{r, echo=FALSE}
 
@@ -194,7 +203,7 @@ fx_lollichart(
 
   chart_title= paste0("Hours spent on stops by stop reason"), # this is the more standard chart title that gets used as a subtitle
 
-  tooltip_text=list(headerFormat="",pointFormat = "<b>{hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours"), # customize your tooltip as a statement, calling out rate and count
+  tooltip_text=list(headerFormat="",pointFormat = "<b>{hours_rate:,.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours"), # customize your tooltip as a statement, calling out rate and count
 
   chart_caption = paste0(sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
   yaxis_label = "'%'", #format for your y axis labels
@@ -240,7 +249,7 @@ fx_lollichart(
 
 ```
 
-#### Time spent on traffic stops by result of traffic stop
+#### Time spent on traffic stops by result
 
 ```{r, echo=FALSE}
 
@@ -310,7 +319,7 @@ hc %>%
 
 
 
-#### Rate of hours spent on traffic stops by result of stop by race/ethnicity of person stopped
+#### Rate of traffic stops by result and race
 
 ```{r, echo=FALSE}
 
@@ -323,60 +332,101 @@ df<-dbGetQuery(con, "SELECT * FROM report_stoprates_result_race_person")
 
 traffic<-df%>%
   filter(grepl('Traffic Violation',reason))%>%
-  filter(grepl('No Action|Warning',result))%>%
-  filter(!grepl('Total',race_label_short))
+  filter(grepl('No Action',result))%>%
+  filter(!grepl('Total',race_label_short))%>%
+  arrange(desc(stop_denom_rate))
 
+#####  Lollipop #####
 
-# set order of grouped bars
+# apply lollypop chart function
 
-traffic <- within(traffic, result <- factor(result, levels=c("Warning","No Action")))
+# Apply Chart 
 
-# set color levels custom
+fx_lollichart(
+  traffic, #name of dataframe
+  order_var=traffic$stop_denom_rate, #variable you're sorting by
+  x='race_label_short', # x or independent variables
+  y='stop_denom_rate', # y or dependent variable
 
-color <-  c(meteorite, orange)
+  top_finding=paste0("Black people are most likely to be stopped for minor traffic stops."), # this is the top finding from the chart that gets used like a title
 
+  chart_title= paste0("Percent of traffic stops that resulted in no action by race"), # this is the more standard chart title that gets used as a subtitle
 
-traffic%>%
-  arrange(desc(result))%>%
-  hchart("lollipop", invert = TRUE,
-         hcaes(x=race_label_short,
-               y=stop_pop_rate,
-               group=result),
-         color=color)%>%
-  hc_xAxis( title = list(text = "") ) %>% 
-  
-  hc_yAxis( title = list(text = ""),
-            labels = list(format = "{value}%")) %>%  
-  
-  # title elements
-  hc_title(
-    text = paste0("Black drivers are most likely to be stopped for minor traffic stops"),
-    #margin = 20,
-    align = "left", 
-    style = list(useHTML = TRUE
-    )
-  ) %>% 
-  hc_plotOptions(series=list(connectorWidth=1.2,
-                             marker=list(symbol='circle')))%>%
-  hc_subtitle(
-    text = paste0("Rate of traffic stops that resulted in a warning no action by race"), align="left"
-  ) %>% 
-  hc_caption(
-    text = paste0(racenote,"<br>", sourcenote)
-  ) %>% 
-  hc_add_theme(cc_theme)%>%
-  hc_chart(inverted = T) %>%
-  hc_exporting(
-    enabled = TRUE, sourceWidth=900, sourceHeight=600, 
-    chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.stop_pop_rate:.1f}%')))))),
-    filename = paste0("Rate of traffic stops that resulted in a warning no action by race","_Catalyst California, catalystcalifornia.org, 2023.")
-  )
+  tooltip_text=list(headerFormat="",pointFormat = "<b>{point.stop_denom_rate:,.1f}%</b> of stops of <b>{point.race_label_short}</b> people result in No Action, or a total of {point.stop_count:,.1f} stops"), # customize your tooltip as a statement, calling out rate and count
+
+  chart_caption = paste0(racenote,"<br>", sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
+  yaxis_label = "'%'", #format for your y axis labels
+  export_data_label=list(pointFormat='{point.stop_denom_rate:.1f}%')) # format for your data labels on export images
 
 
 
 ```
 
-## Stops are concentrated in lower-income, BIPOC communities of Long Beach, perpetuating inequities. 
+```{r, echo=FALSE}
+
+
+# # Read in table
+# 
+# df<-dbGetQuery(con, "SELECT * FROM report_stoprates_result_race_person")
+# 
+# # filter for traffic
+# 
+# traffic<-df%>%
+#   filter(grepl('Traffic Violation',reason))%>%
+#   filter(grepl('No Action|Warning',result))%>%
+#   filter(!grepl('Total',race_label_short))
+# 
+# 
+# # set order of grouped bars
+# 
+# traffic <- within(traffic, result <- factor(result, levels=c("Warning","No Action")))
+# 
+# # set color levels custom
+# 
+# color <-  c(meteorite, orange)
+# 
+# 
+# traffic%>%
+#   arrange(desc(result))%>%
+#   hchart("lollipop", invert = TRUE,
+#          hcaes(x=race_label_short,
+#                y=stop_pop_rate,
+#                group=result),
+#          color=color)%>%
+#   hc_xAxis( title = list(text = "") ) %>% 
+#   
+#   hc_yAxis( title = list(text = ""),
+#             labels = list(format = "{value}%")) %>%  
+#   
+#   # title elements
+#   hc_title(
+#     text = paste0("Black drivers are most likely to be stopped for minor traffic stops"),
+#     #margin = 20,
+#     align = "left", 
+#     style = list(useHTML = TRUE
+#     )
+#   ) %>% 
+#   hc_plotOptions(series=list(connectorWidth=1.2,
+#                              marker=list(symbol='circle')))%>%
+#   hc_subtitle(
+#     text = paste0("Rate of traffic stops that resulted in a warning no action by race"), align="left"
+#   ) %>% 
+#   hc_caption(
+#     text = paste0(racenote,"<br>", sourcenote)
+#   ) %>% 
+#   hc_add_theme(cc_theme)%>%
+#   hc_chart(inverted = T) %>%
+#   hc_exporting(
+#     enabled = TRUE, sourceWidth=900, sourceHeight=600, 
+#     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.stop_pop_rate:.1f}%')))))),
+#     filename = paste0("Rate of traffic stops that resulted in a warning no action by race","_Catalyst California, catalystcalifornia.org, 2023.")
+#   )
+# 
+# 
+
+```
+
+## Stops are concentrated in low-income communities of color. 
 
 ### There is a higher rate of stops in northern and central Long Beach. {.tabset .tabset-pills}
 
