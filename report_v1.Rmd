@@ -203,7 +203,7 @@ fx_lollichart(
 
   chart_title= paste0("Hours spent on stops by stop reason"), # this is the more standard chart title that gets used as a subtitle
 
-  tooltip_text=list(headerFormat="",pointFormat = "<b>{hours_rate:,.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours"), # customize your tooltip as a statement, calling out rate and count
+  tooltip_text=list(headerFormat="",pointFormat = "<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours"), # customize your tooltip as a statement, calling out rate and count
 
   chart_caption = paste0(sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
   yaxis_label = "'%'", #format for your y axis labels
@@ -426,10 +426,14 @@ fx_lollichart(
 
 ```
 
-## Stops are concentrated in low-income communities of color. 
+## Low-income communities of color are unjustly targeted with unnecessary stops, perpetuating inequities. 
 
-### There is a higher rate of stops in northern and central Long Beach. {.tabset .tabset-pills}
+We map the approximate location of officer-initiated stops by council district, race, and result to see how stops are distributed throughout the city. In 2019, Council Districts 1, 6, and 7 had the highest counts and rates of stops per population. Across Council Districts, people of color experience the highest stop rates. Higher stop rates do not translate to a greater likelihood of stops that are a risk to the community. In Council Districts 8, 9, 1, and 6, a higher share of stops result in no action. These districts have some of the highest rates of people of color in the city. 
 
+
+### Stops are concentrated in central Long Beach and among people of color across Council Districts. {.tabset .tabset-pills}
+
+Across Council Districts, LBPD stops people of color at the highest rates. Plotting stops by race and council districts, we find a greater density of stops of Black and Latinx people. In 2019, in six out of nine Council Districts, Black people had the highest stop rates. Latinx, MESA, and NHPI people also experience the highest rate of stops in at least one of each Council District.
 
 ```{r, echo = FALSE}
 #### DS ####
@@ -868,8 +872,9 @@ leaflet(width = "100%", height = "495px") %>%
 ```
 
 
-### More hours are spent on policing in these communities that have fewer resources.
+### More hours are spent on unnecessary stops in communities of color that have fewer resources.
 
+More stops in a community does not coincide with a greater likelihood of preventing or detecting serious crime. We calculated the percent of hours in each Council District that resulted in stops with no action. Council Districts 9,8,1, and 6 have higher rates of stops where an officer found no reason to take action, or even cite, a person. In Council District 9, nearly 1 in 5 hours (18.9%) spent on officer-initiated stops resulted in no action.
 
 ```{r, echo=FALSE}
 #### DS ####
