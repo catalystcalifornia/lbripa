@@ -1196,11 +1196,11 @@ leaflet(width = "100%", height = "495px") %>%
 
 ### Traffic stops lead to unnecessary searches by officers that harm people of color.
 
-Instead of creating safer communities, officers use routine traffic stops as a means to profile and harass people of color. LBPD officers
+Instead of creating safer communities, officers use routine traffic stops as a means to profile and harass people of color. LBPD officers use routine traffic stops to search people with the purported intent of preventing more serious crime. This practice yields ineffective results. The majority of searches, nearly 4 in 5 across races, lead to no contraband or evidence found for a crime. Nearly 90% of searches done during traffic stops of MESA, Black, Multi-racial, Asian, and AIAN individuals result in no contraband or evidence found. 
 
 ```{r, echo=FALSE}
 #### DS ####
-
+report_hitrates_race_person<-report_hitrates_race_person%>%filter(race!="total")
 ##### Chart - unfounded searches by race for traffic violations #####
 
 # Apply Chart
