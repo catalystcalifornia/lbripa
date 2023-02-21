@@ -428,8 +428,12 @@ fx_lollichart(
 
 ## Stops are concentrated in low-income communities of color. 
 
-### There is a higher rate of stops in northern and central Long Beach. {.tabset .tabset-pills}
+We map the approximate location of officer-initiated stops by council district, race, and result to see how stops are distributed throughout the city. In 2019, Council Districts 1, 6, and 7 had the highest counts and rates of stops per population. Across Council Districts, people of color experience the highest stop rates. Higher stop rates do not translate to a greater likelihood of stops that are a risk to the community. In Council Districts 8, 9, 1, and 6, a higher share of stops result in no action. These districts have some of the highest rates of people of color in the city. 
 
+
+### There is a higher rate of stops in central Long Beach. {.tabset .tabset-pills}
+
+Across Council Districts, LBPD stops people of color at the highest rates. Plotting stops by race and council districts, we find a greater density of stops of Black and Latinx people. In 2019, in six out of nine Council Districts, Black people had the highest stop rates. Latinx, MESA, and NHPI people also experience the highest rate of stops in at least one of each Council District.
 
 ```{r, echo = FALSE}
 #### DS ####
