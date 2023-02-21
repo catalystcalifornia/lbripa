@@ -929,7 +929,7 @@ A common narrative may be that traffic stops lead to safer streets with fewer in
 
 ### Traffic stops do not correlate to safer streets for communities impacted traffic injuries.
 
-We compared 2019 traffic stops to high-injury corridors and intersections identified by the Safe Streets Long Beach initiative. The initiative identified these high-injury corridors and intersections based on 2015-17 data, but they remain the initiative's action plan to guarantee equity in increasing road safety. Council Districts 1 and 6 have the highest rate of traffic stops, but they also have the highest concentration of high-injury motor, pedestrian, and bike networks. Rather than improving safety in these highly impacted communities, officer-initiated traffic stops can lead to greater harm by more contact and exposure to the police. 
+We compared 2019 traffic stops to high-injury corridors and intersections identified by the Safe Streets Long Beach initiative. The initiative identified these high-injury corridors and intersections based on 2013-17 data, but they remain the initiative's action plan to guarantee equity in increasing road safety. Council Districts 1 and 6 have the highest rate of traffic stops, but they also have the highest concentration of high-injury motor, pedestrian, and bike networks. Rather than improving safety in these highly impacted communities, officer-initiated traffic stops can lead to greater harm by more contact and exposure to the police. 
 
 
 ```{r, echo=FALSE}
