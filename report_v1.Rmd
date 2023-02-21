@@ -89,7 +89,7 @@ df %>%
      innerSize="65%",
      center = c(50, 50), 
     )%>% 
-  hc_title(text = "Four in five hours are spent on officer-initiated stops not calls for service",
+  hc_title(text = "Three in four hours are spent on officer-initiated stops not calls for service",
  align="left")%>%
    hc_subtitle(text = "Percent of hours spent on calls for service versus officer-initiated stops",
                      align="left") %>%
@@ -107,25 +107,6 @@ hc_add_theme(cc_theme)%>%
     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(sourcenote))))),
     filename = paste0("Police spend nearly 4x more hours on officer-initiated stops compared to calls for service","_Catalyst California, catalystcalifornia.org, 2023.")
   )
-
-# apply lollypop chart function
-
-# fx_lollichart(
-# df, #name of dataframe
-# order_var=df$hours_rate_cap, #variable you're sorting by
-# x='label', # x or independent variables
-# y='hours_rate_cap', # y or dependent variable
-# top_finding=paste0("Sheriffs spend nearly 4x more hours on officer-initiated stops compared to calls for service"), # this is the top finding from the chart that gets used like a title
-# chart_title= paste0("Percent of Hours spent on Calls for Service versus Officer-Initiated Stops"), 
-# tooltip_text=list(headerFormat="",pointFormat = "<b>{point.hours_rate_cap:.1f}%</b> of hours are spent on <b>{point.label}</b>, or a total of {point.hours_count_cap:,.1f} hours"), 
-# chart_caption = paste0(sourcenote),
-# yaxis_label = "{value}%", #format for your y axis labels
-# export_data_label=list(pointFormat='{point.hours_rate_cap:.1f}% of hours')) # format for your data labels on export images
-# 
-# 
-
-
-
 
 ```
 
@@ -348,7 +329,7 @@ fx_lollichart(
   x='race_label_short', # x or independent variables
   y='stop_denom_rate', # y or dependent variable
 
-  top_finding=paste0("Black people are most likely to be stopped for minor traffic stops."), # this is the top finding from the chart that gets used like a title
+  top_finding=paste0("Multiracial and Black people are most likely to be stopped for minor traffic stops."), # this is the top finding from the chart that gets used like a title
 
   chart_title= paste0("Percent of traffic stops that resulted in no action by race"), # this is the more standard chart title that gets used as a subtitle
 
