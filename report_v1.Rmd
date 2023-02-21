@@ -923,11 +923,13 @@ leaflet(width = "100%", height = "495px") %>%
 ```
 
 
-## Stops detract from safety for our communities.
+## Stops do not lead to greater safety for communities affected by inequities.
 
-### Traffic stops do not correlate to safer streets with fewer injuries.
+A common narrative may be that traffic stops lead to safer streets with fewer injuries and less crime. In reality, communities of color are often the communities with higher rates of injuries from traffic collisions and profiling by police. Comparing traffic collisions to traffic stops shows officer-initiated stops do not necessarily make roadways safer nor do they correlate to areas with higher risk of road injuries. These stops are also ineffective in preventing serious crime. LBPD overwhelming conducts unnecessary searches of people through traffic stops, finding nothing of consequence. People of color bare the largest impact of these stops.
 
+### Traffic stops do not correlate to safer streets for communities impacted traffic injuries.
 
+We compared 2019 traffic stops to high-injury corridors and intersections identified by the Safe Streets Long Beach initiative. The initiative identified these high-injury corridors and intersections based on 2015-17 data, but they remain the initiative's action plan to guarantee equity in increasing road safety. Council Districts 1 and 6 have the highest rate of traffic stops, but they also have the highest concentration of high-injury motor, pedestrian, and bike networks. Rather than improving safety in these highly impacted communities, officer-initiated traffic stops can lead to greater harm by more contact and exposure to the police. 
 
 
 ```{r, echo=FALSE}
@@ -1192,7 +1194,9 @@ leaflet(width = "100%", height = "495px") %>%
 
 
 
-### Traffic stops translate to unnecessary actions by officers that harm BIPOC communities.
+### Traffic stops lead to unnecessary searches by officers that harm people of color.
+
+Instead of creating safer communities, officers use routine traffic stops as a means to profile and harass people of color. LBPD officers
 
 ```{r, echo=FALSE}
 #### DS ####
@@ -1213,11 +1217,11 @@ fx_lollichart(
 
   # z='count',#not working right now so ignore
 
-  top_finding=paste0("Traffic stops translate to unnecessary searches that harm BIPOC communities."), # this is the top finding from the chart that gets used like a title
+  top_finding=paste0("The majority of searches conducted during traffic stops lead to no evidence or contraband found."), # this is the top finding from the chart that gets used like a title
 
-  chart_title= paste0("Number of Unnecessary searches among traffic stops by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
+  chart_title= paste0("Searches with No Contraband or Evidence Found among Traffic Stops by Race"), # this is the more standard chart title that gets used as a subtitle
 
-  tooltip_text=list(headerFormat="",pointFormat = "For every 100 traffic violation stops of people identified as <b>{point.race_label_long:.1f}</b> in Long Beach, LBPD did not find contraband/evidence in <b>{point.hit_rates:.1f}</b> % of these stops,  a total of <b>{point.evidence_not_found:.1f}</b> unnecessary searches."), # customize your tooltip as a statement, calling out rate and count
+  tooltip_text=list(headerFormat="",pointFormat = "For every 100 searches done during traffic stops of people identified as <b>{point.race_label_long:.1f}</b>, LBPD did not find contraband/evidence in <b>{point.hit_rates:.1f}</b>% of those stops,  a total of <b>{point.evidence_not_found:.1f}</b> unnecessary searches."), # customize your tooltip as a statement, calling out rate and count
 
   chart_caption = paste0(racenote,"<br>", sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
 
