@@ -235,8 +235,6 @@ fx_lollichart(
 ```{r, echo=FALSE}
 
 
-
-
 #read in table
 
 df<-dbGetQuery(con, "SELECT * FROM report_timespent_result_stop ")
@@ -247,6 +245,9 @@ df<-dbGetQuery(con, "SELECT * FROM report_timespent_result_stop ")
 df_traffic<-df%>%
   filter(grepl('Traffic Violation',stop_reason_short))%>%
   arrange(-hours_rate)
+   
+  
+  # mutate(hours_rate= round(hours_rate, 0))
 
 col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A", "#211447",
         "#FF9E0D")
@@ -257,9 +258,8 @@ col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A", "
 hc<-hchart(
   df_traffic,
   "item",
-  height='100%',
-  width='50%',
-  tooltip = list(pointFormat = "Percent of hours: {point.hours_rate:.1f}%"),
+  rows=8,
+  tooltip = list(pointFormat = "Out of 100 hours, LBPD spent {point.hours_rate:.1f} hours on traffic stops that resulted in {point.stop_result_short}"),
   hcaes(
     name = stop_result_short,
     y = hours_rate,
@@ -267,12 +267,8 @@ hc<-hchart(
     color = col
   ),
   name = "Total Hours",
-  showInLegend = TRUE,
-  size = "20%",
-  center = list("50%", "75%")
-  # startAngle = -100,
-  # endAngle  = 100
-) %>%
+  showInLegend = TRUE) %>%
+  
   hc_title(text = "The majority of hours spent on traffic stops result in citations, warnings, or no action")%>%
   
   hc_caption(
@@ -283,8 +279,10 @@ hc<-hchart(
     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}')))))),
     filename = paste0("The majority of hours spent on traffic stops result in citations, warnings, or no action","_Catalyst California, catalystcalifornia.org, 2023.")
   )%>%
-  hc_legend(title=list(text="Result of Stop"), 
-            enable = TRUE, labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
+  
+  hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span><br><br>'),
+            enable = TRUE, 
+            labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
 
 # add in margins so the graph isn't cut off
 
@@ -293,6 +291,7 @@ hc %>%
     marginRight = 100,
     marginLeft=100
   )
+
 
 
 ```
