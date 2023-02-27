@@ -280,7 +280,7 @@ hc<-hchart(
     filename = paste0("The majority of hours spent on traffic stops result in citations, warnings, or no action","_Catalyst California, catalystcalifornia.org, 2023.")
   )%>%
   
-  hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span><br><br>'),
+  hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span>'),
             enable = TRUE, 
             labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
 
