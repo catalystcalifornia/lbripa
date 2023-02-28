@@ -85,7 +85,7 @@ df %>%
   hchart(
     "pie", hcaes(x = label, y = hours_rate_cap),
     name = "Uninsured Population in Central Long Beach",
-    tooltip = list(pointFormat = "<b>{point.hours_rate_cap:.1f}%</b> of hours are spent on <b>{point.label}</b>, or a total of {point.hours_count_cap:,.1f} hours"),
+    tooltip = list(headerFormat="", pointFormat = "<b>{point.hours_rate_cap:.1f}%</b> of hours are spent on <b>{point.label}</b>, or a total of {point.hours_count_cap:,.1f} hours"),
      innerSize="65%",
      center = c(50, 50), 
     )%>% 
@@ -160,6 +160,8 @@ Officers are required to report the reason why they stopped a person and the res
 
 ```{r, echo=FALSE}
 
+###JZ###
+
 #  Chart - % time spent on stops by stop reason:
 # ideally these charts should be on a carousel (https://www.r-bloggers.com/2017/04/slickr/)
 
@@ -191,51 +193,13 @@ fx_lollichart(
   export_data_label=list(pointFormat='{point.stop_time_hrs_cap:.1f}% of hours')) # format for your data labels on export images
 
 
-#### Item Chart ####
-# 
-# col <-c(meteorite, lavender, orange, peridot, "#BE3075", "#EB001F","#000000")
-# 
-# hchart(
-#   df,
-#   "item",
-#   height='100%',
-#   width='50%',
-#   hcaes(
-#     name = stop_reason_short,
-#     y = stop_rate,
-#     label = stop_reason_short,
-#     color = col
-#   ),
-#   name = "Stop Rate (Hours)",
-#   showInLegend = TRUE,
-#   size = "20%",
-#     center = list("50%", "75%")
-#        # startAngle = -100,
-#        # endAngle  = 100
-# ) %>%
-#   hc_title(text = "The majority of hours spent on traffic stops result in citations, warnings, or no action")%>%
-#     hc_caption(
-#     text = paste0(sourcenote)) %>% 
-#   hc_add_theme(cc_theme)%>%
-#     hc_exporting(
-#     enabled = TRUE, sourceWidth=900, sourceHeight=600, 
-#     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.stop_rate:.1f}%')))))),
-#     filename = paste0("Hours spent on stops by stop reason","_Catalyst California, catalystcalifornia.org, 2023.")
-#   )%>%
-#            hc_legend(title=list(text="Reason for Stop"), 
-#                      enable = TRUE, labelFormat = '{name} <span style="opacity: 0.4">{stop_rate:.1f}%</span>')
-# 
-# 
-
-
 ```
 
 #### Time spent on traffic stops by result
 
 ```{r, echo=FALSE}
 
-
-
+### JZ ###
 
 #read in table
 
@@ -247,6 +211,9 @@ df<-dbGetQuery(con, "SELECT * FROM report_timespent_result_stop ")
 df_traffic<-df%>%
   filter(grepl('Traffic Violation',stop_reason_short))%>%
   arrange(-hours_rate)
+   
+  
+  # mutate(hours_rate= round(hours_rate, 0))
 
 col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A", "#211447",
         "#FF9E0D")
@@ -257,9 +224,8 @@ col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A", "
 hc<-hchart(
   df_traffic,
   "item",
-  height='100%',
-  width='50%',
-  tooltip = list(pointFormat = "Percent of hours: {point.hours_rate:.1f}%"),
+  rows=8,
+  tooltip = list(headerFormat="", pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on traffic stops that resulted in <b>{point.stop_result_short}</b>"),
   hcaes(
     name = stop_result_short,
     y = hours_rate,
@@ -267,13 +233,10 @@ hc<-hchart(
     color = col
   ),
   name = "Total Hours",
-  showInLegend = TRUE,
-  size = "20%",
-  center = list("50%", "75%")
-  # startAngle = -100,
-  # endAngle  = 100
-) %>%
-  hc_title(text = "The majority of hours spent on traffic stops result in citations, warnings, or no action")%>%
+  showInLegend = TRUE) %>%
+  
+  hc_title(text = "The majority of hours spent on traffic stops result in citations, warnings, or no action", 
+ align="left" )%>%
   
   hc_caption(
     text = paste0(sourcenote)) %>% 
@@ -283,8 +246,10 @@ hc<-hchart(
     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}')))))),
     filename = paste0("The majority of hours spent on traffic stops result in citations, warnings, or no action","_Catalyst California, catalystcalifornia.org, 2023.")
   )%>%
-  hc_legend(title=list(text="Result of Stop"), 
-            enable = TRUE, labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
+  
+  hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span>'),
+            enable = TRUE, 
+            labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
 
 # add in margins so the graph isn't cut off
 
@@ -293,6 +258,7 @@ hc %>%
     marginRight = 100,
     marginLeft=100
   )
+
 
 
 ```
@@ -304,6 +270,7 @@ hc %>%
 
 ```{r, echo=FALSE}
 
+### JZ ###
 
 # Read in table
 
