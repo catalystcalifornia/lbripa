@@ -888,6 +888,12 @@ council_district_noaction <- council_district %>%
   left_join(
     report_timespent_officerinitiated_cd_stop
   ) 
+## only keep last name of rep
+council_district_noaction <- council_district_noaction %>% mutate(representat = gsub(".* ", "", representat))
+
+## add link
+council_district_noaction$link <- c("https://www.longbeach.gov/district4/", "https://www.longbeach.gov/district5/","https://www.longbeach.gov/district3/","https://www.longbeach.gov/district1/","https://www.longbeach.gov/district8/","https://www.longbeach.gov/district6/","https://www.longbeach.gov/district9/","https://www.longbeach.gov/district7/","https://www.longbeach.gov/district2/")
+
 
 cc_brand <- c("#E2D9FF", "#BDAFE9","#8E7ACA", "#362178","#211447")
 
@@ -895,8 +901,9 @@ cc_brand <- c("#E2D9FF", "#BDAFE9","#8E7ACA", "#362178","#211447")
 hours_rate_noaction_cap_popup <- paste0((
 label = paste0(
    "In Council District  <span style='font-size: 14px; font-weight: bold;'>",  
- council_district_noaction$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>",council_district_noaction$representat,"</span>), the total rate of LBPD Hours spent on officer-initiated stops that resulted in no action is <span style='font-size: 12px; font-weight: bold;'>",  
- scales::comma(council_district_noaction$hours_rate_noaction_cap, accuracy = 0.1), "</span>%, a total of <span style='font-size: 14px; font-weight: bold;'> ", scales::comma(council_district_noaction$hours_count_noaction_cap, accuracy = 0.1), "</span> hours.")))
+ council_district_noaction$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>",council_district_noaction$representat,"</span>), officers spent <span style='font-size: 12px; font-weight: bold;'>",  
+ scales::comma(council_district_noaction$hours_count_noaction_cap, accuracy = 0.1), "</span> hours in stops that resulted in no action, a rate of <span style='font-size: 14px; font-weight: bold;'> ", scales::comma(council_district_noaction$hours_rate_noaction_cap, accuracy = 0.1), "</span>%.")))
+
 
 
 
