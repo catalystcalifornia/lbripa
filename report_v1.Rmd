@@ -901,11 +901,14 @@ cc_brand <- c("#E2D9FF", "#BDAFE9","#8E7ACA", "#362178","#211447")
 hours_rate_noaction_cap_popup <- paste0((
 label = paste0(
    "In Council District  <span style='font-size: 14px; font-weight: bold;'>",  
- council_district_noaction$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>",council_district_noaction$representat,"</span>), officers spent <span style='font-size: 12px; font-weight: bold;'>",  
+ council_district_noaction$council_num,  "<a href=",council_district_noaction$link, ">", "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>",council_district_noaction$representat, "</span>) ", "</a>",
+
+ " ,officers spent <span style='font-size: 12px; font-weight: bold;'>", 
  scales::comma(council_district_noaction$hours_count_noaction_cap, accuracy = 0.1), "</span> hours in stops that resulted in no action, a rate of <span style='font-size: 14px; font-weight: bold;'> ", scales::comma(council_district_noaction$hours_rate_noaction_cap, accuracy = 0.1), "</span>%.")))
 
 
 
+#'<a href=',  p_spdf$Link, '>', p_spdf$Link, '</a>'
 
 
 #palette purples
