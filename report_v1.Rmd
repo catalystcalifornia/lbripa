@@ -135,7 +135,7 @@ fx_barbubblechart(
 
   x='race_label_short', # x or independent variables
 
-  y='stop_rate', # y or dependent variable
+  y='stop_rate_per1k', # y or dependent variable
 
   z='stop_count',
 
@@ -658,6 +658,8 @@ council_district_count <-  council_district %>%
     report_stoprates_cd_race_person
   ) 
 
+# multiply rate by 100
+#population_race_cd$rate <- population_race_cd$rate*100
 
 
 # get demographics by council district
@@ -667,12 +669,21 @@ df_demographics <- population_race_cd %>% select(cd, race, count, rate) %>%  piv
   values_from = c(count:rate)
 )
 
+df_stop <- report_stoprates_cd_race_person %>% select(council_num, race, pop_count, stop_count, stop_rate_per1k) %>%  pivot_wider(
+ names_from = race,
+ names_glue = "{race}_{.value}",
+ values_from = c(pop_count:stop_rate_per1k)
+)
+
 ## merge df_demographics with council_district-- get council_district_demographics
 council_district_demographics <- council_district %>% 
   left_join(
     df_demographics, by = c("council_num" = "cd")
   ) 
 
+## merge with stop rate
+
+council_district_demographics <- council_district_demographics %>% left_join(df_stop)
 ## only keep last name of rep
 ####council_district_rate <- council_district_rate %>% mutate(representat = gsub(".* ", "", representat))
 
@@ -698,126 +709,170 @@ nhpi_dots <- lb_ripa_dots %>% filter(race == "nhpi")
 
 ## function to change the legend shape and color
 colors_function <- function(colors, sizes, borders, shapes) {
-  shapes <- gsub("circle", "50%", shapes)
-  shapes <- gsub("square", "0%", shapes)
-  paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:3px solid ", borders, "; border-radius:", shapes)
+  shapes <- gsub("circle", "100%", shapes)
+  shapes <- gsub("square", "100%", shapes)
+  paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:1px solid ", borders, "; border-radius:", shapes)
+}
+
+colors_function2 <- function(colors, sizes, borders, shapes) {
+  shapes <- gsub("square", "100%", shapes)
+  paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:1px solid ", borders, "; border-radius:", shapes)
 }
 
 ###
 
-# colors according to our brand guide: https://catalystcalifornia.sharepoint.com/sites/Portal/AP%20Projects/Forms/AllItems.aspx?FolderCTID=0x012000EF0283621C7FE048A8E68512F119353B&id=%2Fsites%2FPortal%2FAP%20Projects%2FCommunications%2FCatalyst%20California%2FBranding%20Materials%20%2B%20Templates%2FVisual%20Brand%20Guide%2FCatalyst%20California%20Brand%20Guide%5FSeptember%202022%2Epdf&viewid=1aaeb4a9%2D2232%2D41c7%2Da71c%2D727af9e1f5d7&parent=%2Fsites%2FPortal%2FAP%20Projects%2FCommunications%2FCatalyst%20California%2FBranding%20Materials%20%2B%20Templates%2FVisual%20Brand%20Guide
-#2BC433
-#362178
-#F25922
-#CEEA01
-#177FEB
-#FF9E0D
-#FFCC00
-#733256
+
 
 ### Pop-ups ### ---------------
 demographic_popup <- paste0((
   label = paste0(
-    "The racial makeup of Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+    "<div class='leaflet-popup-scrolled' style='max-width:800px;max-height:200px'>", 
+    "In Council District  <span style='font-size: 14px; font-weight: bold;'>",  council_district_demographics$council_num, 
     
-    council_district_demographics$council_num, "</span> consists of: <span style='font-size: 12px; font-weight: bold;'>",
-    
-   scales::percent(council_district_demographics$aian_rate),"</span> American Indian and Alaska Native </br> <span style='font-size: 12px; font-weight: bold;'>",
-    
-    scales::percent(council_district_demographics$latinx_rate), "</span>Latinx </br>  <span style='font-size: 12px; font-weight: bold;'>",
-    
-    scales::percent(council_district_demographics$mesa_rate), " </span> Middle Eastern or South Asian </br> <span style='font-size: 12px; font-weight: bold;'>",
-    
-    scales::percent(council_district_demographics$nh_asian_rate)," </span>Asian  </br>  <span style='font-size: 12px; font-weight: bold;'>",  
-    
-    scales::percent(council_district_demographics$nh_black_rate)," </span> Black </br>   <span style='font-size: 12px; font-weight: bold;'>", 
-    
-    scales::percent(council_district_demographics$nh_twoormor_rate)," </span> Two or More </br><span style='font-size: 12px; font-weight: bold;'>", 
-    
-    scales::percent(council_district_demographics$nh_white_rate), "</span>White </br> <span style='font-size: 12px; font-weight: bold;'>",  
-    
-    scales::percent(council_district_demographics$nhpi_rate), "</span> and Native Hawaiian or Pacific Islander.")
-))
-
-
-
-
-
-
-leaflet(width = "100%", height = "495px") %>%
+     "</span>, <br> <br> For every 1K  <span style='font-size: 14px; font-weight: bold;'> Black </span> people, LBPD stopped <span style='font-size: 14px; font-weight: bold;'>",
+    council_district_demographics$nh_black_stop_rate, "</span> people who identify as Black. <span style='font-size: 14px; font-weight: bold;'>",
+   scales::percent(council_district_demographics$nh_black_rate, accuracy = 0.1),"</span> of the population in this district identify as Black. </br <span style='font-size: 14px; font-weight: bold;'>",
+   
+    "</span> <br> For every 1K  <span style='font-size: 14px; font-weight: bold;'> Latinx </span> people, LBPD stopped <span style='font-size: 14px; font-weight: bold;'>",
+    council_district_demographics$latinx_stop_rate, "</span> people who identify as Latinx. <span style='font-size: 14px; font-weight: bold;'>",
+   scales::percent(council_district_demographics$latinx_rate, accuracy = 0.1),"</span> of the population in this district identify as Latinx. </br <span style='font-size: 14px; font-weight: bold;'>",
+   
+      "</span> <br> For every 1K  <span style='font-size: 14px; font-weight: bold;'> Asian </span> people, LBPD stopped <span style='font-size: 14px; font-weight: bold;'>",
+    council_district_demographics$nh_asian_stop_rate, "</span> people who identify as Asian. <span style='font-size: 14px; font-weight: bold;'>",
+   scales::percent(council_district_demographics$nh_asian_rate, accuracy = 0.1),"</span> of the population in this district identify as Asian. </br> <span style='font-size: 14px; font-weight: bold;'>",
+   
+     "</span> <br> For every 1K  <span style='font-size: 14px; font-weight: bold;'> White </span> people, LBPD stopped <span style='font-size: 14px; font-weight: bold;'>",
+    council_district_demographics$nh_white_stop_rate, "</span> people who identify as White. <span style='font-size: 14px; font-weight: bold;'>",
+   scales::percent(council_district_demographics$nh_white_rate, accuracy = 0.1),"</span> of the population in this district identify as White. </br> <span style='font-size: 14px; font-weight: bold;'>",
+      
+    "</span> <br> For every 1K  <span style='font-size: 14px; font-weight: bold;'> Middle Eastern or South Asian </span> people, LBPD stopped <span style='font-size: 14px; font-weight: bold;'>",
+    council_district_demographics$mesa_stop_rate, "</span> people who identify as Middle Eastern or South Asian. <span style='font-size: 14px; font-weight: bold;'>",
+   scales::percent(council_district_demographics$mesa_rate, accuracy = 0.1),"</span> of the population in this district identify as Middle Eastern or South Asian. </br> <span style='font-size: 14px; font-weight: bold;'>",
   
-  # add Long beach district layer with stop rates
-  addPolygons(data = council_district_demographics, label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", opacity = 1, fill=F, popup = ~paste0(demographic_popup), 
-            weight = 2, smoothFactor = 0.5,  highlight = highlightOptions(color = "white", weight = 7, bringToFront = TRUE, sendToBack = FALSE)) %>%
-  
+   
+   
+  "</span> <br> For every 1K  <span style='font-size: 14px; font-weight: bold;'> Native Hawaiian or Pacific Islander </span> people, LBPD stopped <span style='font-size: 14px; font-weight: bold;'>",
+    council_district_demographics$nhpi_rate_stop_rate, "</span> people who identify as Native Hawaiian or Pacific Islander. <span style='font-size: 14px; font-weight: bold;'>",
+   scales::percent(council_district_demographics$nhpi_rate, accuracy = 0.1),"</span> of the population in this district identify as Native Hawaiian or Pacific Islander. </br> <span style='font-size: 14px; font-weight: bold;'>",
+   
+   
+    "</span> <br> For every 1K  <span style='font-size: 14px; font-weight: bold;'> American Indian and Alaska Native </span> people, LBPD stopped <span style='font-size: 14px; font-weight: bold;'>",
+    council_district_demographics$aian_stop_rate, "</span> people who identify as American Indian and Alaska Native. <span style='font-size: 14px; font-weight: bold;'>",
+   scales::percent(council_district_demographics$aian_rate, accuracy = 0.1),"</span> of the population in this district identify as American Indian and Alaska Native. </br> <span style='font-size: 14px; font-weight: bold;'>",
+ 
+   
+       "</span> <br> For every 1K  <span style='font-size: 14px; font-weight: bold;'> Two or More Races </span> people, LBPD stopped <span style='font-size: 14px; font-weight: bold;'>",
+    council_district_demographics$nh_twoormor_stop_rate, "</span> people who identify as Two or More Races. <span style='font-size: 14px; font-weight: bold;'>",
+   scales::percent(council_district_demographics$nh_twoormor_rate, accuracy = 0.1),"</span> of the population in this district identify as Two or More Races. </br> <span style='font-size: 14px; font-weight: bold;'>"
+   
+
+
+
+)))
+
+
+# colors according to our brand guide: https://catalystcalifornia.sharepoint.com/sites/Portal/AP%20Projects/Forms/AllItems.aspx?FolderCTID=0x012000EF0283621C7FE048A8E68512F119353B&id=%2Fsites%2FPortal%2FAP%20Projects%2FCommunications%2FCatalyst%20California%2FBranding%20Materials%20%2B%20Templates%2FVisual%20Brand%20Guide%2FCatalyst%20California%20Brand%20Guide%5FSeptember%202022%2Epdf&viewid=1aaeb4a9%2D2232%2D41c7%2Da71c%2D727af9e1f5d7&parent=%2Fsites%2FPortal%2FAP%20Projects%2FCommunications%2FCatalyst%20California%2FBranding%20Materials%20%2B%20Templates%2FVisual%20Brand%20Guide
+
+# Base Color 00
+lime_green <- c('#0AB013')
+persian_indigo <- c('#211447')
+halloween_orange <- c('#DF4007')
+bitter_lemon <- c('#BCD313')
+blue <- c('#0860BC')
+dark_tangerine <- c('#EB8D00')
+american_yellow <- c('#EABB00')
+halaya_ube <- c('#601D42')
+
+#dark_silver <- c('#6F6F6F') ## remove these
+
+
+
+### change size of legend
+
+ leaflet(width = "100%", height = "600px") %>%
+
   
   ## add NH Black Stops
   
-  addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#CEEA01", stroke = TRUE) %>% 
+addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor=blue, stroke = TRUE) %>% 
   
   ## add NH White Stops
   
-  addCircleMarkers(data = nh_white_dots, group = "White", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#2BC433", stroke = TRUE) %>% 
+ addCircleMarkers(data = nh_white_dots, group = "White", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor=  bitter_lemon,  stroke = TRUE) %>% 
   
   
   ### add AIAN dots 
   
-  addCircleMarkers(data = aian_dots,  group = "AIAN", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#FF9E0D", stroke = TRUE) %>% 
+ addCircleMarkers(data = aian_dots,  group = "AIAN", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= dark_tangerine, stroke = TRUE) %>% 
   
   ### add latinx dots
   
-  addCircleMarkers(data = latinx_dots, group = "Latinx", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#177FEB", stroke = TRUE) %>% 
+ addCircleMarkers(data = latinx_dots, group = "Latinx", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= lime_green,  stroke = TRUE) %>% 
   
   ### add MESA dots
   
-  addCircleMarkers(data = mesa_dots, group = "MESA", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#F25922", stroke = TRUE) %>% 
+ addCircleMarkers(data = mesa_dots, group = "MESA", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= american_yellow, stroke = TRUE) %>% 
   
   ### add nh asian dots
   
-  addCircleMarkers(data = nh_asian_dots, group = "Asian", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#FFCC00", stroke = TRUE) %>% 
+ addCircleMarkers(data = nh_asian_dots, group = "Asian", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor=  halloween_orange, stroke = TRUE) %>% 
   
   ### add nh two or more dots
   
-  addCircleMarkers(data = nh_twoormor_dots, group = "Two or More Races", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#362178", stroke = TRUE) %>% 
+ addCircleMarkers(data = nh_twoormor_dots, group = "Two or More Races", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= persian_indigo, stroke = TRUE) %>% 
   
   ### add nhpi dots
   
-  addCircleMarkers(data = nhpi_dots, group = "NHPI", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= "#733256", stroke = TRUE) %>% 
+ addCircleMarkers(data = nhpi_dots, group = "NHPI", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= halaya_ube, stroke = TRUE) %>% 
   
-  addLayersControl(overlayGroups = c("Black", "White", "AIAN", "Latinx", "MESA","Asian", "Two or More Races", "NHPI"),
+   # add Long beach district layer with stop rates
+  addPolygons(data = council_district_demographics, label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", fillColor = "white", opacity = 1,  popup = ~paste0(demographic_popup), 
+            weight = 2, smoothFactor = 0.5,  highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE)) %>%
+  
+  addLayersControl(overlayGroups = c("Black", "Latinx", "Asian", "White",  "MESA", "NHPI", "AIAN", "Two or More Races"),
                    options = layersControlOptions(collapsed = FALSE))  %>%
+  
+  
   
   ## add Legend
   
-  addLegend(position = "bottomleft",   title = "", group = "Black", labels = c("Black traffic stop count"), colors = colors_function(colors ="#CEEA01", sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-    addLegend(position = "bottomleft",   title = "", group = "White", labels = c("White traffic stop count"), colors = colors_function(colors ="#2BC433", sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-   addLegend(position = "bottomleft",   title = "", group = "AIAN", labels = c("AIAN traffic stop count"), colors = colors_function(colors ="#FF9E0D", sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-   addLegend(position = "bottomleft",   title = "", group = "Latinx", labels = c("Latinx traffic stop count"), colors = colors_function(colors ="#177FEB", sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-   addLegend(position = "bottomleft",   title = "", group = "MESA", labels = c("MESA traffic stop count"), colors = colors_function(colors ="#2BC433", sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-   addLegend(position = "bottomleft",   title = "", group = "Asian", labels = c("Asian traffic stop count"), colors = colors_function(colors ="#FFCC00", sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-   addLegend(position = "bottomleft",   title = "", group = "Two or More Races", labels = c("Two or More Races traffic stop count"), colors = colors_function(colors ="#362178", sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-   addLegend(position = "bottomleft",   title = "", group = "NHPI", labels = c("NHPI traffic stop count"), colors = colors_function(colors ="#2BC433", sizes = "10", shapes = "circle", borders = NULL) ) %>%
+   addLegend(position = "bottomleft",   title = "1 dot = 10 people stopped", colors = "", labels = "") %>%
   
   
-   addLegend(position = "bottomleft",   title = "Each dot represents 10 traffic stops by race/ethnicity", colors = NA, labels = "Note:Each dot does not represent the actual location of a stop. Rather, this map summarizes the distribution of traffic stops by council district and race.") %>%
+  
+  addLegend(position = "bottomleft",   title = "", group = "Black", labels = c("Black"), colors = colors_function(colors = blue, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+    addLegend(position = "bottomleft",   title = "", group = "White", labels = c("White"), colors = colors_function(colors =  bitter_lemon, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+   addLegend(position = "bottomleft",   title = "", group = "AIAN", labels = c("American Indian or Alaska Native"), colors = colors_function(colors = dark_tangerine, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+   addLegend(position = "bottomleft",   title = "", group = "Latinx", labels = c("Latinx"), colors = colors_function(colors = lime_green, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+   addLegend(position = "bottomleft",   title = "", group = "MESA", labels = c("Middle Eastern or South Asian"), colors = colors_function(colors = american_yellow, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+   addLegend(position = "bottomleft",   title = "", group = "Asian", labels = c("Asian"), colors = colors_function(colors = halloween_orange, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+   addLegend(position = "bottomleft",   title = "", group = "Two or More Races", labels = c("Two or More Races"), colors = colors_function(colors =persian_indigo, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+   addLegend(position = "bottomleft",   title = "", group = "NHPI", labels = c("Native Hawaiian or Pacific Islander"), colors = colors_function(colors =halaya_ube, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+  
   
   #base and view
   
   addProviderTiles("CartoDB.Positron")%>%
-  setView(-118.1888, 	33.77091	, zoom = 11) %>%
+  setView(-118.1888, 	33.77091	, zoom = 11) %>% #base and view 
   
-  hideGroup(c( "Latinx", "White","Asian", "Two or More Races", "AIAN", "NHPI", "MESA", "Black"))  #base and view 
+  hideGroup(c("White"))   # hide white group
+ 
+ 
+ #<span style=' font-size: 12px;'>Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, MESA=Middle Eastern or South Asian; Observations by race may overlap in the point density map.</span style>
 
-
+#<span style='float: left; font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023.</span style>
 
 ```
+<span style=' font-size: 12px;'>Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, MESA=Middle Eastern or South Asian; Observations by race may overlap in the point density map. </span> 
+<br> <span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023.</span>
 
 
 ### More hours are spent on unnecessary stops in communities of color that have fewer resources.
@@ -834,34 +889,33 @@ council_district_noaction <- council_district %>%
     report_timespent_officerinitiated_cd_stop
   ) 
 
-
+cc_brand <- c("#E2D9FF", "#BDAFE9","#8E7ACA", "#362178","#211447")
 
 
 hours_rate_noaction_cap_popup <- paste0((
 label = paste0(
-   "In Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+   "In Council District  <span style='font-size: 14px; font-weight: bold;'>",  
  council_district_noaction$council_num, "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>",council_district_noaction$representat,"</span>), the total rate of LBPD Hours spent on officer-initiated stops that resulted in no action is <span style='font-size: 12px; font-weight: bold;'>",  
- scales::comma(council_district_noaction$hours_rate_noaction_cap, accuracy = 0.1), "</span>%, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_noaction$hours_count_noaction_cap, accuracy = 0.1), "</span> hours.")))
+ scales::comma(council_district_noaction$hours_rate_noaction_cap, accuracy = 0.1), "</span>%, a total of <span style='font-size: 14px; font-weight: bold;'> ", scales::comma(council_district_noaction$hours_count_noaction_cap, accuracy = 0.1), "</span> hours.")))
 
 
 
 
 #palette purples
-pal_stop_hours_rate_noaction_cap <- colorQuantile("Blues",council_district_noaction$hours_rate_noaction_cap, n = 5)
+pal_stop_hours_rate_noaction_cap <- colorQuantile(cc_brand,council_district_noaction$hours_rate_noaction_cap, n = 5)
 
 
 leaflet(width = "100%", height = "495px") %>%
   # add Long beach district layer with stop rates
-  addPolygons(data =  council_district_noaction,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 2, smoothFactor = 0.5, opacity = 1, fillOpacity = 2, popup = ~paste0(hours_rate_noaction_cap_popup),
+  addPolygons(data =  council_district_noaction,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", weight = 2, smoothFactor = 0.5, opacity = 1, fillOpacity = 0.5, popup = ~paste0(hours_rate_noaction_cap_popup),
               fillColor = ~pal_stop_hours_rate_noaction_cap(hours_rate_noaction_cap), highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE), group = "") %>%
   
   ## add legend for stop hours
-  addLegend(position = "bottomleft", pal = pal_stop_hours_rate_noaction_cap, values = council_district_noaction$hours_rate_noaction_cap, opacity = .5, title = "Percent of hours spent on officer initiated stops that result in no action out of all total hours spent on officer-initiated stops", na.label = NA, labFormat = function(type, cuts, p) {
+  addLegend(position = "bottomleft", pal = pal_stop_hours_rate_noaction_cap, values = council_district_noaction$hours_rate_noaction_cap, opacity = .5, title = "Percent of Hours Spent on Stops with No Action", na.label = NA, labFormat = function(type, cuts, p) {
     n = length(cuts)
     paste0(scales::comma(cuts, accuracy = .1)[-n], " &ndash; ", scales::comma(cuts, accuracy = .1)[-1], "%")
   }) %>%
-  
-  
+
   
   #base and view
   
@@ -884,125 +938,7 @@ We compared 2019 traffic stops to high-injury corridors and intersections identi
 #### DS ####
 
 ##### Map - map comparing traffic stop rates to injury networks #####
-
-### high injury network data: start with intersections. This should only be points
-## Link: https://www.longbeach.gov/goactivelb/programs/safe-streets-lb/high-injury-map/
-
-# Point SPDF for Motor Intersections -----------------------------------------------
-high_injury_motor_intersections_spdf <- SpatialPointsDataFrame(coords      = high_injury_motor_intersections [ , c("lon", "lat")],
-                                                               data        = high_injury_motor_intersections, 
-                                                               proj4string = CRS("+init=epsg:28992"))
-
-
-# Point SPDF for Pedestrian/Bike Crashes corridors -----------------------------------------------
-high_injury_ped_intersections_spdf <-  SpatialPointsDataFrame(coords      = high_injury_ped_intersections [ , c("lon", "lat")],
-                                                              data        = high_injury_ped_intersections, 
-                                                              proj4string = CRS("+init=epsg:28992"))
-
-
-
-
-
-## line
-##### points to line function found in RPubs: https://rpubs.com/walkerke/points_to_line
-
-points_to_line <- function(data, long, lat, id_field = NULL, sort_field = NULL) {
-  
-  # Convert to SpatialPointsDataFrame
-  coordinates(data) <- c(long, lat)
-  
-  # If there is a sort field...
-  if (!is.null(sort_field)) {
-    if (!is.null(id_field)) {
-      data <- data[order(data[[id_field]], data[[sort_field]]), ]
-    } else {
-      data <- data[order(data[[sort_field]]), ]
-    }
-  }
-  
-  # If there is only one path...
-  if (is.null(id_field)) {
-    
-    lines <- SpatialLines(list(Lines(list(Line(data)), "id")))
-    
-    return(lines)
-    
-    #if we have multiple lines...
-  } else if (!is.null(id_field)) {  
-    
-    # Split into a list by ID field
-    paths <- sp::split(data, data[[id_field]])
-    
-    sp_lines <- SpatialLines(list(Lines(list(Line(paths[[1]])), "line1")))
-    
-    # for loops
-    for (p in 2:length(paths)) {
-      id <- paste0("line", as.character(p))
-      l <- SpatialLines(list(Lines(list(Line(paths[[p]])), id)))
-      sp_lines <- spRbind(sp_lines, l)
-    }
-    
-    return(sp_lines)
-  }
-}
-
-# Line SF for  motor crashes corridors -----------------------------------------------------  
-
-
-
-## use points to line function
-high_injury_motor_corridors_line <- points_to_line(high_injury_motor_corridors, "lon", "lat", "rank")
-
-## make data tidy to join back with line string later
-
-high_injury_motor_corridors_tidy <- high_injury_motor_corridors %>%  group_by(rank) %>%  dplyr::mutate(number =row_number()) %>% group_by(rank) %>% pivot_wider(names_from = number, values_from = c("street", "address")) %>%
-  filter(!is.na(street_1)) %>% select(rank, corridor, length, num_crashes,num_killed_or_seriously_injured, street_1) %>% left_join(
-    
-    high_injury_motor_corridors %>%  group_by(rank) %>%  dplyr::mutate(number =row_number()) %>% group_by(rank) %>% pivot_wider(names_from = number, values_from = c("street", "address")) %>%
-      filter(!is.na(street_2)) %>% select(rank, corridor, length, num_crashes,num_killed_or_seriously_injured, street_2)) %>%  left_join(
-        high_injury_motor_corridors %>%  group_by(rank) %>%  dplyr::mutate(number =row_number()) %>% group_by(rank) %>% pivot_wider(names_from = number, values_from = c("street", "address")) %>%
-          filter(!is.na(address_1)) %>% select(rank, corridor, length, num_crashes,num_killed_or_seriously_injured, address_1)
-      ) %>% left_join(
-        high_injury_motor_corridors %>%  group_by(rank) %>%  dplyr::mutate(number =row_number()) %>% group_by(rank) %>% pivot_wider(names_from = number, values_from = c("street", "address")) %>%
-          filter(!is.na(address_2)) %>% select(rank, corridor, length, num_crashes,num_killed_or_seriously_injured, address_2)
-      )
-
-## convert to spatial line data frame
-high_injury_motor_corridors_line_sf <- SpatialLinesDataFrame(sl = high_injury_motor_corridors_line, data = high_injury_motor_corridors_tidy, match.ID = FALSE)
-
-# convert to simple feature
-high_injury_motor_corridors_line_sf <- st_as_sf(high_injury_motor_corridors_line_sf)
-
-
-# Line SF for  pedestrian/bike crashes corridors --------------------------------------------------
-
-## use points to line function
-high_injury_ped_corridors_line <- points_to_line(high_injury_ped_corridors, "lon", "lat", "rank")
-
-## make data tidy to join back with line string later
-
-high_injury_ped_corridors_tidy <- high_injury_ped_corridors %>%  group_by(rank) %>%  dplyr::mutate(number =row_number()) %>% group_by(rank) %>% pivot_wider(names_from = number, values_from = c("street", "address")) %>%
-  filter(!is.na(street_1)) %>% select(rank, corridor, length, num_crashes,num_killed_or_seriously_injured, street_1) %>% left_join(
-    
-    high_injury_ped_corridors %>%  group_by(rank) %>%  dplyr::mutate(number =row_number()) %>% group_by(rank) %>% pivot_wider(names_from = number, values_from = c("street", "address")) %>%
-      filter(!is.na(street_2)) %>% select(rank, corridor, length, num_crashes,num_killed_or_seriously_injured, street_2)) %>%  left_join(
-        high_injury_ped_corridors %>%  group_by(rank) %>%  dplyr::mutate(number =row_number()) %>% group_by(rank) %>% pivot_wider(names_from = number, values_from = c("street", "address")) %>%
-          filter(!is.na(address_1)) %>% select(rank, corridor, length, num_crashes,num_killed_or_seriously_injured, address_1)
-      ) %>% left_join(
-        high_injury_ped_corridors %>%  group_by(rank) %>%  dplyr::mutate(number =row_number()) %>% group_by(rank) %>% pivot_wider(names_from = number, values_from = c("street", "address")) %>%
-          filter(!is.na(address_2)) %>% select(rank, corridor, length, num_crashes,num_killed_or_seriously_injured, address_2)
-      )
-
-
-## convert to spatial line data frame
-high_injury_ped_corridors_line_sf <- SpatialLinesDataFrame(sl = high_injury_ped_corridors_line, data = high_injury_ped_corridors_tidy, match.ID = FALSE)
-
-# convert to simple feature
-high_injury_ped_corridors_line_sf <- st_as_sf(high_injury_ped_corridors_line_sf)
-
-
-
-
+source("W:/Project/ECI/LB RIPA/R/3. Safety/report_highinjury_corridors_intersections.R")
 
 # merge stop rates by council district shape-file -----------------------------------
 council_district$council_num <- as.character(council_district$council_num) # change council number to character to merge
@@ -1063,18 +999,22 @@ high_injury_ped_intersections_popup <- paste0((
 
 
 
+## palette #2
+
+#cc_brand2 <- c('#FFbDA6', '#FF9873', '#FA7B4D', '#F25922', '#DF4007')
+
+russian_violet <- c('#211447')
+brown_chocolate <- c('#601D42')
 
 
-#palette purples
-
-pal_total <- colorQuantile("Blues", council_district_rate$total_traffic_stop_rate, n = 5)
+pal_total <- colorQuantile(cc_brand, council_district_rate$total_traffic_stop_rate, n = 5)
 
 
 leaflet(width = "100%", height = "495px") %>%
   
   
   # add Long beach district layer with stop rates
-  addPolygons(data = council_district_rate,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 2, smoothFactor = 0.5,  opacity = 1, fillOpacity = 2,  fillColor = ~pal_total(total_traffic_stop_rate), highlight = highlightOptions(color = "white", weight = 3, bringToFront = FALSE), group = "Council Districts") %>%
+  addPolygons(data = council_district_rate,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 2, smoothFactor = 0.5,  opacity = 1, fillOpacity = 0.5,  fillColor = ~pal_total(total_traffic_stop_rate), highlight = highlightOptions(color = "white", weight = 3, bringToFront = FALSE), group = "Council Districts") %>%
   
   
   ## add motor corridors 
@@ -1082,14 +1022,14 @@ leaflet(width = "100%", height = "495px") %>%
                popup= ~paste0(high_injury_motor_corridors_popup),
                label= ~htmlEscape(paste0("High Injury Motor Intersections/Corridors")),
              
-              color = "yellow", weight = 4, opacity = 2) %>%
+              color = "yellow", weight = 2, opacity = 2) %>%
   
   ## add pedestrian/bike corridors
   addPolylines(data = high_injury_ped_corridors_line_sf, group = "High Injury Pedestrian or Bike Intersections/Corridors",
                popup= ~paste0(high_injury_ped_corridors_popup),
                label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
               
-               color = "red", weight = 4, opacity = 2) %>%
+               color = "red", weight = 2, opacity = 2) %>%
   
   
   
@@ -1114,7 +1054,7 @@ leaflet(width = "100%", height = "495px") %>%
   
   
   ## add legend for stop rate
-  addLegend(layerId = "Total", position = "bottomleft", group = "Total", pal = pal_total, values = council_district_rate$total_traffic_stop_rate, opacity = .5, title = "Officer-Initiated Traffic Stop Rate By Council District Per 1K Total Residents", na.label = NA, labFormat = function(type, cuts, p) {
+  addLegend(layerId = "Total", position = "bottomleft", group = "Total", pal = pal_total, values = council_district_rate$total_traffic_stop_rate, opacity = .5, title = "Traffic Stop Rate Per 1K Total Residents", na.label = NA, labFormat = function(type, cuts, p) {
     n = length(cuts)
     paste0(cuts[-n], " &ndash; ", cuts[-1])
   })  %>%
