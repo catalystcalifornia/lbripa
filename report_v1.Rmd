@@ -780,7 +780,7 @@ halloween_orange <- c('#DF4007')
 bitter_lemon <- c('#BCD313')
 blue <- c('#0860BC')
 dark_tangerine <- c('#EB8D00')
-american_yellow <- c('EABB00')
+american_yellow <- c('#EABB00')
 halaya_ube <- c('#601D42')
 
 #dark_silver <- c('#6F6F6F') ## remove these
@@ -848,7 +848,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
   
    addLegend(position = "bottomleft",   title = "", group = "Latinx", labels = c("Latinx"), colors = colors_function(colors = lime_green, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
-   addLegend(position = "bottomleft",   title = "", group = "MESA", labels = c("Middle Eastern or South Asian"), colors = colors_function(colors = dark_silver, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+   addLegend(position = "bottomleft",   title = "", group = "MESA", labels = c("Middle Eastern or South Asian"), colors = colors_function(colors = american_yellow, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
    addLegend(position = "bottomleft",   title = "", group = "Asian", labels = c("Asian"), colors = colors_function(colors = halloween_orange, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
