@@ -24,6 +24,7 @@ library(leaflet)
 library(sp)
 library(htmltools) # for html escape
 library(magrittr)
+library(leaflegend) # customize legends to change shapes
 
 
 library(htmlwidgets)
@@ -941,6 +942,7 @@ A common narrative may be that traffic stops lead to safer streets with fewer in
 We compared 2019 traffic stops to high-injury corridors and intersections identified by the Safe Streets Long Beach initiative. The initiative identified these high-injury corridors and intersections based on 2013-17 data, but they remain the initiative's action plan to guarantee equity in increasing road safety. Council Districts 1 and 6 have the highest rate of traffic stops, but they also have the highest concentration of high-injury motor, pedestrian, and bike networks. Rather than improving safety in these highly impacted communities, officer-initiated traffic stops can lead to greater harm by more contact and exposure to the police. 
 
 
+
 ```{r, echo=FALSE}
 #### DS ####
 
@@ -964,6 +966,16 @@ council_district_rate <- council_district %>%
   ) 
 
 
+### remove Long Beach, CA from pop-up
+
+high_injury_motor_intersections_spdf <- high_injury_motor_intersections_spdf  %>% mutate(address= gsub(", Long Beach, CA, USA", "", address))
+high_injury_ped_intersections_spdf <- high_injury_ped_intersections_spdf  %>% mutate(address= gsub(", Long Beach, CA, USA", "", address))
+high_injury_motor_corridors_line_sf <- high_injury_motor_corridors_line_sf %>% mutate(address_1= gsub(", Long Beach, CA, USA", "", address_1),
+                                                                   address_2= gsub(", Long Beach, CA, USA", "", address_2),)
+high_injury_ped_corridors_line_sf <- high_injury_ped_corridors_line_sf  %>% mutate(address_1= gsub(", Long Beach, CA, USA", "", address_1),
+                                                                   address_2= gsub(", Long Beach, CA, USA", "", address_2),)
+
+
 
 ###############
 ####Pop-Ups####
@@ -971,15 +983,15 @@ council_district_rate <- council_district %>%
 
 high_injury_motor_intersections_popup <- paste0((
   label = paste0(
-    "There are approximately <span style='font-weight: bold;'>", high_injury_motor_intersections_spdf$num_killed_or_seriously_injured, "</span> killed or seriously injured, <span style='font-size: 12px; font-weight: bold;'>",  
-    high_injury_motor_intersections_spdf$num_vehicle_crashes, "</span> Vehicle Crash(es), and <span style='font-size: 12px; font-weight: bold;'>", high_injury_motor_intersections_spdf$num_motorcycle_crashes,"</span> motorcycle crash(es) at the intersection of <span style='font-size: 12px; font-weight: bold;'>",  
+    "There were approximately <span style='font-weight: bold;'>", high_injury_motor_intersections_spdf$num_killed_or_seriously_injured, "</span> killed or seriously injured, <span style='font-size: 12px; font-weight: bold;'>",  
+    high_injury_motor_intersections_spdf$num_vehicle_crashes, "</span> vehicle crash(es), and <span style='font-size: 12px; font-weight: bold;'>", high_injury_motor_intersections_spdf$num_motorcycle_crashes,"</span> motorcycle crash(es) at the intersection of <span style='font-size: 12px; font-weight: bold;'>",  
     high_injury_motor_intersections_spdf$address,".")))
 
 
 high_injury_ped_corridors_popup <- paste0((
   label = paste0(
-    "There are approximately <span style='font-weight: bold;'>", high_injury_ped_corridors_line_sf$num_killed_or_seriously_injured, "</span> killed or seriously injured and <span style='font-size: 12px; font-weight: bold;'>",  
-    high_injury_ped_corridors_line_sf$num_crashes, "</span> Pedestrian or Bicycle Crash(es), at corridor <span style='font-size: 12px; font-weight: bold;'>",
+    "There were approximately <span style='font-weight: bold;'>", high_injury_ped_corridors_line_sf$num_killed_or_seriously_injured, "</span> killed or seriously injured and <span style='font-size: 12px; font-weight: bold;'>",  
+    high_injury_ped_corridors_line_sf$num_crashes, "</span> pedestrian or bicycle crash(es), at corridor <span style='font-size: 12px; font-weight: bold;'>",
     high_injury_ped_corridors_line_sf$corridor, "</span>. This corridor runs from <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_corridors_line_sf$address_1, "</span> to <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_corridors_line_sf$address_2, ".")))
 
 
@@ -989,8 +1001,8 @@ high_injury_ped_corridors_popup <- paste0((
 
 high_injury_motor_corridors_popup <- paste0((
   label = paste0(
-    "There are approximately <span style='font-weight: bold;'>", high_injury_motor_corridors_line_sf$num_killed_or_seriously_injured, "</span> killed or seriously injured and <span style='font-size: 12px; font-weight: bold;'>",  
-    high_injury_motor_corridors_line_sf$num_crashes, "</span> Vehicle or Motorcycle Crash(es), at corridor <span style='font-size: 12px; font-weight: bold;'>",
+    "There were approximately <span style='font-weight: bold;'>", high_injury_motor_corridors_line_sf$num_killed_or_seriously_injured, "</span> killed or seriously injured and <span style='font-size: 12px; font-weight: bold;'>",  
+    high_injury_motor_corridors_line_sf$num_crashes, "</span> vehicle or motorcycle crash(es), at corridor <span style='font-size: 12px; font-weight: bold;'>",
     high_injury_motor_corridors_line_sf$corridor, "</span>. This corridor runs from <span style='font-size: 12px; font-weight: bold;'>", high_injury_motor_corridors_line_sf$address_1, "</span> to <span style='font-size: 12px; font-weight: bold;'>", high_injury_motor_corridors_line_sf$address_2,".")))
 
 
@@ -998,8 +1010,8 @@ high_injury_motor_corridors_popup <- paste0((
 
 high_injury_ped_intersections_popup <- paste0((
   label = paste0(
-    "There are approximately <span style='font-weight: bold;'>", high_injury_ped_intersections_spdf$num_killed_or_seriously_injured, "</span> killed or seriously injured, <span style='font-size: 12px; font-weight: bold;'>",  
-    high_injury_ped_intersections_spdf$num_ped_crashes, "</span> Pedestrian Crash(es), and <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_intersections_spdf$num_bike_crashes,"</span> bike crash(es) at the intersection of <span style='font-size: 12px; font-weight: bold;'>",  
+    "There were approximately <span style='font-weight: bold;'>", high_injury_ped_intersections_spdf$num_killed_or_seriously_injured, "</span> killed or seriously injured, <span style='font-size: 12px; font-weight: bold;'>",  
+    high_injury_ped_intersections_spdf$num_ped_crashes, "</span> pedestrian crash(es), and <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_intersections_spdf$num_bike_crashes,"</span> bike crash(es) at the intersection of <span style='font-size: 12px; font-weight: bold;'>",  
     high_injury_ped_intersections_spdf$address,".")))
 
 
@@ -1020,15 +1032,12 @@ peridot <- c("#CEEA01")
 pal_total <- colorQuantile(cc_brand, council_district_rate$total_traffic_stop_rate, n = 5)
 
 ## function to change the legend shape and color
-colors_function_circle <- function(colors, sizes, borders, shapes) {
-  shapes <- gsub("circle", "100%", shapes)
-  paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:1px solid ", borders, "; border-radius:", shapes)
-}
 
 colors_function_line <- function(colors, sizes, borders, shapes) {
   shapes <- gsub("dashed", "100%", shapes)
   paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:1px solid ", borders, "; border-radius:", shapes)
 }
+
 
 
 leaflet(width = "100%", height = "495px") %>%
@@ -1080,22 +1089,21 @@ leaflet(width = "100%", height = "495px") %>%
     paste0(cuts[-n], " &ndash; ", cuts[-1])
   })  %>%
   
-  ### MOTOR
-  ## add legend for intersections
- 
-   addLegend(position = "bottomleft",   title = "", group = "High Injury Motor Intersections/Corridors", labels = "Motor Intersections", colors = colors_function_circle(colors =peridot, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
+ #### CORRIDOR LEGEND
+
 ## add legend for corridors
-   addLegend(position = "bottomleft",   title = "", group = "High Injury Motor Intersections/Corridors", labels = "Motor Corridors", colors = colors_function_line(colors =peridot, sizes = "10", shapes = "dashed", borders = NULL) ) %>%
+  addLegendLine(position = "bottomleft",values = 0, title = "Motor Corridors",  group = "High Injury Motor Intersections/Corridors",  baseSize = 5, width = 50, color = peridot) %>%
   
-  ### PEDESTRIAN
+    ## add legend for corridors
+  addLegendLine(position = "bottomleft",values = 0, title = "Pedestrian or Bike Corridors",  group = "High Injury Pedestrian or Bike Intersections/Corridors",  baseSize = 5, width = 50, color = papaya_orange) %>%
+  
+  ### PEDESTRIAN LEGEND
   
   ## add legend for intersections
    addLegend(position = "bottomleft",   title = "", group = "High Injury Pedestrian or Bike Intersections/Corridors", labels = "Pedestrian or Bike Intersections", colors = colors_function_circle(colors =papaya_orange, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
-  ## add legend for corridors
-   addLegend(position = "bottomleft",   title = "", group = "High Injury Pedestrian or Bike Intersections/Corridors", labels = "Pedestrian or Bike Corridors", colors = colors_function_line(colors =papaya_orange, sizes = "10", shapes = "dashed", borders = NULL) ) %>%
-  
+
+   addLegend(position = "bottomleft",   title = "", group = "High Injury Motor Intersections/Corridors", labels = "Motor Intersections", colors = colors_function_circle(colors =peridot, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
   
   #layer control
