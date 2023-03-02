@@ -24,7 +24,8 @@ library(leaflet)
 library(sp)
 library(htmltools) # for html escape
 library(magrittr)
-library(maptools)
+
+
 library(htmlwidgets)
 
 
@@ -38,10 +39,10 @@ report_stoprates_race_person <- dbGetQuery(con, "SELECT * FROM data.report_stopr
 report_stoprates_cd_race_person <- dbGetQuery(con, "SELECT * FROM data.report_stoprates_cd_race_person") 
 report_hitrates_race_person <- dbGetQuery(con, "SELECT * FROM data.report_hitrates_race_person") 
 council_district <- st_read(con, query = "SELECT * FROM data.colb_council_districts_place_2022")
-high_injury_motor_corridors <- st_read(con, query = "SELECT * FROM data.high_injury_motor_corridors")
-high_injury_motor_intersections <- st_read(con, query = "SELECT * FROM data.high_injury_motor_intersections")
-high_injury_ped_corridors  <- st_read(con, query = "SELECT * FROM data.high_injury_ped_corridors")
-high_injury_ped_intersections <- st_read(con, query = "SELECT * FROM data.high_injury_ped_intersections")
+high_injury_motor_corridors_line_sf <- st_read(con, query = "SELECT * FROM data.high_injury_motor_corridors_spatial") %>% st_as_sf()
+high_injury_motor_intersections_spdf <- st_read(con, query = "SELECT * FROM data.high_injury_motor_intersections_spatial")
+high_injury_ped_corridors_line_sf  <- st_read(con, query = "SELECT * FROM data.high_injury_ped_corridors_spatial")  %>% st_as_sf()
+high_injury_ped_intersections_spdf <- st_read(con, query = "SELECT * FROM data.high_injury_ped_intersections_spatial")
 report_timespent_officerinitiated_cd_stop <- st_read(con, query = "SELECT * FROM data.report_timespent_officerinitiated_cd_stop")
 report_traffic_stoprates_cd_race_person <- dbGetQuery(con, "SELECT * FROM data.report_traffic_stoprates_cd_race_person") 
 population_race_cd <-  dbGetQuery(con, "SELECT * FROM data.population_race_cd") 
@@ -714,10 +715,6 @@ colors_function <- function(colors, sizes, borders, shapes) {
   paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:1px solid ", borders, "; border-radius:", shapes)
 }
 
-colors_function2 <- function(colors, sizes, borders, shapes) {
-  shapes <- gsub("square", "100%", shapes)
-  paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:1px solid ", borders, "; border-radius:", shapes)
-}
 
 ###
 
@@ -948,7 +945,7 @@ We compared 2019 traffic stops to high-injury corridors and intersections identi
 #### DS ####
 
 ##### Map - map comparing traffic stop rates to injury networks #####
-source("W:/Project/ECI/LB RIPA/R/3. Safety/report_highinjury_corridors_intersections.R")
+#source("W:/Project/ECI/LB RIPA/R/3. Safety/report_highinjury_corridors_intersections.R")
 
 # merge stop rates by council district shape-file -----------------------------------
 council_district$council_num <- as.character(council_district$council_num) # change council number to character to merge
@@ -1013,11 +1010,25 @@ high_injury_ped_intersections_popup <- paste0((
 
 #cc_brand2 <- c('#FFbDA6', '#FF9873', '#FA7B4D', '#F25922', '#DF4007')
 
-russian_violet <- c('#211447')
-brown_chocolate <- c('#601D42')
+#palette colors
+
+papaya_orange <- c("#F25922")
+peridot <- c("#CEEA01")
+
 
 
 pal_total <- colorQuantile(cc_brand, council_district_rate$total_traffic_stop_rate, n = 5)
+
+## function to change the legend shape and color
+colors_function_circle <- function(colors, sizes, borders, shapes) {
+  shapes <- gsub("circle", "100%", shapes)
+  paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:1px solid ", borders, "; border-radius:", shapes)
+}
+
+colors_function_line <- function(colors, sizes, borders, shapes) {
+  shapes <- gsub("dashed", "100%", shapes)
+  paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:1px solid ", borders, "; border-radius:", shapes)
+}
 
 
 leaflet(width = "100%", height = "495px") %>%
@@ -1032,14 +1043,14 @@ leaflet(width = "100%", height = "495px") %>%
                popup= ~paste0(high_injury_motor_corridors_popup),
                label= ~htmlEscape(paste0("High Injury Motor Intersections/Corridors")),
              
-              color = "yellow", weight = 2, opacity = 2) %>%
+              color = peridot, weight = 2, opacity = 2) %>%
   
   ## add pedestrian/bike corridors
   addPolylines(data = high_injury_ped_corridors_line_sf, group = "High Injury Pedestrian or Bike Intersections/Corridors",
                popup= ~paste0(high_injury_ped_corridors_popup),
                label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
               
-               color = "red", weight = 2, opacity = 2) %>%
+               color = papaya_orange, weight = 2, opacity = 2) %>%
   
   
   
@@ -1049,7 +1060,7 @@ leaflet(width = "100%", height = "495px") %>%
                    popup= ~paste0(high_injury_motor_intersections_popup),
                    label= ~htmlEscape(paste0("High Injury Motor Vehicle/Motorcycle Intersection")),
                    weight = 2, fillOpacity = 1, radius=4,
-                    color = "black", fillColor= "yellow", stroke = TRUE
+                    color = "black", fillColor= peridot, stroke = TRUE
   ) %>%
   
   ## add pedestrian/bike intersections
@@ -1058,7 +1069,7 @@ leaflet(width = "100%", height = "495px") %>%
                    popup= ~paste0(high_injury_ped_intersections_popup),
                    label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
                    weight = 2, fillOpacity = 1, radius=4,
-                   color="black",  fillColor= "red", stroke = TRUE
+                   color="black",  fillColor= papaya_orange, stroke = TRUE
   ) %>%
   
   
@@ -1068,6 +1079,24 @@ leaflet(width = "100%", height = "495px") %>%
     n = length(cuts)
     paste0(cuts[-n], " &ndash; ", cuts[-1])
   })  %>%
+  
+  ### MOTOR
+  ## add legend for intersections
+ 
+   addLegend(position = "bottomleft",   title = "", group = "High Injury Motor Intersections/Corridors", labels = "Motor Intersections", colors = colors_function_circle(colors =peridot, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+## add legend for corridors
+   addLegend(position = "bottomleft",   title = "", group = "High Injury Motor Intersections/Corridors", labels = "Motor Corridors", colors = colors_function_line(colors =peridot, sizes = "10", shapes = "dashed", borders = NULL) ) %>%
+  
+  ### PEDESTRIAN
+  
+  ## add legend for intersections
+   addLegend(position = "bottomleft",   title = "", group = "High Injury Pedestrian or Bike Intersections/Corridors", labels = "Pedestrian or Bike Intersections", colors = colors_function_circle(colors =papaya_orange, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+  ## add legend for corridors
+   addLegend(position = "bottomleft",   title = "", group = "High Injury Pedestrian or Bike Intersections/Corridors", labels = "Pedestrian or Bike Corridors", colors = colors_function_line(colors =papaya_orange, sizes = "10", shapes = "dashed", borders = NULL) ) %>%
+  
+  
   
   #layer control
   
@@ -1103,7 +1132,7 @@ report_hitrates_race_person<-report_hitrates_race_person%>%filter(race!="total")
 
 # Apply Chart
 
-fx_lollichart(
+fx_barbubblechart(
 
   db=report_hitrates_race_person, #name of dataframe
 
@@ -1113,20 +1142,22 @@ fx_lollichart(
 
   y='hit_rates', # y or dependent variable
 
-  # z='count',#not working right now so ignore
+  z='evidence_not_found',
 
-  top_finding=paste0("The majority of searches conducted during traffic stops lead to no evidence or contraband found."), # this is the top finding from the chart that gets used like a title
+ top_finding=paste0("The majority of searches conducted during traffic stops lead to no evidence or contraband found."), # this is the top finding from the chart that gets used like a title
 
-  chart_title= paste0("Searches with No Contraband or Evidence Found among Traffic Stops by Race"), # this is the more standard chart title that gets used as a subtitle
+
+   chart_title= paste0("Searches with No Contraband or Evidence Found among Traffic Stops by Race"), # this is the more standard chart title that gets used as a subtitle
+
 
   tooltip_text=list(headerFormat="",pointFormat = "For every 100 searches done during traffic stops of people identified as <b>{point.race_label_long:.1f}</b>, LBPD did not find contraband/evidence in <b>{point.hit_rates:.1f}</b>% of those stops,  a total of <b>{point.evidence_not_found:.1f}</b> unnecessary searches."), # customize your tooltip as a statement, calling out rate and count
 
-  chart_caption = paste0(racenote,"<br>", sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
+    chart_caption = paste0(racenote,"<br>", sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
 
-  yaxis_label = "''", #format for your y axis labels
+
+ yaxis_label = "''", #format for your y axis labels
   export_data_label=list(pointFormat='{point.hit_rates:.1f}%') # format for your data labels on export images
 )
-
 
 
 ```
