@@ -291,22 +291,29 @@ traffic<-df%>%
 
 # Apply Chart 
 
-fx_lollichart(
-  traffic, #name of dataframe
+fx_barbubblechart(
+
+  db=traffic, #name of dataframe
+
   order_var=traffic$stop_denom_rate, #variable you're sorting by
+
   x='race_label_short', # x or independent variables
+
   y='stop_denom_rate', # y or dependent variable
+
+  z='pop_count',
 
   top_finding=paste0("Multiracial and Black people are most likely to be stopped for minor traffic stops."), # this is the top finding from the chart that gets used like a title
 
   chart_title= paste0("Percent of traffic stops that resulted in no action by race"), # this is the more standard chart title that gets used as a subtitle
 
+ 
   tooltip_text=list(headerFormat="",pointFormat = "<b>{point.stop_denom_rate:,.1f}%</b> of stops of <b>{point.race_label_short}</b> people result in No Action, or a total of {point.stop_count:,.1f} stops"), # customize your tooltip as a statement, calling out rate and count
 
-  chart_caption = paste0(racenote,"<br>", sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
+  
+  chart_caption = paste0(racenote,"<br>", sourcenote), 
   yaxis_label = "'%'", #format for your y axis labels
-  export_data_label=list(pointFormat='{point.stop_denom_rate:.1f}%')) # format for your data labels on export images
-
+  export_data_label=list(pointFormat='{point.stop_denom_rate:.1f}%'))
 
 
 ```
