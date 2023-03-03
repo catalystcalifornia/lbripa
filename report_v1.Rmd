@@ -24,7 +24,7 @@ library(leaflet)
 library(sp)
 library(htmltools) # for html escape
 library(magrittr)
-library(leaflegend) # customize legends to change shapes
+#library(leaflegend) # customize legends to change shapes:: commenting out because not needed for high injury network maps for now
 
 
 library(htmlwidgets)
@@ -1034,16 +1034,16 @@ high_injury_ped_intersections_popup <- paste0((
 papaya_orange <- c("#F25922")
 peridot <- c("#CEEA01")
 
-
+cc_brand <- c("#E2D9FF", "#BDAFE9","#8E7ACA", "#362178","#211447")
 
 pal_total <- colorQuantile(cc_brand, council_district_rate$total_traffic_stop_rate, n = 5)
 
 ## function to change the legend shape and color
 
-colors_function_line <- function(colors, sizes, borders, shapes) {
-  shapes <- gsub("dashed", "100%", shapes)
-  paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:1px solid ", borders, "; border-radius:", shapes)
-}
+#colors_function_circle <- function(colors, sizes, borders, shapes) {
+ # shapes <- gsub("circle", "100%", shapes)
+ # paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:1px solid ", borders, "; border-radius:", shapes)
+#}
 
 
 
@@ -1099,18 +1099,18 @@ leaflet(width = "100%", height = "495px") %>%
  #### CORRIDOR LEGEND
 
 ## add legend for corridors
-  addLegendLine(position = "bottomleft",values = 0, title = "Motor Corridors",  group = "High Injury Motor Intersections/Corridors",  baseSize = 5, width = 50, color = peridot) %>%
+##  addLegendLine(position = "bottomleft",values = 0, title = "Motor Corridors",  group = "High Injury Motor Intersections/Corridors",  baseSize = 5, width = 50, color = peridot) %>%
   
     ## add legend for corridors
-  addLegendLine(position = "bottomleft",values = 0, title = "Pedestrian or Bike Corridors",  group = "High Injury Pedestrian or Bike Intersections/Corridors",  baseSize = 5, width = 50, color = papaya_orange) %>%
+#  addLegendLine(position = "bottomleft",values = 0, title = "Pedestrian or Bike Corridors",  group = "High Injury Pedestrian or Bike Intersections/Corridors",  baseSize = 5, width = 50, color = papaya_orange) %>%
   
   ### PEDESTRIAN LEGEND
   
   ## add legend for intersections
-   addLegend(position = "bottomleft",   title = "", group = "High Injury Pedestrian or Bike Intersections/Corridors", labels = "Pedestrian or Bike Intersections", colors = colors_function_circle(colors =papaya_orange, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+#   addLegend(position = "bottomleft",   title = "", group = "High Injury Pedestrian or Bike Intersections/Corridors", labels = "Pedestrian or Bike Intersections", colors = colors_function_circle(colors =papaya_orange, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
 
-   addLegend(position = "bottomleft",   title = "", group = "High Injury Motor Intersections/Corridors", labels = "Motor Intersections", colors = colors_function_circle(colors =peridot, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+ #  addLegend(position = "bottomleft",   title = "", group = "High Injury Motor Intersections/Corridors", labels = "Motor Intersections", colors = colors_function_circle(colors =peridot, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
   
   #layer control
