@@ -86,7 +86,7 @@ df<-dbGetQuery(con, "SELECT * FROM report_timespent_cfs_stop")
 df %>%
   hchart(
     "pie", hcaes(x = label, y = hours_rate_cap),
-    name = "Uninsured Population in Central Long Beach",
+    name = "",
     tooltip = list(headerFormat="", pointFormat = "<b>{point.hours_rate_cap:.1f}%</b> of hours are spent on <b>{point.label}</b>, or a total of {point.hours_count_cap:,.1f} hours"),
      innerSize="65%",
      center = c(50, 50), 
@@ -106,8 +106,8 @@ df %>%
 hc_add_theme(cc_theme)%>%
   hc_exporting(
     enabled = TRUE, sourceWidth=900, sourceHeight=600, 
-    chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(sourcenote))))),
-    filename = paste0("Police spend nearly 4x more hours on officer-initiated stops compared to calls for service","_Catalyst California, catalystcalifornia.org, 2023.")
+    chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format='{point.hours_rate_cap:.1f}%')))),
+    filename = paste0("Percent of hours spent on calls for service versus officer-initiated stops","_Catalyst California, catalystcalifornia.org, 2023.")
   )
 
 ```
@@ -133,7 +133,7 @@ fx_barbubblechart(
 
   db=report_stoprates_race_person, #name of dataframe
 
-  order_var=report_stoprates_race_person$rate, #variable you're sorting by
+  order_var=report_stoprates_race_person$stop_rate_per1k, #variable you're sorting by
 
   x='race_label_short', # x or independent variables
 
@@ -145,12 +145,12 @@ fx_barbubblechart(
 
   chart_title= paste0("Number of Officer-initiated Stops per 1K of Same Population by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
 
-  tooltip_text="For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate:.1f}</b> people identified as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:,0f}</b> people.", # customize your tooltip as a statement, calling out rate and count
+  tooltip_text="For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate_per1k:.1f}</b> people identified as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:,0f}</b> people.", # customize your tooltip as a statement, calling out rate and count
 
   chart_caption = paste0(racenote,"<br>", sourcenote, "<br><br><br>"), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
 
   yaxis_label = "''", #format for your y axis labels
-  export_data_label=list(pointFormat='{point.stop_rate:.1f} per 1K') # format for your data labels on export images
+   export_data_label=list(pointFormat='{point.stop_rate_per1k:.1f} per 1K')
 )
 ```
 
@@ -188,11 +188,11 @@ fx_lollichart(
 
   chart_title= paste0("Hours spent on stops by stop reason"), # this is the more standard chart title that gets used as a subtitle
 
-  tooltip_text="<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours", # customize your tooltip as a statement, calling out rate and count
+  tooltip_text="<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours", 
 
-  chart_caption = paste0(sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
+  chart_caption = paste0(sourcenote), 
   yaxis_label = "'%'", #format for your y axis labels
-  export_data_label=list(pointFormat='{point.stop_time_hrs_cap:.1f}% of hours')) # format for your data labels on export images
+  export_data_label=list(pointFormat='{point.hours_rate:.1f}% of hours spent'))
 
 
 ```
