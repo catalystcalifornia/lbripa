@@ -1159,15 +1159,15 @@ fx_barbubblechart(
 
   z='evidence_not_found',
 
- top_finding=paste0("The majority of searches conducted during traffic stops lead to no evidence or contraband found."), # this is the top finding from the chart that gets used like a title
+ top_finding=paste0("Most searches LBPD conducts during traffic stops lead to no evidence or contraband found."), # this is the top finding from the chart that gets used like a title
 
 
    chart_title= paste0("Searches with No Contraband or Evidence Found among Traffic Stops by Race"), # this is the more standard chart title that gets used as a subtitle
 
 
-  tooltip_text="For every 100 searches done during traffic stops of people identified as <b>{point.race_label_long:.1f}</b>, LBPD did not find contraband/evidence in <b>{point.hit_rates:.1f}</b>% of those stops,  a total of <b>{point.evidence_not_found:.1f}</b> unnecessary searches.", # customize your tooltip as a statement, calling out rate and count
+  tooltip_text="For every 100 searches done during traffic stops of people perceived as <b>{point.race_label_long}</b>, LBPD did not find contraband/evidence in <b>{point.hit_rates:.0f}</b> stops,  a total of <b>{point.evidence_not_found:.0f}</b> unnecessary searches.", # customize your tooltip as a statement, calling out rate and count
 
-    chart_caption = paste0(racenote,"<br>", sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
+    chart_caption = paste0(racenote,"<br>", sourcenote, " Analysis for all officer-initiated traffic stops where a search occurred."), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
 
 
  yaxis_label = "''", #format for your y axis labels
