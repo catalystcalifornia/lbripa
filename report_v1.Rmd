@@ -141,11 +141,11 @@ fx_barbubblechart(
 
   z='stop_count',
 
-  top_finding=paste0("Black, NHPI, and MESA people are stopped by LBPD at higher rates."), # this is the top finding from the chart that gets used like a title
+  top_finding=paste0("LBPD stopped Black, NHPI, and MESA people at higher rates than other community members."), # this is the top finding from the chart that gets used like a title
 
   chart_title= paste0("Number of Officer-initiated Stops per 1K of Same Population by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
 
-  tooltip_text="For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate:.1f}</b> people identified as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:,0f}</b> people.", # customize your tooltip as a statement, calling out rate and count
+  tooltip_text="For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate_per1k:.1f}</b> people perceived as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:,0f}</b> people.", # customize your tooltip as a statement, calling out rate and count
 
   chart_caption = paste0(racenote,"<br>", sourcenote), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
 
@@ -784,11 +784,10 @@ persian_indigo <- c('#211447')
 halloween_orange <- c('#DF4007')
 bitter_lemon <- c('#BCD313')
 blue <- c('#0860BC')
-dark_tangerine <- c('#EB8D00')
+#dark_tangerine <- c('#EB8D00')
 american_yellow <- c('#EABB00')
 halaya_ube <- c('#601D42')
-
-#dark_silver <- c('#6F6F6F') ## remove these
+dark_silver <- c('#6F6F6F') 
 
 
 
@@ -808,7 +807,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
   
   ### add AIAN dots 
   
- addCircleMarkers(data = aian_dots,  group = "AIAN", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= dark_tangerine, stroke = TRUE) %>% 
+ addCircleMarkers(data = aian_dots,  group = "AIAN", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= dark_silver, stroke = TRUE) %>% 
   
   ### add latinx dots
   
@@ -834,7 +833,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
   addPolygons(data = council_district_demographics, label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", fillColor = "white", opacity = 1,  popup = ~paste0(demographic_popup), 
             weight = 2, smoothFactor = 0.5,  highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE)) %>%
   
-  addLayersControl(overlayGroups = c("Black", "Latinx", "Asian", "White",  "MESA", "NHPI", "AIAN", "Two or More Races"),
+  addLayersControl(overlayGroups = c("Latinx","Black",  "Asian", "White",  "MESA", "NHPI", "AIAN", "Two or More Races"),
                    options = layersControlOptions(collapsed = FALSE))  %>%
   
   
@@ -843,30 +842,30 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
   
    addLegend(position = "bottomleft",   title = "1 dot = 10 people stopped", colors = "", labels = "") %>%
   
-  
+   addLegend(position = "bottomleft",   title = "", group = "Latinx", labels = c("Latinx"), colors = colors_function(colors = lime_green, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
   addLegend(position = "bottomleft",   title = "", group = "Black", labels = c("Black"), colors = colors_function(colors = blue, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+   
+   addLegend(position = "bottomleft",   title = "", group = "Asian", labels = c("Asian"), colors = colors_function(colors = halloween_orange, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
     addLegend(position = "bottomleft",   title = "", group = "White", labels = c("White"), colors = colors_function(colors =  bitter_lemon, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+   
+      addLegend(position = "bottomleft",   title = "", group = "MESA", labels = c("Middle Eastern or South Asian"), colors = colors_function(colors = american_yellow, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+    addLegend(position = "bottomleft",   title = "", group = "NHPI", labels = c("Native Hawaiian or Pacific Islander"), colors = colors_function(colors =halaya_ube, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
    addLegend(position = "bottomleft",   title = "", group = "AIAN", labels = c("American Indian or Alaska Native"), colors = colors_function(colors = dark_tangerine, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
-   addLegend(position = "bottomleft",   title = "", group = "Latinx", labels = c("Latinx"), colors = colors_function(colors = lime_green, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-   addLegend(position = "bottomleft",   title = "", group = "MESA", labels = c("Middle Eastern or South Asian"), colors = colors_function(colors = american_yellow, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-   addLegend(position = "bottomleft",   title = "", group = "Asian", labels = c("Asian"), colors = colors_function(colors = halloween_orange, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
+
    addLegend(position = "bottomleft",   title = "", group = "Two or More Races", labels = c("Two or More Races"), colors = colors_function(colors =persian_indigo, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
-   addLegend(position = "bottomleft",   title = "", group = "NHPI", labels = c("Native Hawaiian or Pacific Islander"), colors = colors_function(colors =halaya_ube, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
+ 
   
   
   #base and view
   
   addProviderTiles("CartoDB.Positron")%>%
-  setView(-118.1888, 	33.77091	, zoom = 11) %>% #base and view 
+  setView(-118.16675, 	33.80462	, zoom = 12) %>% #base and view 
   
   hideGroup(c("White"))   # hide white group
  
@@ -935,7 +934,7 @@ leaflet(width = "100%", height = "495px") %>%
   #base and view
   
   addProviderTiles("CartoDB.Positron")%>%
-  setView(	-118.1888, 	33.77091	, zoom = 11)
+  setView(-118.16675, 	33.80462	, zoom = 12) #base and view 
 
 ```
 
@@ -1031,8 +1030,10 @@ high_injury_ped_intersections_popup <- paste0((
 
 #palette colors
 
-papaya_orange <- c("#F25922")
-peridot <- c("#CEEA01")
+papaya_orange <- c("#DF4007")
+american_yellow <- c("#002FEA")
+
+#peridot <- c("#CEEA01")
 
 cc_brand <- c("#E2D9FF", "#BDAFE9","#8E7ACA", "#362178","#211447")
 
@@ -1059,7 +1060,7 @@ leaflet(width = "100%", height = "495px") %>%
                popup= ~paste0(high_injury_motor_corridors_popup),
                label= ~htmlEscape(paste0("High Injury Motor Intersections/Corridors")),
              
-              color = peridot, weight = 2, opacity = 2) %>%
+              color = american_yellow, weight = 2, opacity = 2) %>%
   
   ## add pedestrian/bike corridors
   addPolylines(data = high_injury_ped_corridors_line_sf, group = "High Injury Pedestrian or Bike Intersections/Corridors",
@@ -1076,7 +1077,7 @@ leaflet(width = "100%", height = "495px") %>%
                    popup= ~paste0(high_injury_motor_intersections_popup),
                    label= ~htmlEscape(paste0("High Injury Motor Vehicle/Motorcycle Intersection")),
                    weight = 2, fillOpacity = 1, radius=4,
-                    color = "black", fillColor= peridot, stroke = TRUE
+                    color = "black", fillColor= american_yellow, stroke = TRUE
   ) %>%
   
   ## add pedestrian/bike intersections
@@ -1128,7 +1129,7 @@ leaflet(width = "100%", height = "495px") %>%
   #base and view
   
   addProviderTiles("CartoDB.Positron") %>%
-  setView(	-118.1888, 	33.77091	, zoom = 11) %>%
+  setView(-118.16675, 	33.80462	, zoom = 12) %>% #base and view 
   
   hideGroup(c("Pedestrian/Bike"))
 ```
