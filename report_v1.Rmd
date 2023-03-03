@@ -938,6 +938,8 @@ leaflet(width = "100%", height = "495px") %>%
   setView(	-118.1888, 	33.77091	, zoom = 11)
 
 ```
+<span style=' font-size: 12px;'>Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, MESA=Middle Eastern or South Asian</span> 
+<br> <span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023.</span>
 
 
 ## Stops do not lead to greater safety for communities affected by inequities.
@@ -1132,6 +1134,8 @@ leaflet(width = "100%", height = "495px") %>%
   
   hideGroup(c("Pedestrian/Bike"))
 ```
+<span style=' font-size: 12px;'>Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, MESA=Middle Eastern or South Asian</span> 
+<br> <span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023.</span>
 
 
 
