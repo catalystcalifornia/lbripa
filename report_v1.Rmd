@@ -795,39 +795,41 @@ dark_silver <- c('#6F6F6F')
 
  leaflet(width = "100%", height = "600px") %>%
 
+    ### add latinx dots
   
+ addCircleMarkers(data = latinx_dots, group = "Latinx", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= lime_green,  stroke = TRUE) %>% 
+   
   ## add NH Black Stops
   
 addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor=blue, stroke = TRUE) %>% 
+   
+   ### add nh asian dots
+  
+ addCircleMarkers(data = nh_asian_dots, group = "Asian", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor=  halloween_orange, stroke = TRUE) %>% 
+   
   
   ## add NH White Stops
   
  addCircleMarkers(data = nh_white_dots, group = "White", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor=  bitter_lemon,  stroke = TRUE) %>% 
-  
-  
-  ### add AIAN dots 
-  
- addCircleMarkers(data = aian_dots,  group = "AIAN", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= dark_silver, stroke = TRUE) %>% 
-  
-  ### add latinx dots
-  
- addCircleMarkers(data = latinx_dots, group = "Latinx", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= lime_green,  stroke = TRUE) %>% 
-  
-  ### add MESA dots
+   
+    ### add MESA dots
   
  addCircleMarkers(data = mesa_dots, group = "MESA", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= american_yellow, stroke = TRUE) %>% 
   
-  ### add nh asian dots
   
- addCircleMarkers(data = nh_asian_dots, group = "Asian", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor=  halloween_orange, stroke = TRUE) %>% 
+   ### add nhpi dots
+  
+ addCircleMarkers(data = nhpi_dots, group = "NHPI", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= halaya_ube, stroke = TRUE) %>% 
+   
+  ### add AIAN dots 
+  
+ addCircleMarkers(data = aian_dots,  group = "AIAN", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= dark_silver, stroke = TRUE) %>% 
   
   ### add nh two or more dots
   
  addCircleMarkers(data = nh_twoormor_dots, group = "Two or More Races", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= persian_indigo, stroke = TRUE) %>% 
   
-  ### add nhpi dots
-  
- addCircleMarkers(data = nhpi_dots, group = "NHPI", label = NULL, weight = 2, fillOpacity = 1, radius = 2, color="white",  fillColor= halaya_ube, stroke = TRUE) %>% 
+
   
    # add Long beach district layer with stop rates
   addPolygons(data = council_district_demographics, label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", fillColor = "white", opacity = 1,  popup = ~paste0(demographic_popup), 
@@ -854,7 +856,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
   
     addLegend(position = "bottomleft",   title = "", group = "NHPI", labels = c("Native Hawaiian or Pacific Islander"), colors = colors_function(colors =halaya_ube, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
-   addLegend(position = "bottomleft",   title = "", group = "AIAN", labels = c("American Indian or Alaska Native"), colors = colors_function(colors = dark_tangerine, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+   addLegend(position = "bottomleft",   title = "", group = "AIAN", labels = c("American Indian or Alaska Native"), colors = colors_function(colors = dark_silver, sizes = "10", shapes = "circle", borders = NULL) ) %>%
   
 
    addLegend(position = "bottomleft",   title = "", group = "Two or More Races", labels = c("Two or More Races"), colors = colors_function(colors =persian_indigo, sizes = "10", shapes = "circle", borders = NULL) ) %>%
@@ -876,7 +878,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 
 ```
 <span style=' font-size: 12px;'>Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, MESA=Middle Eastern or South Asian; Observations by race may overlap in the point density map. </span> 
-<br> <span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023.</span>
+<br> <span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span>
 
 
 ### More hours are spent on unnecessary stops in communities of color that have fewer resources.
@@ -937,6 +939,7 @@ leaflet(width = "100%", height = "495px") %>%
   setView(-118.16675, 	33.80462	, zoom = 12) #base and view 
 
 ```
+<br> <span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span>
 
 
 ## Stops do not lead to greater safety for communities affected by inequities.
@@ -946,7 +949,6 @@ A common narrative may be that traffic stops lead to safer streets with fewer in
 ### Traffic stops do not correlate to safer streets for communities impacted traffic injuries.
 
 We compared 2019 traffic stops to high-injury corridors and intersections identified by the Safe Streets Long Beach initiative. The initiative identified these high-injury corridors and intersections based on 2013-17 data, but they remain the initiative's action plan to guarantee equity in increasing road safety. Council Districts 1 and 6 have the highest rate of traffic stops, but they also have the highest concentration of high-injury motor, pedestrian, and bike networks. Rather than improving safety in these highly impacted communities, officer-initiated traffic stops can lead to greater harm by more contact and exposure to the police. 
-
 
 
 ```{r, echo=FALSE}
@@ -966,11 +968,18 @@ df <- report_traffic_stoprates_cd_race_person %>% select(council_num, race, pop_
 
 ## get traffic stop rate by council number
 council_district$council_num <- as.character(council_district$council_num)
-council_district_rate <- council_district %>% 
+
+# merge
+council_district_traffic_rate <- council_district %>% 
   left_join(
     df
   ) 
 
+## only keep last name of rep
+council_district_traffic_rate <- council_district_traffic_rate %>% mutate(representat = gsub(".* ", "", representat))
+
+
+council_district_traffic_rate$link <- c("https://www.longbeach.gov/district4/", "https://www.longbeach.gov/district5/","https://www.longbeach.gov/district3/","https://www.longbeach.gov/district1/","https://www.longbeach.gov/district8/","https://www.longbeach.gov/district6/","https://www.longbeach.gov/district9/","https://www.longbeach.gov/district7/","https://www.longbeach.gov/district2/")
 
 ### remove Long Beach, CA from pop-up
 
@@ -1021,23 +1030,30 @@ high_injury_ped_intersections_popup <- paste0((
     high_injury_ped_intersections_spdf$address,".")))
 
 
+#### traffic stop rate pop_up ####
 
+total_traffic_rate_popup <- paste0((
+ label = paste0(
+    "For every 1K <span style='font-weight: bold;'>Total</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
+   council_district_traffic_rate$council_num, "<a href=",council_district_traffic_rate$link, ">", "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_traffic_rate$representat,"</span>) ", "</a>", ",LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",council_district_traffic_rate$total_traffic_stop_rate, "</span>  people, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_traffic_rate$total_traffic_stop_count), "</span> people. ")))
+  
+  
 
 
 ## palette #2
 
 #cc_brand2 <- c('#FFbDA6', '#FF9873', '#FA7B4D', '#F25922', '#DF4007')
 
-#palette colors
+#palette colors for dots/lines
 
 papaya_orange <- c("#DF4007")
-american_yellow <- c("#002FEA")
+american_yellow <- c("#EABB00")
 
 #peridot <- c("#CEEA01")
 
 cc_brand <- c("#E2D9FF", "#BDAFE9","#8E7ACA", "#362178","#211447")
 
-pal_total <- colorQuantile(cc_brand, council_district_rate$total_traffic_stop_rate, n = 5)
+pal_total <- colorQuantile(cc_brand, council_district_traffic_rate$total_traffic_stop_rate, n = 5)
 
 ## function to change the legend shape and color
 
@@ -1052,22 +1068,22 @@ leaflet(width = "100%", height = "495px") %>%
   
   
   # add Long beach district layer with stop rates
-  addPolygons(data = council_district_rate,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 2, smoothFactor = 0.5,  opacity = 1, fillOpacity = 0.5,  fillColor = ~pal_total(total_traffic_stop_rate), highlight = highlightOptions(color = "white", weight = 3, bringToFront = FALSE), group = "Council Districts") %>%
-  
+  addPolygons(data = council_district_traffic_rate,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 2, smoothFactor = 0.5,  opacity = 1, fillOpacity = 0.5,  fillColor = ~pal_total(total_traffic_stop_rate),
+              popup = ~paste0(total_traffic_rate_popup), highlight = highlightOptions(color = "white", weight = 3, bringToFront = FALSE), group = "Council Districts") %>%
   
   ## add motor corridors 
   addPolylines(data = high_injury_motor_corridors_line_sf, group = "High Injury Motor Intersections/Corridors",
                popup= ~paste0(high_injury_motor_corridors_popup),
                label= ~htmlEscape(paste0("High Injury Motor Intersections/Corridors")),
              
-              color = american_yellow, weight = 2, opacity = 2) %>%
+              color = american_yellow, weight = 2, opacity =1) %>%
   
   ## add pedestrian/bike corridors
   addPolylines(data = high_injury_ped_corridors_line_sf, group = "High Injury Pedestrian or Bike Intersections/Corridors",
                popup= ~paste0(high_injury_ped_corridors_popup),
                label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
               
-               color = papaya_orange, weight = 2, opacity = 2) %>%
+               color = papaya_orange, weight = 2, opacity = 1) %>%
   
   
   
@@ -1092,7 +1108,7 @@ leaflet(width = "100%", height = "495px") %>%
   
   
   ## add legend for stop rate
-  addLegend(layerId = "Total", position = "bottomleft", group = "Total", pal = pal_total, values = council_district_rate$total_traffic_stop_rate, opacity = .5, title = "Traffic Stop Rate Per 1K Total Residents", na.label = NA, labFormat = function(type, cuts, p) {
+  addLegend(layerId = "Total", position = "bottomleft", group = "Total", pal = pal_total, values = council_district_traffic_rate$total_traffic_stop_rate, opacity = .5, title = "Traffic Stop Rate Per 1K Total Residents", na.label = NA, labFormat = function(type, cuts, p) {
     n = length(cuts)
     paste0(cuts[-n], " &ndash; ", cuts[-1])
   })  %>%
@@ -1133,7 +1149,7 @@ leaflet(width = "100%", height = "495px") %>%
   
   hideGroup(c("Pedestrian/Bike"))
 ```
-
+<br> <span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops for traffic violations.</span>
 
 
 
