@@ -758,7 +758,7 @@ demographic_popup <- paste0((
    
    
   "</span> <br> For every 1K  <span style='font-size: 14px; font-weight: bold;'> Native Hawaiian or Pacific Islander </span> people, LBPD stopped <span style='font-size: 14px; font-weight: bold;'>",
-    council_district_demographics$nhpi_rate_stop_rate, "</span> people who identify as Native Hawaiian or Pacific Islander. <span style='font-size: 14px; font-weight: bold;'>",
+    council_district_demographics$nhpi_stop_rate, "</span> people who identify as Native Hawaiian or Pacific Islander. <span style='font-size: 14px; font-weight: bold;'>",
    scales::percent(council_district_demographics$nhpi_rate, accuracy = 0.1),"</span> of the population in this district identify as Native Hawaiian or Pacific Islander. </br> <span style='font-size: 14px; font-weight: bold;'>",
    
    
