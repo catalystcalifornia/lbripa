@@ -4,13 +4,14 @@ subtitle: "DRAFT"
 author: "Catalyst California"
 output:
   html_document:
+    css: "W:\\RDA Team\\R\\cc_brandguide.css"
     code_folding: hide
     toc: yes
     toc_depth: 2
     toc_float: yes
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 ---
-  
+
   
 ```{r setup, include=FALSE}
 
@@ -25,8 +26,6 @@ library(sp)
 library(htmltools) # for html escape
 library(magrittr)
 #library(leaflegend) # customize legends to change shapes:: commenting out because not needed for high injury network maps for now
-
-
 library(htmlwidgets)
 
 
