@@ -4,6 +4,7 @@ subtitle: "DRAFT"
 author: "Catalyst California"
 output:
   html_document:
+    css: "W:\\RDA Team\\R\\cc_brandguide.css"
     code_folding: hide
     toc: yes
     toc_depth: 2
