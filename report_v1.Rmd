@@ -978,7 +978,7 @@ council_district_traffic_rate <- council_district %>%
   ) 
 
 ## only keep last name of rep
-council_district_traffic_rate <- council_district_traffic_rate %>% mutate(representat = gsub(".* ", "", representat))
+#council_district_traffic_rate <- council_district_traffic_rate %>% mutate(representat = gsub(".* ", "", representat))
 
 
 council_district_traffic_rate$link <- c("https://www.longbeach.gov/district4/", "https://www.longbeach.gov/district5/","https://www.longbeach.gov/district3/","https://www.longbeach.gov/district1/","https://www.longbeach.gov/district8/","https://www.longbeach.gov/district6/","https://www.longbeach.gov/district9/","https://www.longbeach.gov/district7/","https://www.longbeach.gov/district2/")
@@ -1036,8 +1036,10 @@ high_injury_ped_intersections_popup <- paste0((
 
 total_traffic_rate_popup <- paste0((
  label = paste0(
-    "For every 1K <span style='font-weight: bold;'>Total</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
-   council_district_traffic_rate$council_num, "<a href=",council_district_traffic_rate$link, ">", "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_traffic_rate$representat,"</span>) ", "</a>", ",LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",council_district_traffic_rate$total_traffic_stop_rate, "</span>  people, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_traffic_rate$total_traffic_stop_count), "</span> people. ")))
+    "For every 1K <span style='font-weight: bold;'>Total</span> people in   <span style='font-size: 12px; font-weight: bold;'>",  
+    
+    
+  "<a href=",council_district_traffic_rate$link, ">", "</span> Council District <span style='font-size: 12px; font-weight: bold;'>",  council_district_traffic_rate$council_num, "</span>", "</a>", ", LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",council_district_traffic_rate$total_traffic_stop_rate, "</span>  people, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_traffic_rate$total_traffic_stop_count), "</span> people. ")))
   
   
 
