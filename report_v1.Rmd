@@ -732,7 +732,7 @@ colors_function <- function(colors, sizes, borders, shapes) {
 
 ### Pop-ups ### ---------------
 #create popup
-demographic_popup <- paste0("<div class='point-density'> <div class='leaflet-data' data-cd='",council_district_demographics$council_num,
+demographic_popup <- paste0("<div class='pointdensity'> <div class='leaflet-data' data-cd='",council_district_demographics$council_num,
                "' data-nh-black-stop-rate='",council_district_demographics$nh_black_stop_rate,
                "' data-nh-black-rate='",scales::percent(council_district_demographics$nh_black_rate, accuracy = 0.1),
                "' data-latinx-stop-rate='",council_district_demographics$latinx_stop_rate,
@@ -828,6 +828,47 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
  #<span style=' font-size: 12px;'>Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, MESA=Middle Eastern or South Asian; Observations by race may overlap in the point density map.</span style>
 
 #<span style='float: left; font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023.</span style>
+
+```
+```{js}
+<!-- This function is used to format LB RIPA data in the point density map "popup"/sidebar feature -->
+
+<!-- Captures  -->
+var mapsPlaceholder = [];
+L.Map.addInitHook(function () {
+  mapsPlaceholder.push(this);
+  mapsPlaceholder.forEach(map => {
+    map.on('popupopen', (e) => {
+    
+    let popups = document.querySelectorAll('.leaflet-data');
+    console.log(popups);
+
+document.querySelectorAll('.pointdensity').forEach(pointdensity => {
+pointdensity.parentElement.parentElement.parentElement.classList.add('hidden')
+})
+  
+popups.forEach((popup) => {
+console.log(popup)
+console.log(popup.getAttribute('data-cd').trim())
+
+document.querySelector('.cd').innerHTML = popup.getAttribute('data-cd')
+document.querySelector('.nh-black-stop-rate').innerHTML = popup.getAttribute('data-nh-black-stop-rate')
+document.querySelector('.nh-black-rate').innerHTML = popup.getAttribute('data-nh-black-rate')
+document.querySelector('.latinx-stop-rate').innerHTML = popup.getAttribute('data-latinx-stop-rate')
+document.querySelector('.latinx-rate').innerHTML = popup.getAttribute('data-latinx-rate')
+document.querySelector('.nh-asian-stop-rate').innerHTML = popup.getAttribute('data-nh-asian-stop-rate')
+document.querySelector('.nh-asian-rate').innerHTML = popup.getAttribute('data-nh-asian-rate')
+document.querySelector('.nh-white-stop-rate').innerHTML = popup.getAttribute('data-nh-white-stop-rate')
+document.querySelector('.nh-white-rate').innerHTML = popup.getAttribute('data-nh-white-rate')
+document.querySelector('.mesa-stop-rate').innerHTML = popup.getAttribute('data-mesa-stop-rate')
+document.querySelector('.mesa-rate').innerHTML = popup.getAttribute('data-mesa-rate')
+document.querySelector('.nhpi-stop-rate').innerHTML = popup.getAttribute('data-nhpi-stop-rate')
+document.querySelector('.nhpi-rate').innerHTML = popup.getAttribute('data-nhpi-rate')
+document.querySelector('.aian-stop-rate').innerHTML = popup.getAttribute('data-aian-stop-rate')
+document.querySelector('.aian-rate').innerHTML = popup.getAttribute('data-aian-rate')
+document.querySelector('.nh-twoormor-stop-rate').innerHTML = popup.getAttribute('data-nh-twoormor-stop-rate')
+document.querySelector('.nh-twoormor-rate').innerHTML = popup.getAttribute('data-nh-twoormor-rate')
+})})})})
 
 ```
 <span style=' font-size: 12px;'>Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, MESA=Middle Eastern or South Asian; Observations by race may overlap in the point density map. </span> 
