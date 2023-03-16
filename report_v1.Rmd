@@ -830,6 +830,53 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 #<span style='float: left; font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023.</span style>
 
 ```
+<style type="text/css">
+
+.info {
+    padding: 6px 8px;
+    font-size: 12px;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgb(0 0 0 / 20%);
+    border-radius: 5px;
+}
+.legend {
+    width:325px;
+    opacity:  1;
+    border-left:1px solid #737373;
+    border-right:1px solid #737373;
+    border-top:1px solid #737373;
+    border-bottom:1px solid #737373;
+}
+.leaflet-touch .leaflet-control-layers {
+  border-left:1px solid #737373;
+    border-right:1px solid #737373;
+    border-top:1px solid #737373;
+    border-bottom:1px solid #737373;
+}
+
+.leaflet-popup-scrolled {
+  max-height: 420px;
+  overflow: auto;
+  padding: 2%;
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+}
+
+.leaflet-left .leaflet-control {
+  background-color: white;
+  opacity: 1.0;
+}
+
+.leaflet-control-layers .leaflet-control .leaflet-control-layers-expanded {
+  background-color: white;
+  opacity: 1.0;
+}
+
+.hidden {
+  display: none;
+}
+</style>
 ```{js}
 <!-- This function is used to format LB RIPA data in the point density map "popup"/sidebar feature -->
 
