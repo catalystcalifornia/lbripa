@@ -923,7 +923,7 @@ label = paste0(
 pal_stop_hours_rate_noaction_cap <- colorQuantile(cc_brand,council_district_noaction$hours_rate_noaction_cap, n = 5)
 
 
-leaflet(width = "100%", height = "495px") %>%
+leaflet(width = "100%", height = "600px") %>%
   # add Long beach district layer with stop rates
   addPolygons(data =  council_district_noaction,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", weight = 2, smoothFactor = 0.5, opacity = 1, fillOpacity = 0.5, popup = ~paste0(hours_rate_noaction_cap_popup),
               fillColor = ~pal_stop_hours_rate_noaction_cap(hours_rate_noaction_cap), highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE), group = "") %>%
@@ -1068,7 +1068,7 @@ pal_total <- colorQuantile(cc_brand, council_district_traffic_rate$total_traffic
 
 
 
-leaflet(width = "100%", height = "495px") %>%
+leaflet(width = "100%", height = "600px") %>%
   
   
   # add Long beach district layer with stop rates
