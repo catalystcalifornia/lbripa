@@ -840,32 +840,6 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
   addLayersControl(overlayGroups = c("Latinx","Black",  "Asian", "White",  "MESA", "NHPI", "AIAN", "Two or More Races"),
                    options = layersControlOptions(collapsed = FALSE))  %>%
   
-  
-  
-  ## add Legend
-  
-   addLegend(position = "bottomleft",   title = "1 dot = 10 people stopped", colors = "", labels = "") %>%
-  
-   addLegend(position = "bottomleft",   title = "", group = "Latinx", labels = c("Latinx"), colors = colors_function(colors = lime_green, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-  addLegend(position = "bottomleft",   title = "", group = "Black", labels = c("Black"), colors = colors_function(colors = blue, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-   
-   addLegend(position = "bottomleft",   title = "", group = "Asian", labels = c("Asian"), colors = colors_function(colors = halloween_orange, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-    addLegend(position = "bottomleft",   title = "", group = "White", labels = c("White"), colors = colors_function(colors =  bitter_lemon, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-   
-      addLegend(position = "bottomleft",   title = "", group = "MESA", labels = c("Middle Eastern or South Asian"), colors = colors_function(colors = american_yellow, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-    addLegend(position = "bottomleft",   title = "", group = "NHPI", labels = c("Native Hawaiian or Pacific Islander"), colors = colors_function(colors =halaya_ube, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-   addLegend(position = "bottomleft",   title = "", group = "AIAN", labels = c("American Indian or Alaska Native"), colors = colors_function(colors = dark_silver, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
-
-   addLegend(position = "bottomleft",   title = "", group = "Two or More Races", labels = c("Two or More Races"), colors = colors_function(colors =persian_indigo, sizes = "10", shapes = "circle", borders = NULL) ) %>%
-  
- 
-  
-  
   #base and view
   
   addProviderTiles("CartoDB.Positron")%>%
