@@ -962,7 +962,7 @@ label = paste0(
 pal_stop_hours_rate_noaction_cap <- colorQuantile(cc_brand,council_district_noaction$hours_rate_noaction_cap, n = 5)
 
 
-leaflet(width = "100%", height = "495px") %>%
+leaflet(width = "100%", height = "600px") %>%
   # add Long beach district layer with stop rates
   addPolygons(data =  council_district_noaction,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", weight = 2, smoothFactor = 0.5, opacity = 1, fillOpacity = 0.5, popup = ~paste0(hours_rate_noaction_cap_popup),
               fillColor = ~pal_stop_hours_rate_noaction_cap(hours_rate_noaction_cap), highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE), group = "") %>%
@@ -1017,7 +1017,7 @@ council_district_traffic_rate <- council_district %>%
   ) 
 
 ## only keep last name of rep
-council_district_traffic_rate <- council_district_traffic_rate %>% mutate(representat = gsub(".* ", "", representat))
+#council_district_traffic_rate <- council_district_traffic_rate %>% mutate(representat = gsub(".* ", "", representat))
 
 
 council_district_traffic_rate$link <- c("https://www.longbeach.gov/district4/", "https://www.longbeach.gov/district5/","https://www.longbeach.gov/district3/","https://www.longbeach.gov/district1/","https://www.longbeach.gov/district8/","https://www.longbeach.gov/district6/","https://www.longbeach.gov/district9/","https://www.longbeach.gov/district7/","https://www.longbeach.gov/district2/")
@@ -1075,8 +1075,10 @@ high_injury_ped_intersections_popup <- paste0((
 
 total_traffic_rate_popup <- paste0((
  label = paste0(
-    "For every 1K <span style='font-weight: bold;'>Total</span> people in Council District  <span style='font-size: 12px; font-weight: bold;'>",  
-   council_district_traffic_rate$council_num, "<a href=",council_district_traffic_rate$link, ">", "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>", council_district_traffic_rate$representat,"</span>) ", "</a>", ",LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",council_district_traffic_rate$total_traffic_stop_rate, "</span>  people, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_traffic_rate$total_traffic_stop_count), "</span> people. ")))
+    "For every 1K <span style='font-weight: bold;'>Total</span> people in   <span style='font-size: 12px; font-weight: bold;'>",  
+    
+    
+  "<a href=",council_district_traffic_rate$link, ">", "</span> Council District <span style='font-size: 12px; font-weight: bold;'>",  council_district_traffic_rate$council_num, "</span>", "</a>", ", LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",council_district_traffic_rate$total_traffic_stop_rate, "</span>  people, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_traffic_rate$total_traffic_stop_count), "</span> people. ")))
   
   
 
@@ -1105,7 +1107,7 @@ pal_total <- colorQuantile(cc_brand, council_district_traffic_rate$total_traffic
 
 
 
-leaflet(width = "100%", height = "495px") %>%
+leaflet(width = "100%", height = "600px") %>%
   
   
   # add Long beach district layer with stop rates
