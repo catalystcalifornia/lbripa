@@ -773,7 +773,7 @@ dark_silver <- c('#6F6F6F')
         options = leafletOptions(zoomControl = FALSE)) %>%
    
    # create sidebar and add html for content
-addControl(html='<div class="leaflet-popup-scrolled"><div class ="cd-header" style="margin-bottom: 8px; margin-top: 8px;">Council District <span class="cd" style="font-size: 16px; font-weight: bold;"></span></div><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-black-color"></span>Black stop rate per 1k: <span class="nh-black-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-black-color"></span>Black population rate: <span class="nh-black-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon latinx-color"></span>Latinx stop rate per 1k: <span class="latinx-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon latinx-color"></span>Latinx population rate: <span class="latinx-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-asian-color"></span>Asian stop rate per 1k: <span class="nh-asian-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-asian-color"></span>Asian population rate: <span class="nh-asian-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-white-color"></span>White stop rate per 1k: <span class="nh-white-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-white-color"></span>White population rate: <span class="nh-white-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon mesa-color"></span>MESA stop rate per 1k: <span class="mesa-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon mesa-color"></span>MESA population rate: <span class="mesa-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nhpi-color"></span>NHPI stop rate per 1k: <span class="nhpi-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nhpi-color"></span>NHPI population rate: <span class="nhpi-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon aian-color"></span>AIAN stop rate per 1k: <span class="aian-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon aian-color"></span>AIAN population rate: <span class="aian-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-twoormor-color"></span>Two or More Races stop rate per 1k: <span class="nh-twoormor-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-twoormor-color"></span>Two or More Races population rate: <span class="nh-twoormor-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 10px; font-style: italic;">*Each dot represents 10 people stopped by LBPD.</span></div>', position = "topleft") %>%
+addControl(html='<div class="leaflet-popup-scrolled point-density-sidebar"><div class ="cd-header" style="margin-bottom: 8px; margin-top: 8px;">Council District <span class="cd" style="font-size: 16px; font-weight: bold;"></span></div><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-black-color"></span>Black stop rate per 1k: <span class="nh-black-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-black-color"></span>Black population rate: <span class="nh-black-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon latinx-color"></span>Latinx stop rate per 1k: <span class="latinx-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon latinx-color"></span>Latinx population rate: <span class="latinx-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-asian-color"></span>Asian stop rate per 1k: <span class="nh-asian-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-asian-color"></span>Asian population rate: <span class="nh-asian-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-white-color"></span>White stop rate per 1k: <span class="nh-white-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-white-color"></span>White population rate: <span class="nh-white-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon mesa-color"></span>MESA stop rate per 1k: <span class="mesa-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon mesa-color"></span>MESA population rate: <span class="mesa-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nhpi-color"></span>NHPI stop rate per 1k: <span class="nhpi-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nhpi-color"></span>NHPI population rate: <span class="nhpi-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon aian-color"></span>AIAN stop rate per 1k: <span class="aian-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon aian-color"></span>AIAN population rate: <span class="aian-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-twoormor-color"></span>Two or More Races stop rate per 1k: <span class="nh-twoormor-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;"><span class="circle-icon nh-twoormor-color"></span>Two or More Races population rate: <span class="nh-twoormor-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 10px; font-style: italic;">*Each dot represents 10 people stopped by LBPD.</span></div>', position = "topleft") %>%
 
     ### add latinx dots
   
@@ -840,15 +840,10 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 ```
 <style type="text/css">
 
-<!-- .info { -->
-<!--     padding: 6px 8px; -->
-<!--     font-size: 12px; -->
-<!--     background: white; -->
-<!--     background: rgba(255,255,255,0.8); -->
-<!--     box-shadow: 0 0 15px rgb(0 0 0 / 20%); -->
-<!--     border-radius: 5px; -->
-<!-- } -->
-<!-- .legend .pointdensity { -->
+.info {
+    border-radius: 0;
+}
+<!-- .point-density-sidebar { -->
 <!--     width:600px; -->
 <!--     opacity:  1; -->
 <!--     border-left:1px solid #737373; -->
@@ -914,19 +909,31 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 <!--     border-bottom:1px solid #737373; -->
 <!-- } -->
 
-<!-- .leaflet-popup-scrolled { -->
-<!--   max-height: 420px; -->
-<!--   overflow: auto; -->
-<!--   padding: 2%; -->
-<!--   border-bottom: 1px solid #ddd; -->
-<!--   border-top: 1px solid #ddd; -->
-<!-- } -->
+.leaflet-popup-scrolled {
+  height: 600px;
+  overflow: auto;
+  opacity: 1;
+  border-bottom: 0;
+  border-top: 0;
+}
 
-<!-- .leaflet-left .leaflet-control { -->
-<!--   background-color: white; -->
-<!--   opacity: 1.0; -->
-<!-- } -->
+.info {
+  background: white;
+  opacity: 1;
+}
 
+
+.leaflet-left .leaflet-control {
+  margin-left: 0;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0;
+}
+
+.leaflet-top .leaflet-control {
+  margin-top: 0;
+}
 <!-- .leaflet-control-layers .leaflet-control .leaflet-control-layers-expanded { -->
 <!--   background-color: white; -->
 <!--   opacity: 1.0; -->
