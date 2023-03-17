@@ -769,7 +769,8 @@ dark_silver <- c('#6F6F6F')
 
 ### change size of legend
 
- leaflet(width = "100%", height = "600px") %>%
+ leaflet(width = "100%", height = "600px",
+        options = leafletOptions(zoomControl = FALSE)) %>%
    
    # create sidebar and add html for content
 addControl(html='<div class="leaflet-popup-scrolled"><div class ="cd-header" style="margin-bottom: 8px; margin-top: 8px;">Council District <span class="cd" style="font-size: 16px; font-weight: bold;"></span></div><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">Black stop rate per 1k: <span class="nh-black-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">Black population rate: <span class="nh-black-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">Latinx stop rate per 1k: <span class="latinx-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">Latinx population rate: <span class="latinx-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">Asian stop rate per 1k: <span class="nh-asian-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">Asian population rate: <span class="nh-asian-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">White stop rate per 1k: <span class="nh-white-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">White population rate: <span class="nh-white-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">MESA stop rate per 1k: <span class="mesa-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">MESA population rate: <span class="mesa-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">NHPI stop rate per 1k: <span class="nhpi-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">NHPI population rate: <span class="nhpi-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">AIAN stop rate per 1k: <span class="aian-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">AIAN population rate: <span class="aian-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">Two or More Races stop rate per 1k: <span class="nh-twoormor-stop-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 12px; font-weight:bold; line-height: 1.5em;">Two or More Races population rate: <span class="nh-twoormor-rate" style="font-size: 12px; font-weight: bold;"></span><br><span style="font-size: 10px; font-style: italic;">*Each dot represents 10 people stopped by LBPD.</span></div>', position = "topleft") %>%
@@ -815,15 +816,22 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
             weight = 2, smoothFactor = 0.5,  highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE)) %>%
   
   addLayersControl(overlayGroups = c("Latinx","Black",  "Asian", "White",  "MESA", "NHPI", "AIAN", "Two or More Races"),
-                   options = layersControlOptions(collapsed = FALSE))  %>%
+                   options = layersControlOptions(collapsed = FALSE),
+                   position = 'topright')  %>%
   
   #base and view
   
   addProviderTiles("CartoDB.Positron")%>%
   setView(-118.16675, 	33.80462	, zoom = 12) %>% #base and view 
   
-  hideGroup(c("White"))   # hide white group
+  hideGroup(c("White"))  %>% # hide white group
  
+ 
+  # move location control to top right
+  htmlwidgets::onRender("function(el, x) {
+        L.control.zoom({position: 'bottomright'}).addTo(this)
+    }")
+
  
  #<span style=' font-size: 12px;'>Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, MESA=Middle Eastern or South Asian; Observations by race may overlap in the point density map.</span style>
 
@@ -840,14 +848,14 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 <!--     box-shadow: 0 0 15px rgb(0 0 0 / 20%); -->
 <!--     border-radius: 5px; -->
 <!-- } -->
-<!-- .legend .pointdensity { -->
-<!--     width:325px; -->
-<!--     opacity:  1; -->
-<!--     border-left:1px solid #737373; -->
-<!--     border-right:1px solid #737373; -->
-<!--     border-top:1px solid #737373; -->
-<!--     border-bottom:1px solid #737373; -->
-<!-- } -->
+.legend .pointdensity {
+    width:600px;
+    opacity:  1;
+    border-left:1px solid #737373;
+    border-right:1px solid #737373;
+    border-top:1px solid #737373;
+    border-bottom:1px solid #737373;
+}
 <!-- .leaflet-touch .leaflet-control-layers { -->
 <!--   border-left:1px solid #737373; -->
 <!--     border-right:1px solid #737373; -->
@@ -978,7 +986,7 @@ leaflet(width = "100%", height = "600px") %>%
   
   addProviderTiles("CartoDB.Positron")%>%
   setView(-118.16675, 	33.80462	, zoom = 12) #base and view 
-
+  
 ```
 <br> <span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span>
 
