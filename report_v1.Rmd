@@ -69,7 +69,7 @@ Examining data from the Racial & Identity Profiling Act (RIPA), we find that LBP
 
 We find that LBPD spends more time on stops made during their patrol time (referred to as officer-initiated stops) than stops made in response to calls from the community. The type of stops and results of these stops show evidence of racial profiling.
 
-### Most time is spent on officer-initiated stops not on  responding to concerns from the community.   
+### Most time is spent on officer-initiated stops not on responding to concerns from the community.   
 
 Nearly 80% of time officers spent on stops are spent on officer-initiated stops. This translates to just 1 in 5 hours spent on responding to calls for service, or concerns from the community. 
 
@@ -113,50 +113,9 @@ hc_add_theme(cc_theme)%>%
 
 ```
 
-### These stops disproportionately impact people of color across the city.
-
-People of color are more likely to be impacted by this high occurrence of officer-initiated stops. As a part of RIPA data collection, officers are required to report the race of the person they stopped, based on the officer's perception. The data show LBPD officers stop Black, Native Hawaiian or Pacific Islander, and Middle Eastern or South African peoples in Long Beach at the highest rates. In 2019, LBPD officers stopped 169 Black people for every one thousand Black people in Long Beach. And while White people make up a much larger share of the Long Beach population, more Black people are stopped by LBPD than White people.
-
-```{r, echo=FALSE}
-#### DS ####
-
-##### Chart - stop rates per 1K by race for LB #####
-#### DS ####
-
-##### Chart - stop rates per 1K by race for LB #####
-# add a comma to stop count
-
-# Apply Chart
-
-report_stoprates_race_person<-report_stoprates_race_person%>%filter(race!="total")
-
-fx_barbubblechart(
-
-  db=report_stoprates_race_person, #name of dataframe
-
-  order_var=report_stoprates_race_person$stop_rate_per1k, #variable you're sorting by
-
-  x='race_label_short', # x or independent variables
-
-  y='stop_rate_per1k', # y or dependent variable
-
-  z='stop_count',
-
-  top_finding=paste0("LBPD stopped Black, NHPI, and MESA people at higher rates than other community members."), # this is the top finding from the chart that gets used like a title
-
-  chart_title= paste0("Number of Officer-initiated Stops per 1K of Same Population by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
-
-  tooltip_text="For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate_per1k:.1f}</b> people perceived as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:,0f}</b> people.", # customize your tooltip as a statement, calling out rate and count
 
 
-  chart_caption = paste0(racenote,"<br>", sourcenote, "<br><br><br>"), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
-
-  yaxis_label = "''", #format for your y axis labels
-   export_data_label=list(pointFormat='{point.stop_rate_per1k:.1f} per 1K')
-)
-```
-
-### Stops are made based on racial profiling not risk for crime {.tabset}
+### Officer-initiated stops are not preventing serious threats or crimes {.tabset}
 
 Officers are required to report the reason why they stopped a person and the result of that stop, e.g. whether a person received a citation, was arrested, or no consequence or action was necessary. We analyze the time spent on officer-initiated stops by stop reason and then by stop result to determine if officers are making stops that help prevent a serious threat to community safety. Stops are made mainly for minor traffic reasons that are resolved with a citation or warning, or no action at all. Then, we narrow in on traffic stops that resulted in no action to see if traffic stops of people of color are more likely to result in some consequence for safety. In the end, these stops show more evidence of racial profiling than protecting the safety of communities. While LBPD is more likely to stop Black people and other people of color, a sizable share of these stops are traffic stops have no or minor implications for community safety. In 2019, over 1 in 5 traffic stops of Black people resulted in no action.
 
@@ -417,7 +376,51 @@ ft
 
 ```
 
-#### Rate of traffic stops by result and race
+
+### Stops are made based on racial profiling and disproportionately impact people of color 
+
+People of color are more likely to be impacted by this high occurrence of officer-initiated stops. As a part of RIPA data collection, officers are required to report the race of the person they stopped, based on the officer's perception. The data show LBPD officers stop Black, Native Hawaiian or Pacific Islander, and Middle Eastern or South African peoples in Long Beach at the highest rates. In 2019, LBPD officers stopped 169 Black people for every one thousand Black people in Long Beach. And while White people make up a much larger share of the Long Beach population, more Black people are stopped by LBPD than White people.
+
+```{r, echo=FALSE}
+#### DS ####
+
+##### Chart - stop rates per 1K by race for LB #####
+#### DS ####
+
+##### Chart - stop rates per 1K by race for LB #####
+# add a comma to stop count
+
+# Apply Chart
+
+report_stoprates_race_person<-report_stoprates_race_person%>%filter(race!="total")
+
+fx_barbubblechart(
+
+  db=report_stoprates_race_person, #name of dataframe
+
+  order_var=report_stoprates_race_person$stop_rate_per1k, #variable you're sorting by
+
+  x='race_label_short', # x or independent variables
+
+  y='stop_rate_per1k', # y or dependent variable
+
+  z='stop_count',
+
+  top_finding=paste0("LBPD stopped Black, NHPI, and MESA people at higher rates than other community members."), # this is the top finding from the chart that gets used like a title
+
+  chart_title= paste0("Number of Officer-initiated Stops per 1K of Same Population by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
+
+  tooltip_text="For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate_per1k:.1f}</b> people perceived as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:,0f}</b> people.", # customize your tooltip as a statement, calling out rate and count
+
+
+  chart_caption = paste0(racenote,"<br>", sourcenote, "<br><br><br>"), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
+
+  yaxis_label = "''", #format for your y axis labels
+   export_data_label=list(pointFormat='{point.stop_rate_per1k:.1f} per 1K')
+)
+```
+
+A pretextual stop is defined as...  When focusing in on just traffic stops that resulted in no action, individuals who were perceived as having two or more races, or as Black, had the highest rate of traffic stops with no resulting action. This is indicative of a pretextual stop, because for there to be no resulting action to the stop it is likely that there was no serious threat or danger in the first place. (placeholder text)
 
 ```{r, echo=FALSE}
 
@@ -531,6 +534,7 @@ fx_barbubblechart(
 # 
 
 ```
+
 
 ## Low-income communities of color are unjustly targeted with unnecessary stops, perpetuating inequities. 
 
