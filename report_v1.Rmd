@@ -121,7 +121,7 @@ Officers are required to report the reason why they stopped a person and the res
 
 #### Time spent on stops by reason
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include=FALSE}
 
 ###JZ###
 
@@ -158,7 +158,7 @@ fx_lollichart(
 
 ```
 
-```{r}
+```{r, include=FALSE}
 
 ####Item chart####
 
@@ -218,42 +218,58 @@ hc %>%
 ### Tree map###
 
 # define colors
-col <-c("#9B9A9A", meteorite, lavender, orange,peridot,"#177FEB", "#733256" )  
+col <-c(meteorite, "#9B9A9A",  lavender, orange,peridot,"#177FEB", "#733256" )  
 
-# set decimal options
-
-options(highcharter.theme = hc_theme_smpl(tooltip = list(valueDecimals = 1)))
 
 # graph
+df%>%
+  hchart(
+    "treemap", 
+    hcaes(x = stop_reason_short, value = hours_rate))%>%
 
-hctreemap2(df, 
-           group_vars = "stop_reason_short",
-           size_var = "hours_rate",
-           tooltip = list(pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on stops for <b>{point.stop_reason_short}</b>")) %>%
-  
-    hc_plotOptions(treemap = list(colorByPoint = TRUE)) %>%      
+  hc_tooltip(pointFormat = "<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours")%>%
+
+ hc_plotOptions(treemap = list(colorByPoint = TRUE)) %>%      
   
     hc_colors(col) %>%   #with this we can set the colors, note: 1st color is given to first row in the data frame (not necessarily the biggest box)
   
     hc_colorAxis(dataClasses = color_classes(df$stop_reason_short)) %>%      
   
   hc_title(text = "LBPD spends most of its time on traffic stops",
+           align = "left",
     style = list(
       color = black,
       fontFamily = main_font, # font_title
       fontWeight = black_font_weight,
-      textAlign="left",
-      fontSize='24px'
+  
+  fontSize='24px'
     )) %>%
  
    hc_subtitle(text = "Hours spent on stops by stop reason",
+               align = "left",
               style = list(
       color = black, 
       fontFamily = main_font, # font_subtitle
       fontWeight = black_font_weight,
+       
       fontSize='14px'))%>%
   
-    hc_legend(enabled = FALSE)           
+    hc_legend(enabled = FALSE) %>%
+  
+  hc_caption(
+      text = paste0(sourcenote)
+      # , style=list(fontSize='8px')
+    ) %>% 
+  
+      hc_add_theme(cc_theme)%>%
+
+  
+   hc_exporting(
+      enabled = TRUE, sourceWidth=900, sourceHeight=600, 
+      chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}% of hours spent')))))),
+      filename = paste0("Hours spent on stops by stop reason_Catalyst California, catalystcalifornia.org, 2023.")
+    )
+ 
 
 
 
@@ -506,7 +522,7 @@ fx_barbubblechart(
 
   y='stop_denom_rate', # y or dependent variable
 
-  z='pop_count',
+  z='stop_count',
 
   top_finding=paste0("Multiracial and Black people are most likely to be stopped for minor traffic stops."), # this is the top finding from the chart that gets used like a title
 
