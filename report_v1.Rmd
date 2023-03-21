@@ -26,7 +26,7 @@ library(sp)
 library(htmltools) # for html escape
 library(magrittr)
 #library(leaflegend) # customize legends to change shapes:: commenting out because not needed for high injury network maps for now
-
+library(flextable)
 
 library(htmlwidgets)
 
@@ -69,7 +69,7 @@ Examining data from the Racial & Identity Profiling Act (RIPA), we find that LBP
 
 We find that LBPD spends more time on stops made during their patrol time (referred to as officer-initiated stops) than stops made in response to calls from the community. The type of stops and results of these stops show evidence of racial profiling.
 
-### Most time is spent on officer-initiated stops not on  responding to concerns from the community.   
+### Most time is spent on officer-initiated stops not on responding to concerns from the community.   
 
 Nearly 80% of time officers spent on stops are spent on officer-initiated stops. This translates to just 1 in 5 hours spent on responding to calls for service, or concerns from the community. 
 
@@ -113,56 +113,15 @@ hc_add_theme(cc_theme)%>%
 
 ```
 
-### These stops disproportionately impact people of color across the city.
-
-People of color are more likely to be impacted by this high occurrence of officer-initiated stops. As a part of RIPA data collection, officers are required to report the race of the person they stopped, based on the officer's perception. The data show LBPD officers stop Black, Native Hawaiian or Pacific Islander, and Middle Eastern or South African peoples in Long Beach at the highest rates. In 2019, LBPD officers stopped 169 Black people for every one thousand Black people in Long Beach. And while White people make up a much larger share of the Long Beach population, more Black people are stopped by LBPD than White people.
-
-```{r, echo=FALSE}
-#### DS ####
-
-##### Chart - stop rates per 1K by race for LB #####
-#### DS ####
-
-##### Chart - stop rates per 1K by race for LB #####
-# add a comma to stop count
-
-# Apply Chart
-
-report_stoprates_race_person<-report_stoprates_race_person%>%filter(race!="total")
-
-fx_barbubblechart(
-
-  db=report_stoprates_race_person, #name of dataframe
-
-  order_var=report_stoprates_race_person$stop_rate_per1k, #variable you're sorting by
-
-  x='race_label_short', # x or independent variables
-
-  y='stop_rate_per1k', # y or dependent variable
-
-  z='stop_count',
-
-  top_finding=paste0("LBPD stopped Black, NHPI, and MESA people at higher rates than other community members."), # this is the top finding from the chart that gets used like a title
-
-  chart_title= paste0("Number of Officer-initiated Stops per 1K of Same Population by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
-
-  tooltip_text="For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate_per1k:.1f}</b> people perceived as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:,0f}</b> people.", # customize your tooltip as a statement, calling out rate and count
 
 
-  chart_caption = paste0(racenote,"<br>", sourcenote, "<br><br><br>"), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
-
-  yaxis_label = "''", #format for your y axis labels
-   export_data_label=list(pointFormat='{point.stop_rate_per1k:.1f} per 1K')
-)
-```
-
-### Stops are made based on racial profiling not risk for crime {.tabset}
+### Officer-initiated stops are not preventing serious threats or crimes {.tabset}
 
 Officers are required to report the reason why they stopped a person and the result of that stop, e.g. whether a person received a citation, was arrested, or no consequence or action was necessary. We analyze the time spent on officer-initiated stops by stop reason and then by stop result to determine if officers are making stops that help prevent a serious threat to community safety. Stops are made mainly for minor traffic reasons that are resolved with a citation or warning, or no action at all. Then, we narrow in on traffic stops that resulted in no action to see if traffic stops of people of color are more likely to result in some consequence for safety. In the end, these stops show more evidence of racial profiling than protecting the safety of communities. While LBPD is more likely to stop Black people and other people of color, a sizable share of these stops are traffic stops have no or minor implications for community safety. In 2019, over 1 in 5 traffic stops of Black people resulted in no action.
 
 #### Time spent on stops by reason
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include=FALSE}
 
 ###JZ###
 
@@ -190,14 +149,132 @@ fx_lollichart(
 
   chart_title= paste0("Hours spent on stops by stop reason"), # this is the more standard chart title that gets used as a subtitle
 
-  tooltip_text="<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours", 
+  tooltip_text="<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours",
 
-  chart_caption = paste0(sourcenote), 
+  chart_caption = paste0(sourcenote),
   yaxis_label = "'%'", #format for your y axis labels
   export_data_label=list(pointFormat='{point.hours_rate:.1f}% of hours spent'))
 
 
 ```
+
+```{r, include=FALSE}
+
+####Item chart####
+
+  # mutate(hours_rate= round(hours_rate, 0))
+
+col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A")  
+
+
+#### Item Chart 1: Traffic Stops + Results -rate of hours (/100) ####
+
+hc<-hchart(
+  df,
+  "item",
+    rows=6,
+  tooltip = list(headerFormat="", pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on stops for <b>{point.stop_reason_short}</b>"),
+  hcaes(
+    name = stop_reason_short,
+    y = hours_rate,
+    label = stop_reason_short,
+    color = col
+  ),
+  name = "Total Hours",
+  showInLegend = TRUE) %>%
+  
+  hc_title(text = "LBPD spends most of its time on traffic stops", 
+ align="left" )%>%
+  
+  hc_caption(
+    text = paste0(sourcenote)) %>% 
+  hc_add_theme(cc_theme)%>%
+  hc_exporting(
+    enabled = TRUE, sourceWidth=900, sourceHeight=600, 
+    chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}')))))),
+    filename = paste0("Hours spent on stops by stop reason","_Catalyst California, catalystcalifornia.org, 2023.")
+  )%>%
+  
+  hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span>'),
+            enable = TRUE, 
+            labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
+
+ # hc
+
+# add in margins so the graph isn't cut off
+
+hc %>%
+  hc_chart(
+    marginRight = 100,
+    marginLeft=100
+  )
+
+
+
+```
+
+```{r}
+
+### Tree map###
+
+# define colors
+col <-c(meteorite, "#9B9A9A",  lavender, orange,peridot,"#177FEB", "#733256" )  
+
+
+# graph
+df%>%
+  hchart(
+    "treemap", 
+    hcaes(x = stop_reason_short, value = hours_rate))%>%
+
+  hc_tooltip(pointFormat = "<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours")%>%
+
+ hc_plotOptions(treemap = list(colorByPoint = TRUE)) %>%      
+  
+    hc_colors(col) %>%   #with this we can set the colors, note: 1st color is given to first row in the data frame (not necessarily the biggest box)
+  
+    hc_colorAxis(dataClasses = color_classes(df$stop_reason_short)) %>%      
+  
+  hc_title(text = "LBPD spends most of its time on traffic stops",
+           align = "left",
+    style = list(
+      color = black,
+      fontFamily = main_font, # font_title
+      fontWeight = black_font_weight,
+  
+  fontSize='24px'
+    )) %>%
+ 
+   hc_subtitle(text = "Hours spent on stops by stop reason",
+               align = "left",
+              style = list(
+      color = black, 
+      fontFamily = main_font, # font_subtitle
+      fontWeight = black_font_weight,
+       
+      fontSize='14px'))%>%
+  
+    hc_legend(enabled = FALSE) %>%
+  
+  hc_caption(
+      text = paste0(sourcenote)
+      # , style=list(fontSize='8px')
+    ) %>% 
+  
+      hc_add_theme(cc_theme)%>%
+
+  
+   hc_exporting(
+      enabled = TRUE, sourceWidth=900, sourceHeight=600, 
+      chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}% of hours spent')))))),
+      filename = paste0("Hours spent on stops by stop reason_Catalyst California, catalystcalifornia.org, 2023.")
+    )
+ 
+
+
+
+```
+
 
 #### Time spent on traffic stops by result
 
@@ -267,10 +344,151 @@ hc %>%
 
 ```
 
+#### Most common traffic stop citations
+
+```{r}
+
+# read in df
+
+df<-dbGetQuery(con, "SELECT * FROM report_rates_citations_race_person")
+
+# convert to long format and only keep 'total' group
+
+df_tot<-df%>%
+mutate(across(everything(), as.character))%>%
+  filter(grepl('total',race))%>%
+  pivot_longer(!race, names_to="measure", values_to="value")
+
+df_tot<-df_tot%>%
+  mutate(Percent=ifelse(measure %in% "rank_1_label", 27.7097621947311,
+                     ifelse(measure %in% "rank_2_label", 7.84565091981283,
+                            ifelse(measure %in% "rank_3_label", 5.64066405999615,
+                                   ifelse(measure %in% "rank_4_label", 5.03172873533748,
+                                           ifelse(measure %in% "rank_5_label",4.98685981667842, 'NULL'
+                     ))))))%>%
+  
+    mutate(Total=ifelse(measure %in% "rank_1_label", 4323,
+                     ifelse(measure %in% "rank_2_label", 1224,
+                            ifelse(measure %in% "rank_3_label", 880,
+                                   ifelse(measure %in% "rank_4_label", 785,
+                                           ifelse(measure %in% "rank_5_label",778, 'NULL'
+                     )))))) %>%
+  
+   
+    mutate(Citation=ifelse(measure %in% "rank_1_label", "Unsafe speed for prevailing conditions (speeding)",
+                     ifelse(measure %in% "rank_2_label", "No vehicle or trailer registration",
+                            ifelse(measure %in% "rank_3_label", "Failure to stop at a stop sign",
+                                   ifelse(measure %in% "rank_4_label", "Failure to stop at a red light",
+                                           ifelse(measure %in% "rank_5_label", "Driver failure to obey signs/signals", 'NULL'
+                     ))))))
+   
+  
+
+# keep final rows
+df_tot<-df_tot[c(1,4,7,10,13),]
+
+
+# create top citations total table (not by race)
+
+ft<-df_tot%>%
+  mutate(Percent=as.numeric(Percent),
+         Total=as.numeric(Total))%>%
+  select(Citation, Percent, Total)%>%
+flextable()
+
+# add padding to title
+
+fpp <- officer::fp_par(padding = 6,
+                       line_spacing = 2
+                       )
+
+# add title 
+ft <-   ft%>%set_caption(
+    as_paragraph(
+      as_chunk("Top five traffic citations given by LBPD",
+               props = fp_text_default(font.family = main_font ))
+    ), word_stylename = "Table Caption",
+    fp_p = fpp)
 
 
 
-#### Rate of traffic stops by result and race
+# format number columns
+
+ft <- colformat_double(
+  x = ft,
+  big.mark = ",", digits = 2, na_str = "N/A"
+)
+
+# set font and styling
+
+ft<-font(
+  ft,
+  i = NULL,
+  j = NULL,
+  main_font,
+  part = "all",
+  cs.family = main_font,
+  hansi.family = main_font,
+  eastasia.family = main_font
+)
+
+# set width
+
+ft<-autofit(ft)
+
+# display
+
+ft
+
+```
+
+
+### Stops are made based on racial profiling and disproportionately impact people of color 
+
+People of color are more likely to be impacted by this high occurrence of officer-initiated stops. As a part of RIPA data collection, officers are required to report the race of the person they stopped, based on the officer's perception. The data show LBPD officers stop Black, Native Hawaiian or Pacific Islander, and Middle Eastern or South African peoples in Long Beach at the highest rates. In 2019, LBPD officers stopped 169 Black people for every one thousand Black people in Long Beach. And while White people make up a much larger share of the Long Beach population, more Black people are stopped by LBPD than White people.
+
+```{r, echo=FALSE}
+#### DS ####
+
+##### Chart - stop rates per 1K by race for LB #####
+#### DS ####
+
+##### Chart - stop rates per 1K by race for LB #####
+# add a comma to stop count
+
+# Apply Chart
+
+report_stoprates_race_person<-report_stoprates_race_person%>%filter(race!="total")
+
+fx_barbubblechart(
+
+  db=report_stoprates_race_person, #name of dataframe
+
+  order_var=report_stoprates_race_person$stop_rate_per1k, #variable you're sorting by
+
+  x='race_label_short', # x or independent variables
+
+  y='stop_rate_per1k', # y or dependent variable
+
+  z='stop_count',
+
+  top_finding=paste0("LBPD stopped Black, NHPI, and MESA people at higher rates than other community members."), # this is the top finding from the chart that gets used like a title
+
+  chart_title= paste0("Number of Officer-initiated Stops per 1K of Same Population by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
+
+  tooltip_text="For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate_per1k:.1f}</b> people perceived as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:,0f}</b> people.", # customize your tooltip as a statement, calling out rate and count
+
+
+  chart_caption = paste0(racenote,"<br>", sourcenote, "<br><br><br>"), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
+
+  yaxis_label = "''", #format for your y axis labels
+   export_data_label=list(pointFormat='{point.stop_rate_per1k:.1f} per 1K')
+)
+```
+
+A pretextual stop occurs when an officer stops a person for a relatively minor violation that does not necessarily require a stop, but an officer stops the person based on “hunch” that they possess evidence of crime, and the minor (unharmful) violation is identified to permit an otherwise illegitimate investigation. Pretextual stops are the main pathway for racial profiling because those “hunches” are often based on personal biases.  
+
+To understand how often pretextual traffic stops occur, we analyzed how often traffic stops, what LBPD spends most of their time on, result in no action by race. Individuals who were perceived as having two or more races, or as Black, had the highest rate of traffic stops with no resulting action. This is indicative of a pretextual stop because the fact that the traffic stop resulted in no action indicates that the stop was not based off any evidence of danger or crime in the first place. (placeholder text)
 
 ```{r, echo=FALSE}
 
@@ -304,7 +522,7 @@ fx_barbubblechart(
 
   y='stop_denom_rate', # y or dependent variable
 
-  z='pop_count',
+  z='stop_count',
 
   top_finding=paste0("Multiracial and Black people are most likely to be stopped for minor traffic stops."), # this is the top finding from the chart that gets used like a title
 
@@ -384,6 +602,7 @@ fx_barbubblechart(
 # 
 
 ```
+
 
 ## Low-income communities of color are unjustly targeted with unnecessary stops, perpetuating inequities. 
 
