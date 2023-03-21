@@ -278,7 +278,7 @@ hc %>%
 
 ```
 
-#### Most common types of citations
+#### Most common traffic stop citations
 
 ```{r}
 
@@ -420,7 +420,9 @@ fx_barbubblechart(
 )
 ```
 
-A pretextual stop is defined as...  When focusing in on just traffic stops that resulted in no action, individuals who were perceived as having two or more races, or as Black, had the highest rate of traffic stops with no resulting action. This is indicative of a pretextual stop, because for there to be no resulting action to the stop it is likely that there was no serious threat or danger in the first place. (placeholder text)
+A pretextual stop occurs when an officer stops a person for a relatively minor violation that does not necessarily require a stop, but an officer stops the person based on “hunch” that they possess evidence of crime, and the minor (unharmful) violation is identified to permit an otherwise illegitimate investigation. Pretextual stops are the main pathway for racial profiling because those “hunches” are often based on personal biases.  
+
+To understand how often pretextual traffic stops occur, we analyzed how often traffic stops, what LBPD spends most of their time on, result in no action by race. Individuals who were perceived as having two or more races, or as Black, had the highest rate of traffic stops with no resulting action. This is indicative of a pretextual stop because the fact that the traffic stop resulted in no action indicates that the stop was not based off any evidence of danger or crime in the first place. (placeholder text)
 
 ```{r, echo=FALSE}
 
