@@ -94,7 +94,7 @@ df %>%
     )%>% 
   hc_title(text = "Three in four hours are spent on officer-initiated stops not calls for service",
  align="left")%>%
-   hc_subtitle(text = "Percent of hours spent on calls for service versus officer-initiated stops",
+   hc_subtitle(text = "Percent of Hours Spent on Calls for Service versus Officer-initiated Stops",
                      align="left") %>%
   hc_caption(
     text = paste0(sourcenote))%>%
@@ -147,7 +147,7 @@ fx_lollichart(
 
   top_finding=paste0("Officers spend most of their time on traffic stops and stops for reasonable suspicion"), # this is the top finding from the chart that gets used like a title
 
-  chart_title= paste0("Hours spent on stops by stop reason"), # this is the more standard chart title that gets used as a subtitle
+  chart_title= paste0("Hours Spent on Stops by Stop Reason"), # this is the more standard chart title that gets used as a subtitle
 
   tooltip_text="<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours",
 
@@ -215,6 +215,11 @@ hc %>%
 
 ```{r}
 
+#read in table
+
+df<-dbGetQuery(con, "SELECT * FROM report_timespent_reason_stop")%>%
+  arrange(-hours_rate)
+
 ### Tree map###
 
 # define colors
@@ -227,9 +232,11 @@ df%>%
     "treemap", 
     hcaes(x = stop_reason_short, value = hours_rate))%>%
 
-  hc_tooltip(pointFormat = "<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours")%>%
+  hc_tooltip(pointFormat = "<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b> stops, or a total of {point.hours_count:,.1f} hours")%>%
 
- hc_plotOptions(treemap = list(colorByPoint = TRUE)) %>%      
+ hc_plotOptions(treemap = list(colorByPoint = TRUE))%>%
+                               
+                               # dataLabels=list(useHTML=TRUE, format='<p class="truncate"><b>{point.stop_reason_short}</b></a>',style=list( fontSize='12px')))) %>%      
   
     hc_colors(col) %>%   #with this we can set the colors, note: 1st color is given to first row in the data frame (not necessarily the biggest box)
   
@@ -245,7 +252,7 @@ df%>%
   fontSize='24px'
     )) %>%
  
-   hc_subtitle(text = "Hours spent on stops by stop reason",
+   hc_subtitle(text = "Hours Spent on Stops by Stop Reason",
                align = "left",
               style = list(
       color = black, 
@@ -266,7 +273,7 @@ df%>%
   
    hc_exporting(
       enabled = TRUE, sourceWidth=900, sourceHeight=600, 
-      chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}% of hours spent')))))),
+      chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.stop_reason_short}:<br>{point.hours_rate:.1f}% hours')))))),
       filename = paste0("Hours spent on stops by stop reason_Catalyst California, catalystcalifornia.org, 2023.")
     )
  
@@ -319,13 +326,16 @@ hc<-hchart(
   hc_title(text = "The majority of hours spent on traffic stops result in citations, warnings, or no action", 
  align="left" )%>%
   
+   hc_subtitle(text = "Hours Spent on Traffic Stops by Result", 
+ align="left" )%>%
+  
   hc_caption(
     text = paste0(sourcenote)) %>% 
   hc_add_theme(cc_theme)%>%
   hc_exporting(
     enabled = TRUE, sourceWidth=900, sourceHeight=600, 
     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}')))))),
-    filename = paste0("The majority of hours spent on traffic stops result in citations, warnings, or no action","_Catalyst California, catalystcalifornia.org, 2023.")
+    filename = paste0("Hours Spent on Traffic Stops by Result","_Catalyst California, catalystcalifornia.org, 2023.")
   )%>%
   
   hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span>'),
@@ -524,12 +534,12 @@ fx_barbubblechart(
 
   z='stop_count',
 
-  top_finding=paste0("Multiracial and Black people are most likely to be stopped for minor traffic stops."), # this is the top finding from the chart that gets used like a title
+  top_finding=paste0("LBPD is most likely to stop Multiracial and Black people for minor traffic stops"), # this is the top finding from the chart that gets used like a title
 
-  chart_title= paste0("Percent of traffic stops that resulted in no action by race"), # this is the more standard chart title that gets used as a subtitle
+  chart_title= paste0("Percent of Traffic Stops that Resulted in No Action by Race"), # this is the more standard chart title that gets used as a subtitle
 
  
-  tooltip_text="<b>{point.stop_denom_rate:,.1f}%</b> of stops of <b>{point.race_label_short}</b> people result in No Action, or a total of {point.stop_count:,.1f} stops", # customize your tooltip as a statement, calling out rate and count
+  tooltip_text="<b>{point.stop_denom_rate:,.1f}%</b> of stops of people perceived as <b>{point.race_label_short}</b> result in No Action, or a total of {point.stop_count:,.1f} stops", # customize your tooltip as a statement, calling out rate and count
 
   
   chart_caption = paste0(racenote,"<br>", sourcenote, "<br><br><br>"), 
