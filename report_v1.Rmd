@@ -45,7 +45,7 @@ high_injury_motor_corridors_line_sf <- st_read(con, query = "SELECT * FROM data.
 high_injury_motor_intersections_spdf <- st_read(con, query = "SELECT * FROM data.high_injury_motor_intersections_spatial")
 high_injury_ped_corridors_line_sf  <- st_read(con, query = "SELECT * FROM data.high_injury_ped_corridors_spatial")  %>% st_as_sf()
 high_injury_ped_intersections_spdf <- st_read(con, query = "SELECT * FROM data.high_injury_ped_intersections_spatial")
-report_timespent_officerinitiated_cd_stop <- st_read(con, query = "SELECT * FROM data.report_timespent_officerinitiated_cd_stop")
+report_timespent_officerinitiated_cd_stop <- st_read(con, query = "SELECT * FROM report_timespent_result_cd_stop")
 report_traffic_stoprates_cd_race_person <- dbGetQuery(con, "SELECT * FROM data.report_traffic_stoprates_cd_race_person") 
 population_race_cd <-  dbGetQuery(con, "SELECT * FROM data.population_race_cd") 
 ## Source the Chart Template
@@ -1111,7 +1111,7 @@ More stops in a community does not coincide with a greater likelihood of prevent
 
 ##### Map - officer initiated stops that resulted with no action  by council district #####
 council_district_noaction <- council_district %>% 
-  mutate(council_num=as.character(council_num))%>% #added this mutation because 'council_num' needs to be the same type for both dfs in order to be the join key
+    mutate(council_num=as.character(council_num))%>% 
   left_join(
     report_timespent_officerinitiated_cd_stop
   ) 
