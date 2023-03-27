@@ -36,18 +36,6 @@ source("W:\\RDA Team\\R\\credentials_source.R")
 
 con <- connect_to_db("eci_lb_ripa")
 
-### Import Data ###
-report_stoprates_race_person <- dbGetQuery(con, "SELECT * FROM data.report_stoprates_race_person") 
-report_stoprates_cd_race_person <- dbGetQuery(con, "SELECT * FROM data.report_stoprates_cd_race_person") 
-report_hitrates_race_person <- dbGetQuery(con, "SELECT * FROM data.report_hitrates_race_person") 
-council_district <- st_read(con, query = "SELECT * FROM data.colb_council_districts_place_2022")
-high_injury_motor_corridors_line_sf <- st_read(con, query = "SELECT * FROM data.high_injury_motor_corridors_spatial") %>% st_as_sf()
-high_injury_motor_intersections_spdf <- st_read(con, query = "SELECT * FROM data.high_injury_motor_intersections_spatial")
-high_injury_ped_corridors_line_sf  <- st_read(con, query = "SELECT * FROM data.high_injury_ped_corridors_spatial")  %>% st_as_sf()
-high_injury_ped_intersections_spdf <- st_read(con, query = "SELECT * FROM data.high_injury_ped_intersections_spatial")
-report_timespent_officerinitiated_cd_stop <- st_read(con, query = "SELECT * FROM report_timespent_result_cd_stop")
-report_traffic_stoprates_cd_race_person <- dbGetQuery(con, "SELECT * FROM data.report_traffic_stoprates_cd_race_person") 
-population_race_cd <-  dbGetQuery(con, "SELECT * FROM data.population_race_cd") 
 ## Source the Chart Template
 
 source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
@@ -467,8 +455,8 @@ People of color are more likely to be impacted by this high occurrence of office
 # add a comma to stop count
 
 # Apply Chart
+report_stoprates_race_person <- dbGetQuery(con, "SELECT * FROM data.report_stoprates_race_person")  %>%filter(race!="total")
 
-report_stoprates_race_person<-report_stoprates_race_person%>%filter(race!="total")
 
 fx_barbubblechart(
 
@@ -889,8 +877,13 @@ Across Council Districts, LBPD stops people of color at the highest rates. Plott
 
 
 ```{r}
+council_district <- st_read(con, query = "SELECT * FROM data.colb_council_districts_place_2022")
+report_stoprates_cd_race_person <- st_read(con, query = "SELECT * FROM data.report_stoprates_cd_race_person")
+
 ## make council number a character file
 council_district$council_num <- as.character(council_district$council_num) # change council number to character to merge
+
+population_race_cd <-  dbGetQuery(con, "SELECT * FROM data.population_race_cd")
 
 ## merge with council district shape-file
 council_district_count <-  council_district %>% 
@@ -1118,6 +1111,8 @@ More stops in a community does not coincide with a greater likelihood of prevent
 
 ```{r, echo=FALSE}
 #### DS ####
+report_timespent_officerinitiated_cd_stop <- st_read(con, query = "SELECT * FROM report_timespent_result_cd_stop")
+
 
 ##### Map - officer initiated stops that resulted with no action  by council district #####
 council_district_noaction <- council_district %>% 
@@ -1184,6 +1179,13 @@ We compared 2019 traffic stops to high-injury corridors and intersections identi
 
 ```{r, echo=FALSE}
 #### DS ####
+
+high_injury_motor_corridors_line_sf <- st_read(con, query = "SELECT * FROM data.high_injury_motor_corridors_spatial") %>% st_as_sf()
+high_injury_motor_intersections_spdf <- st_read(con, query = "SELECT * FROM data.high_injury_motor_intersections_spatial")
+high_injury_ped_corridors_line_sf  <- st_read(con, query = "SELECT * FROM data.high_injury_ped_corridors_spatial")  %>% st_as_sf()
+high_injury_ped_intersections_spdf <- st_read(con, query = "SELECT * FROM data.high_injury_ped_intersections_spatial")
+report_traffic_stoprates_cd_race_person <- dbGetQuery(con, "SELECT * FROM data.report_traffic_stoprates_cd_race_person") 
+ 
 
 ##### Map - map comparing traffic stop rates to injury networks #####
 #source("W:/Project/ECI/LB RIPA/R/3. Safety/report_highinjury_corridors_intersections.R")
@@ -1391,6 +1393,7 @@ leaflet(width = "100%", height = "600px") %>%
 Instead of creating safer communities, officers use routine traffic stops as a means to profile and harass people of color. LBPD officers use routine traffic stops to search people with the purported intent of preventing more serious crime. This practice yields ineffective results. The majority of searches, nearly 4 in 5 across races, lead to no contraband or evidence found for a crime. Nearly 90% of searches done during traffic stops of MESA, Black, Multi-racial, Asian, and AIAN individuals result in no contraband or evidence found. 
 
 ```{r, echo=FALSE}
+report_hitrates_race_person <- dbGetQuery(con, "SELECT * FROM data.report_hitrates_race_person") 
 #### DS ####
 report_hitrates_race_person<-report_hitrates_race_person%>%filter(race!="total")
 ##### Chart - unfounded searches by race for traffic violations #####
