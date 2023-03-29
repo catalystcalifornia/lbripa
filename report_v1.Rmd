@@ -348,50 +348,35 @@ hc %>%
 
 # read in df
 
-df<-dbGetQuery(con, "SELECT * FROM report_rates_citations_race_person")
+ df<-dbGetQuery(con, "SELECT * FROM report_rates_citations_race_person_long")
 
 # convert to long format and only keep 'total' group
 
 df_tot<-df%>%
-mutate(across(everything(), as.character))%>%
-  filter(grepl('total',race))%>%
-  pivot_longer(!race, names_to="measure", values_to="value")
+  filter(grepl('total',race))
 
-df_tot<-df_tot%>%
-  mutate(Percent=ifelse(measure %in% "rank_1_label", 27.7097621947311,
-                     ifelse(measure %in% "rank_2_label", 7.84565091981283,
-                            ifelse(measure %in% "rank_3_label", 5.64066405999615,
-                                   ifelse(measure %in% "rank_4_label", 5.03172873533748,
-                                           ifelse(measure %in% "rank_5_label",4.98685981667842, 'NULL'
-                     ))))))%>%
-  
-    mutate(Total=ifelse(measure %in% "rank_1_label", 4323,
-                     ifelse(measure %in% "rank_2_label", 1224,
-                            ifelse(measure %in% "rank_3_label", 880,
-                                   ifelse(measure %in% "rank_4_label", 785,
-                                           ifelse(measure %in% "rank_5_label",778, 'NULL'
-                     )))))) %>%
-  
-   
-    mutate(Citation=ifelse(measure %in% "rank_1_label", "Unsafe speed for prevailing conditions (speeding)",
-                     ifelse(measure %in% "rank_2_label", "No vehicle or trailer registration",
-                            ifelse(measure %in% "rank_3_label", "Failure to stop at a stop sign",
-                                   ifelse(measure %in% "rank_4_label", "Failure to stop at a red light",
-                                           ifelse(measure %in% "rank_5_label", "Driver failure to obey signs/signals", 'NULL'
-                     ))))))
-   
+# df_tot<-df_tot%>%
+#     mutate(Citation=ifelse(measure %in% "rank_1_label", "Unsafe speed for prevailing conditions (speeding)",
+#                      ifelse(measure %in% "rank_2_label", "No vehicle or trailer registration",
+#                             ifelse(measure %in% "rank_3_label", "Failure to stop at a stop sign",
+#                                    ifelse(measure %in% "rank_4_label", "Failure to stop at a red light",
+#                                            ifelse(measure %in% "rank_5_label", "Driver failure to obey signs/signals", 'NULL'
+#                      ))))))
+#    
   
 
 # keep final rows
-df_tot<-df_tot[c(1,4,7,10,13),]
+# df_tot<-df_tot[c(1,4,7,10,13),]
 
 
 # create top citations total table (not by race)
 
 ft<-df_tot%>%
-  mutate(Percent=as.numeric(Percent),
-         Total=as.numeric(Total))%>%
-  select(Citation, Percent, Total)%>%
+  rename("Race"="race",
+         "Citation"="label",
+         "Percent"="rate",
+        "Total"= "count")%>%
+  select(Citation, "Percent", Total)%>%
 flextable()
 
 # add padding to title
@@ -1056,7 +1041,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 
   
    # add Long beach district layer with stop rates
-  addPolygons(data = council_district_demographics, label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", fillColor = "white", opacity = 1,  popup = ~paste0(demographic_popup), 
+  addPolygons(data = council_district_demographics, label=~htmlEscape(paste0("Council District ", council_num)), color = "black", fillColor = "white", opacity = 1,  popup = ~paste0(demographic_popup), 
             weight = 2, smoothFactor = 0.5,  highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE)) %>%
   
   addLayersControl(overlayGroups = c("Latinx","Black",  "Asian", "White",  "MESA", "NHPI", "AIAN", "Two or More Races"),
@@ -1112,7 +1097,7 @@ More stops in a community does not coincide with a greater likelihood of prevent
 ```{r, echo=FALSE}
 #### DS ####
 report_timespent_officerinitiated_cd_stop <- st_read(con, query = "SELECT * FROM report_timespent_result_cd_stop")
-
+council_district <- st_read(con, query = "SELECT * FROM data.colb_council_districts_place_2022")
 
 ##### Map - officer initiated stops that resulted with no action  by council district #####
 council_district_noaction <- council_district %>% 
@@ -1133,9 +1118,7 @@ cc_brand <- c("#E2D9FF", "#BDAFE9","#8E7ACA", "#362178","#211447")
 hours_rate_noaction_cap_popup <- paste0((
 label = paste0(
    "In Council District  <span style='font-size: 14px; font-weight: bold;'>",  
- council_district_noaction$council_num,  "<a href=",council_district_noaction$link, ">", "</span> (Rep. <span style='font-size: 12px; font-weight: bold;'>",council_district_noaction$representat, "</span>) ", "</a>",
-
- " ,officers spent <span style='font-size: 12px; font-weight: bold;'>", 
+ council_district_noaction$council_num,"</span>"," ,officers spent <span style='font-size: 12px; font-weight: bold;'>", 
  scales::comma(council_district_noaction$hours_count_noaction_cap, accuracy = 0.1), "</span> hours in stops that resulted in no action, a rate of <span style='font-size: 14px; font-weight: bold;'> ", scales::comma(council_district_noaction$hours_rate_noaction_cap, accuracy = 0.1), "</span>%.")))
 
 
@@ -1149,7 +1132,7 @@ pal_stop_hours_rate_noaction_cap <- colorQuantile(cc_brand,council_district_noac
 
 leaflet(width = "100%", height = "600px") %>%
   # add Long beach district layer with stop rates
-  addPolygons(data =  council_district_noaction,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "black", weight = 2, smoothFactor = 0.5, opacity = 1, fillOpacity = 0.5, popup = ~paste0(hours_rate_noaction_cap_popup),
+  addPolygons(data =  council_district_noaction,  label=~htmlEscape(paste0("Council District ", council_num)), color = "black", weight = 2, smoothFactor = 0.5, opacity = 1, fillOpacity = 0.5, popup = ~paste0(hours_rate_noaction_cap_popup),
               fillColor = ~pal_stop_hours_rate_noaction_cap(hours_rate_noaction_cap), highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE), group = "") %>%
   
   ## add legend for stop hours
@@ -1165,7 +1148,7 @@ leaflet(width = "100%", height = "600px") %>%
   setView(-118.16675, 	33.80462	, zoom = 12) #base and view 
 
 ```
-<br> <span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span>
+<span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span>
 
 
 ## Stops do not lead to greater safety for communities affected by inequities.
@@ -1267,10 +1250,7 @@ high_injury_ped_intersections_popup <- paste0((
 
 total_traffic_rate_popup <- paste0((
  label = paste0(
-    "For every 1K <span style='font-weight: bold;'>Total</span> people in   <span style='font-size: 12px; font-weight: bold;'>",  
-    
-    
-  "<a href=",council_district_traffic_rate$link, ">", "</span> Council District <span style='font-size: 12px; font-weight: bold;'>",  council_district_traffic_rate$council_num, "</span>", "</a>", ", LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",council_district_traffic_rate$total_traffic_stop_rate, "</span>  people, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_traffic_rate$total_traffic_stop_count), "</span> people. ")))
+    "For every 1K <span style='font-weight: bold;'>Total</span> people in Council District <span style='font-size: 12px; font-weight: bold;'>",  council_district_traffic_rate$council_num, "</span>", ", LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",council_district_traffic_rate$total_traffic_stop_rate, "</span>  people, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_traffic_rate$total_traffic_stop_count), "</span> people. ")))
   
   
 
@@ -1303,7 +1283,7 @@ leaflet(width = "100%", height = "600px") %>%
   
   
   # add Long beach district layer with stop rates
-  addPolygons(data = council_district_traffic_rate,  label=~htmlEscape(paste0("Council Number ", council_num)), color = "#444444", weight = 2, smoothFactor = 0.5,  opacity = 1, fillOpacity = 0.5,  fillColor = ~pal_total(total_traffic_stop_rate),
+  addPolygons(data = council_district_traffic_rate,  label=~htmlEscape(paste0("Council District ", council_num)), color = "#444444", weight = 2, smoothFactor = 0.5,  opacity = 1, fillOpacity = 0.5,  fillColor = ~pal_total(total_traffic_stop_rate),
               popup = ~paste0(total_traffic_rate_popup), highlight = highlightOptions(color = "white", weight = 3, bringToFront = FALSE), group = "Council Districts") %>%
   
   ## add motor corridors 
@@ -1384,7 +1364,7 @@ leaflet(width = "100%", height = "600px") %>%
   
   hideGroup(c("Pedestrian/Bike"))
 ```
-<br> <span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops for traffic violations.</span>
+<span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops for traffic violations.</span>
 
 
 
