@@ -348,50 +348,35 @@ hc %>%
 
 # read in df
 
-df<-dbGetQuery(con, "SELECT * FROM report_rates_citations_race_person")
+ df<-dbGetQuery(con, "SELECT * FROM report_rates_citations_race_person_long")
 
 # convert to long format and only keep 'total' group
 
 df_tot<-df%>%
-mutate(across(everything(), as.character))%>%
-  filter(grepl('total',race))%>%
-  pivot_longer(!race, names_to="measure", values_to="value")
+  filter(grepl('total',race))
 
-df_tot<-df_tot%>%
-  mutate(Percent=ifelse(measure %in% "rank_1_label", 27.7097621947311,
-                     ifelse(measure %in% "rank_2_label", 7.84565091981283,
-                            ifelse(measure %in% "rank_3_label", 5.64066405999615,
-                                   ifelse(measure %in% "rank_4_label", 5.03172873533748,
-                                           ifelse(measure %in% "rank_5_label",4.98685981667842, 'NULL'
-                     ))))))%>%
-  
-    mutate(Total=ifelse(measure %in% "rank_1_label", 4323,
-                     ifelse(measure %in% "rank_2_label", 1224,
-                            ifelse(measure %in% "rank_3_label", 880,
-                                   ifelse(measure %in% "rank_4_label", 785,
-                                           ifelse(measure %in% "rank_5_label",778, 'NULL'
-                     )))))) %>%
-  
-   
-    mutate(Citation=ifelse(measure %in% "rank_1_label", "Unsafe speed for prevailing conditions (speeding)",
-                     ifelse(measure %in% "rank_2_label", "No vehicle or trailer registration",
-                            ifelse(measure %in% "rank_3_label", "Failure to stop at a stop sign",
-                                   ifelse(measure %in% "rank_4_label", "Failure to stop at a red light",
-                                           ifelse(measure %in% "rank_5_label", "Driver failure to obey signs/signals", 'NULL'
-                     ))))))
-   
+# df_tot<-df_tot%>%
+#     mutate(Citation=ifelse(measure %in% "rank_1_label", "Unsafe speed for prevailing conditions (speeding)",
+#                      ifelse(measure %in% "rank_2_label", "No vehicle or trailer registration",
+#                             ifelse(measure %in% "rank_3_label", "Failure to stop at a stop sign",
+#                                    ifelse(measure %in% "rank_4_label", "Failure to stop at a red light",
+#                                            ifelse(measure %in% "rank_5_label", "Driver failure to obey signs/signals", 'NULL'
+#                      ))))))
+#    
   
 
 # keep final rows
-df_tot<-df_tot[c(1,4,7,10,13),]
+# df_tot<-df_tot[c(1,4,7,10,13),]
 
 
 # create top citations total table (not by race)
 
 ft<-df_tot%>%
-  mutate(Percent=as.numeric(Percent),
-         Total=as.numeric(Total))%>%
-  select(Citation, Percent, Total)%>%
+  rename("Race"="race",
+         "Citation"="label",
+         "Percent"="rate",
+        "Total"= "count")%>%
+  select(Citation, "Percent", Total)%>%
 flextable()
 
 # add padding to title
