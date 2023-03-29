@@ -231,23 +231,10 @@ df%>%
     hc_colorAxis(dataClasses = color_classes(df$stop_reason_short)) %>%      
   
   hc_title(text = "LBPD spends most of its time on traffic stops",
-           align = "left",
-    style = list(
-      color = black,
-      fontFamily = main_font, # font_title
-      fontWeight = black_font_weight,
-  
-  fontSize='24px'
-    )) %>%
+           align = "left") %>%
  
    hc_subtitle(text = "Hours Spent on Stops by Stop Reason",
-               align = "left",
-              style = list(
-      color = black, 
-      fontFamily = main_font, # font_subtitle
-      fontWeight = black_font_weight,
-       
-      fontSize='14px'))%>%
+               align = "left")%>%
   
     hc_legend(enabled = FALSE) %>%
   
