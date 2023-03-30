@@ -12,10 +12,17 @@ output:
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 ---
   
-  
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 ```{r setup, include=FALSE}
 
 knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+
+
+list.of.packages <- c("usethis", "highcharter", "tidyverse", "sf", "leaflet", "sp", "htmltools", "magrittr", "flextable", "htmlwidgets")
+
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
 #### Load libraries ####
 library(usethis)
 library(highcharter)
@@ -240,23 +247,10 @@ df%>%
     hc_colorAxis(dataClasses = color_classes(df$stop_reason_short)) %>%      
   
   hc_title(text = "LBPD spends most of its time on traffic stops",
-           align = "left",
-    style = list(
-      color = black,
-      fontFamily = main_font, # font_title
-      fontWeight = black_font_weight,
-  
-  fontSize='24px'
-    )) %>%
+           align = "left") %>%
  
    hc_subtitle(text = "Hours Spent on Stops by Stop Reason",
-               align = "left",
-              style = list(
-      color = black, 
-      fontFamily = main_font, # font_subtitle
-      fontWeight = black_font_weight,
-       
-      fontSize='14px'))%>%
+               align = "left")%>%
   
     hc_legend(enabled = FALSE) %>%
   
