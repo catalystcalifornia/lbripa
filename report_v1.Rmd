@@ -826,42 +826,34 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 
 .nh-black-color {
   color: #0860BC;
-  background-color: #0860BC;
 }
 
 .latinx-color {
   color: #0AB013;
-  background-color: #0AB013;
 }
 
 .nh-asian-color {
   color: #DF4007;
-  background-color: #DF4007;
 }
 
 .nh-white-color {
   color: #BCD313;
-  background-color: #BCD313;
 }
 
 .mesa-color {
   color: #EABB00;
-  background-color: #EABB00;
 }
 
 .nhpi-color {
   color: #601D42;
-  background-color: #601D42;
 }
 
 .aian-color {
   color: #6F6F6F;
-  background-color: #6F6F6F;
 }
 
 .nh-twoormor-color {
   color: #211447;
-  background-color: #211447;
 }
 
 <!-- .leaflet-touch .leaflet-control-layers { -->
