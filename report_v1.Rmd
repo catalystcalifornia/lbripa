@@ -729,7 +729,7 @@ dark_silver <- c('#6F6F6F')
         options = leafletOptions(zoomControl = FALSE)) %>%
    
    # create sidebar and add html for content
-addControl(html="<div class='leaflet-popup-scrolled point-density-sidebar'><div class ='cd-header'>Council District <span class='cd' style='font-weight: 600; font-size: 14px; color: #000000;'></span></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-black-stop-rate nh-black-color'></span> <span class='nh-black-color'>Black people per 1K Black people.</span> They are <span class='nh-black-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class=rate-bar></div><div class=count-bubble></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='latinx-stop-rate latinx-color'></span> <span class='latinx-color'>Latinx people per 1K Latinx people.</span> They are <span class='latinx-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class=rate-bar></div><div class=count-bubble></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-asian-stop-rate nh-asian-color'></span> <span class='nh-asian-color'>Asian people per 1K Asian people.</span> They are <span class='nh-asian-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class=rate-bar></div><div class=count-bubble></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-white-stop-rate nh-white-color'></span> <span class='nh-white-color'>White people per 1K White people.</span> They are <span class='nh-white-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class=rate-bar></div><div class=count-bubble></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='mesa-stop-rate mesa-color'></span> <span class='mesa-color'>MESA people per 1K MESA people.</span> They are <span class='mesa-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class=rate-bar></div><div class=count-bubble></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nhpi-stop-rate nhpi-color'></span> <span class='nhpi-color'>NHPI people per 1K NHPI people.</span> They are <span class='nhpi-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class=rate-bar></div><div class=count-bubble></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='aian-stop-rate aian-color'></span> <span class='aian-color'>AIAN people per 1K AIAN people.</span> They are <span class='aian-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class=rate-bar></div><div class=count-bubble></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-twoormor-stop-rate nh-twoormor-color'></span> <span class='nh-twoormor-color'>people of Two Or More Races per 1K people of Two or More Races.</span> They are <span class='nh-twoormor-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class=rate-bar></div><div class=count-bubble></div></div><span style='font-size: 10px; font-style: italic;'>*Each dot represents 10 people stopped by LBPD.</span></div>", position = "topleft") %>%
+addControl(html="<div class='leaflet-popup-scrolled point-density-sidebar'><div class ='cd-header'>Council District <span class='cd' style='font-weight: 600; font-size: 14px; color: #000000;'></span></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-black-stop-rate nh-black-color'></span> <span class='nh-black-color'>Black people per 1K Black people.</span> They are <span class='nh-black-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class='rate-bar  nh-black-visual-color'></div><div class='count-bubble nh-black-visual-color'></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='latinx-stop-rate latinx-color'></span> <span class='latinx-color'>Latinx people per 1K Latinx people.</span> They are <span class='latinx-rate'></span> of CD<span class='cd'></span>'s population.<br><div  style='width: 100%;'><div class='rate-bar latinx-visual-color'></div><div class='count-bubble latinx-visual-color'></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-asian-stop-rate nh-asian-color'></span> <span class='nh-asian-color'>Asian people per 1K Asian people.</span> They are <span class='nh-asian-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class='rate-bar nh-asian-visual-color'></div><div class='count-bubble nh-asian-visual-color'></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-white-stop-rate nh-white-color'></span> <span class='nh-white-color'>White people per 1K White people.</span> They are <span class='nh-white-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class='rate-bar nh-white-visual-color'></div><div class='count-bubble nh-white-visual-color'></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='mesa-stop-rate mesa-color'></span> <span class='mesa-color'>MESA people per 1K MESA people.</span> They are <span class='mesa-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class='rate-bar mesa-visual-color'></div><div class='count-bubble mesa-visual-color'></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nhpi-stop-rate nhpi-color'></span> <span class='nhpi-color'>NHPI people per 1K NHPI people.</span> They are <span class='nhpi-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class='rate-bar nhpi-visual-color'></div><div class='count-bubble nhpi-visual-color'></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='aian-stop-rate aian-color'></span> <span class='aian-color'>AIAN people per 1K AIAN people.</span> They are <span class='aian-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class='rate-bar aian-visual-color'></div><div class='count-bubble aian-visual-color'></div></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-twoormor-stop-rate nh-twoormor-color'></span> <span class='nh-twoormor-color'>people of Two Or More Races per 1K people of Two or More Races.</span> They are <span class='nh-twoormor-rate'></span> of CD<span class='cd'></span>'s population.<br><div style='width: 100%;'><div class='rate-bar nh-twoormor-visual-color'></div><div class='count-bubble nh-twoormor-visual-color'></div></div><span style='font-size: 10px; font-style: italic;'>*Each dot represents 10 people stopped by LBPD.</span></div>", position = "topleft") %>%
 
     ### add latinx dots
   
@@ -958,7 +958,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 .rate-bar {
   height: 1px;
   border: 0;
-  border-top: 1px solid #0860BC;
+  border-top: 1px solid;
   margin: 1em 0;
   padding: 0;
   width: 100px;
@@ -968,48 +968,47 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background-color: #0860BC;
   margin-top: -25px;
   margin-left:100px;
 }
 
 .nh-black-visual-color {
   border-top-color: #0860BC;
-  color: #0860BC;
+  background-color: #0860BC;
 }
 
 .latinx-visual-color {
   border-top-color: #0AB013;
-  color: #0AB013;
+  background-color: #0AB013;
 }
 
 .nh-asian-visual-color {
   border-top-color: #DF4007;
-  color: #DF4007;
+  background-color: #DF4007;
 }
 
 .nh-white-visual-color {
   border-top-color: #BCD313;
-  color: #BCD313;
+  background-color: #BCD313;
 }
 
 .mesa-visual-color {
   border-top-color: #EABB00;
-  color: #EABB00;
+  background-color: #EABB00;
 }
 
 .nhpi-visual-color {
-  color: #601D42;
+  background-color: #601D42;
   border-top-color: #601D42;
 }
 
 .aian-visual-color {
-  color: #6F6F6F;
+  background-color: #6F6F6F;
   border-top-color: #6F6F6F;
 }
 
 .nh-twoormor-visual-color {
-  color: #211447;
+  background-color: #211447;
   border-top-color: #211447;
 }
 
