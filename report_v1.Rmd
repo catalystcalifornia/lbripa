@@ -964,15 +964,56 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
   width: 100px;
 }
 .count-bubble {
-  position: absolute;
+  position: relative;
   width: 25px;
   height: 25px;
   border-radius: 50%;
   background-color: #0860BC;
   margin-top: -25px;
   margin-left:100px;
-  
 }
+
+.nh-black-visual-color {
+  border-top-color: #0860BC;
+  color: #0860BC;
+}
+
+.latinx-visual-color {
+  border-top-color: #0AB013;
+  color: #0AB013;
+}
+
+.nh-asian-visual-color {
+  border-top-color: #DF4007;
+  color: #DF4007;
+}
+
+.nh-white-visual-color {
+  border-top-color: #BCD313;
+  color: #BCD313;
+}
+
+.mesa-visual-color {
+  border-top-color: #EABB00;
+  color: #EABB00;
+}
+
+.nhpi-visual-color {
+  color: #601D42;
+  border-top-color: #601D42;
+}
+
+.aian-visual-color {
+  color: #6F6F6F;
+  border-top-color: #6F6F6F;
+}
+
+.nh-twoormor-visual-color {
+  color: #211447;
+  border-top-color: #211447;
+}
+
+
 </style>
 ```{js}
 <!-- This function is used to format LB RIPA data in the point density map "popup"/sidebar feature -->
