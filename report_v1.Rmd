@@ -5,7 +5,6 @@ author: "Catalyst California"
 output:
   html_document:
     css: "W:\\RDA Team\\R\\cc_brandguide.css"
-    code_folding: hide
     toc: yes
     toc_depth: 2
     toc_float: yes
@@ -1173,13 +1172,14 @@ Traffic stops and police presence increase trauma for communities of color alrea
 
 Data show that such trends prove true in Long Beach. Specifically, we map stop rates for traffic violations by council district and high-injury networks for motor vehicles, pedestrians, and bikes. We also analyze the hit rate, or percentage of searches among traffic stops that yield evidence or contraband, by race. The data show that traffic stops are concentrated in low-income communities of color most impacted by high-injury networks. Data also show that people of color are also most impacted by unnecessary searches made by LBPD.
 
+
 ### Low-income communities of color are dually impacted by traffic stops and traffic injuries.
 
 Low-income communities and people of color are overrepresented in victims of traffic collisions based on research in Los Angeles and nationally.  In Long Beach, we compare 2019 traffic stops to high-injury corridors and intersections identified by the Safe Streets Long Beach initiative in 2013-17 to examine how communities of color are being impacted both by the burden of law enforcement stops and traffic injuries.^[The initiative identified these high-injury corridors and intersections based on 2013-17 data, but they remain the initiative’s action plan to guarantee equity in increasing road safety.]
 
 Council districts 1 and 6 have the highest number of high-injury corridors and highest rate of officer-initiated traffic stops. These districts also have high shares of people of color and coincide with areas in Long Beach that have lower median incomes.^[https://la.myneighborhooddata.org/2019/02/employment-inequality-across-long-beach-city/]  Notably, council districts 3, 4, and 5, the districts with the lowest percentages of people of color have fewer high-injury pedestrian or bike corridors. In other words, low-income communities of color in Long Beach are disproportionately impacted by traffic injuries and police stops. Public investments in traffic safety should be made based on the needs and priorities of these communities. Research has shown that more police stops do not reduce traffic injuries or fatalities. Based on data across 33 states, the National Institute of Health found no significant association between police stops and vehicle collision death rates.^[https://catalyst-ca.cdn.prismic.io/catalyst-ca/126c30a8-852c-416a-b8a7-55a90c77a04e_APCA+ACLU+REIMAGINING+COMMUNITY+SAFETY+2022_5.pdf] 
 
-Prior research and recommendations from transportation practitioners underscore how traffic safety can be increased without the additional trauma of police interactions. In Seattle, reducing speeds and increasing sign density lowered speeds and led to fewer crashes in the city.^[https://www.seattle.gov/Documents/Departments/SDOT/VisionZero/SpeedLimit_CaseStudies_Report.pdf]  And while street design can help with pedestrian safety, communities of color and low-income communities are less likely to have features of street design known to help with pedestrian safety.^[https://bridgingthegap.ihrp.uic.edu/_asset/02fpi3/btg_street_walkability_FINAL_03-09-12.pdf]  Highway siting decisions, traffic engineering practices, and other street design decisions can also result in substandard, dangerous streets for communities of color.^[https://nacto.org/wp-content/uploads/2020/07/NACTO_CityLimits_Spreads.pdf#page=7]  Rather than using traffic stops to enforce traffic safety, enhancing urban design (such as through street/sidewalk lighting, marked crosswalks, pedestrian-friendly medians, traffic islands, curb extensions and traffic circles) should be considered as a solution-driven alternative.[https://bridgingthegap.ihrp.uic.edu/_asset/02fpi3/btg_street_walkability_FINAL_03-09-12.pdf] 
+Prior research and recommendations from transportation practitioners underscore how traffic safety can be increased without the additional trauma of police interactions. In Seattle, reducing speeds and increasing sign density lowered speeds and led to fewer crashes in the city.^[https://www.seattle.gov/Documents/Departments/SDOT/VisionZero/SpeedLimit_CaseStudies_Report.pdf]  And while street design can help with pedestrian safety, communities of color and low-income communities are less likely to have features of street design known to help with pedestrian safety.^[https://bridgingthegap.ihrp.uic.edu/_asset/02fpi3/btg_street_walkability_FINAL_03-09-12.pdf]  Highway siting decisions, traffic engineering practices, and other street design decisions can also result in substandard, dangerous streets for communities of color.^[https://nacto.org/wp-content/uploads/2020/07/NACTO_CityLimits_Spreads.pdf#page=7]  Rather than using traffic stops to enforce traffic safety, enhancing urban design (such as through street/sidewalk lighting, marked crosswalks, pedestrian-friendly medians, traffic islands, curb extensions and traffic circles) should be considered as a solution-driven alternative.^[https://bridgingthegap.ihrp.uic.edu/_asset/02fpi3/btg_street_walkability_FINAL_03-09-12.pdf] 
 
 ```{r, echo=FALSE}
 #### DS ####
@@ -1387,6 +1387,7 @@ leaflet(width = "100%", height = "600px") %>%
 ```
 <span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops for traffic violations.</span>
 
+
 ### Traffic stops lead to unnecessary, intrusive encounters with LBPD
 
 Instead of creating safer communities, officers use routine traffic stops to profile and harass people of color. Data on traffic and pretextual stops consistently show that stops are ineffective in finding evidence of a crime and disproportionately impact people of color.^[https://www.ppic.org/publication/racial-disparities-in-law-enforcement-stops/] Traffic stops also have little efficacy in preventing or reducing crime. In one case study, when police conducted fewer stops in response to law enforcement scrutiny, there was no observable increase in total, violent, or property crimes.^[https://www.sciencedirect.com/science/article/abs/pii/S0047235217301289]
@@ -1432,9 +1433,11 @@ fx_barbubblechart(
 
 ```
 
+
 # The Solution
 
 [Forthcoming based on partner conversations] 
+
 
 # The Takeaway
 
