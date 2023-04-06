@@ -387,7 +387,7 @@ ft <-   ft%>%set_caption(
     as_paragraph(
       as_chunk("Top Five Traffic Citations Given by LBPD",
                props = fp_text_default(font.family = main_font ),align="left")
-    ), word_stylename = "Table Caption",
+    ), word_stylename = "Table Caption", align_with_table=F,
     fp_p = fpp)%>%
   add_footer_lines(paste0(sourcenote))
 
@@ -412,6 +412,7 @@ ft<-font(
   hansi.family = main_font,
   eastasia.family = main_font
 )
+# ft<-align(ft, i = 1, j = NULL, align = "center", part = "header")
 
 # set width
 
