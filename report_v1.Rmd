@@ -482,7 +482,6 @@ Studies show that police encounters and harassment increase anxiety and trauma a
 df<-dbGetQuery(con, "SELECT * FROM report_stoprates_result_race_person")
 
 # filter for traffic
-
 traffic<-df%>%
   filter(grepl('Traffic Violation',reason))%>%
   filter(grepl('No Action',result))%>%
