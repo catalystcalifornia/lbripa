@@ -357,25 +357,20 @@ hc %>%
 df_tot<-df%>%
   filter(grepl('total',race))
 
-# df_tot<-df_tot%>%
-#     mutate(Citation=ifelse(measure %in% "rank_1_label", "Unsafe speed for prevailing conditions (speeding)",
-#                      ifelse(measure %in% "rank_2_label", "No vehicle or trailer registration",
-#                             ifelse(measure %in% "rank_3_label", "Failure to stop at a stop sign",
-#                                    ifelse(measure %in% "rank_4_label", "Failure to stop at a red light",
-#                                            ifelse(measure %in% "rank_5_label", "Driver failure to obey signs/signals", 'NULL'
-#                      ))))))
-#    
-  
-
-# keep final rows
-# df_tot<-df_tot[c(1,4,7,10,13),]
+df_tot<-df_tot%>%
+    mutate(label_simple=ifelse(label %in% "22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106", "Unsafe speed for prevailing conditions (speeding)",
+                     ifelse(label %in% "4000(A)(1) VC - NO REG:VEH/TRAILER/ETC (I) 54657", "No vehicle or trailer registration",
+                            ifelse(label %in% "22450(A) VC - FAIL STOP VEH:XWALK/ETC (I) 54167", "Failure to stop at a stop sign",
+                                   ifelse(label %in% "21453(A) VC - FAIL STOP LINE/ETC AT RED (I) 54098", "Failure to stop at a red light",
+                                           ifelse(label %in% "21461(A) VC - DRIVER FAIL OBEY SIGN/ETC (I) 54146", "Driver failure to obey signs/signals", 'NULL'
+                     ))))))
 
 
 # create top citations total table (not by race)
 
 ft<-df_tot%>%
   rename("Race"="race",
-         "Citation"="label",
+         "Citation"="label_simple",
          "Percent"="rate",
         "Total"= "count")%>%
   select(Citation, "Percent", Total)%>%
@@ -390,10 +385,11 @@ fpp <- officer::fp_par(padding = 6,
 # add title 
 ft <-   ft%>%set_caption(
     as_paragraph(
-      as_chunk("Top five traffic citations given by LBPD",
-               props = fp_text_default(font.family = main_font ))
+      as_chunk("Top Five Traffic Citations Given by LBPD",
+               props = fp_text_default(font.family = main_font ),align="left")
     ), word_stylename = "Table Caption",
-    fp_p = fpp)
+    fp_p = fpp)%>%
+  add_footer_lines(paste0(sourcenote))
 
 
 
