@@ -389,11 +389,11 @@ ft <-   ft_data%>%set_caption(
       as_chunk("LBPD mostly gives traffic citations for infractions",
                props = fp_text_default(font.family = main_font, font.size=21, bold=TRUE)),"<br>",
       as_chunk("Top Five Traffic Citations Given by LBPD",
-               props = fp_text_default(font.family = main_font, font.size=14, bold=TRUE))
+               props = fp_text_default(font.family = main_font, font.size=14))
       ), word_stylename = "Table Caption", align_with_table=F,
     fp_p = fpp)%>%
   add_footer_lines(as_paragraph(
-      as_chunk(paste0(sourcenote),
+      as_chunk(paste0(sourcenote,"Analysis for all officer-initiated stops."),
                props = fp_text_default(font.family = main_font,font.size=10),align="left")
     ))
 
@@ -416,11 +416,17 @@ ft<-font(
 )
 
 # further customize
-ft<-bold(ft, bold = TRUE, j="Percent",part="body")
-ft<-color(ft,color=meteorite,part="header")
-ft<-bold(ft, bold = TRUE, part="header")
-ft<-border(ft,border.top=fp_border(color=gainsboro),border.bottom=fp_border(color=gainsboro),part="header")
-ft<-border(ft,border.bottom=fp_border(color=gainsboro),i=5)
+ft<-border_remove(ft)
+ft<-bold(ft, bold = TRUE, j="Percent",part="all")
+ft<-color(ft,color=meteorite,j="Percent",part="all")
+ft<-bold(ft, bold = TRUE, j="Citation",part="body")
+ft<-border(ft,border.top=fp_border(color=gainsboro),border.bottom=fp_border(color=gainsboro),part="header",j=c("Citation","Total"))
+ft<-border(ft,border.bottom=fp_border(color=gainsboro),i=5,j=c("Citation","Total"))
+# ft<-border(ft,border.top=black,border.right=black,border.left=black,part="header",j="Percent")
+ft<-surround(ft,j="Percent",part="header",border.top=fp_border(color=black,width=2),border.left=fp_border(color=black,width=2),border.right=fp_border(color=black,width=2))
+ft<-surround(ft,j="Percent",part="body",border.left=fp_border(color=black,width=2),border.right=fp_border(color=black,width=2))
+ft<-surround(ft,j="Percent",part="footer",border.top=fp_border(color=black,width=2))
+ft<-bg(ft,j="Percent",bg=lavender,part="all")
 
 # set width
 ft<-autofit(ft)
