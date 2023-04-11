@@ -98,7 +98,7 @@ df %>%
    hc_subtitle(text = "Percent of Hours Spent on Calls for Service versus Officer-initiated Stops",
                      align="left") %>%
   hc_caption(
-    text = paste0(sourcenote))%>%
+    text = paste0(sourcenote," Analysis for all stops."))%>%
   hc_plotOptions(
     innersize="50%", 
     startAngle=90, 
@@ -133,8 +133,8 @@ The top five offenses that people are cited for are infractions related to movin
 
 #read in table
 
-df<-dbGetQuery(con, "SELECT * FROM report_timespent_reason_stop")%>%
-  arrange(-hours_rate)
+# df<-dbGetQuery(con, "SELECT * FROM report_timespent_reason_stop")%>%
+#   arrange(-hours_rate)
 
 #####  Lollipop #####
 
@@ -142,21 +142,21 @@ df<-dbGetQuery(con, "SELECT * FROM report_timespent_reason_stop")%>%
 
 # Apply Chart 
 
-fx_lollichart(
-  df, #name of dataframe
-  order_var=df$hours_rate, #variable you're sorting by
-  x='stop_reason_short', # x or independent variables
-  y='hours_rate', # y or dependent variable
-
-  top_finding=paste0("Officers spend most of their time on traffic stops and stops for reasonable suspicion"), # this is the top finding from the chart that gets used like a title
-
-  chart_title= paste0("Hours Spent on Stops by Stop Reason"), # this is the more standard chart title that gets used as a subtitle
-
-  tooltip_text="<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours",
-
-  chart_caption = paste0(sourcenote),
-  yaxis_label = "'%'", #format for your y axis labels
-  export_data_label=list(pointFormat='{point.hours_rate:.1f}% of hours spent'))
+# fx_lollichart(
+#   df, #name of dataframe
+#   order_var=df$hours_rate, #variable you're sorting by
+#   x='stop_reason_short', # x or independent variables
+#   y='hours_rate', # y or dependent variable
+# 
+#   top_finding=paste0("Officers spend most of their time on traffic stops and stops for reasonable suspicion"), # this is the top finding from the chart that gets used like a title
+# 
+#   chart_title= paste0("Hours Spent on Stops by Stop Reason"), # this is the more standard chart title that gets used as a subtitle
+# 
+#   tooltip_text="<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours",
+# 
+#   chart_caption = paste0(sourcenote,"Analysis for all stops."),
+#   yaxis_label = "'%'", #format for your y axis labels
+#   export_data_label=list(pointFormat='{point.hours_rate:.1f}% of hours spent'))
 
 
 ```
@@ -167,50 +167,50 @@ fx_lollichart(
 
   # mutate(hours_rate= round(hours_rate, 0))
 
-col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A")  
+# col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A")
 
-
-#### Item Chart 1: Traffic Stops + Results -rate of hours (/100) ####
-
-hc<-hchart(
-  df,
-  "item",
-    rows=6,
-  tooltip = list(headerFormat="", pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on stops for <b>{point.stop_reason_short}</b>"),
-  hcaes(
-    name = stop_reason_short,
-    y = hours_rate,
-    label = stop_reason_short,
-    color = col
-  ),
-  name = "Total Hours",
-  showInLegend = TRUE) %>%
-  
-  hc_title(text = "LBPD spends most of its time on traffic stops", 
- align="left" )%>%
-  
-  hc_caption(
-    text = paste0(sourcenote)) %>% 
-  hc_add_theme(cc_theme)%>%
-  hc_exporting(
-    enabled = TRUE, sourceWidth=900, sourceHeight=600, 
-    chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}')))))),
-    filename = paste0("Hours spent on stops by stop reason","_Catalyst California, catalystcalifornia.org, 2023.")
-  )%>%
-  
-  hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span>'),
-            enable = TRUE, 
-            labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
-
- # hc
-
-# add in margins so the graph isn't cut off
-
-hc %>%
-  hc_chart(
-    marginRight = 100,
-    marginLeft=100
-  )
+# 
+# #### Item Chart 1: Traffic Stops + Results -rate of hours (/100) ####
+# 
+# hc<-hchart(
+#   df,
+#   "item",
+#     rows=6,
+#   tooltip = list(headerFormat="", pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on stops for <b>{point.stop_reason_short}</b>"),
+#   hcaes(
+#     name = stop_reason_short,
+#     y = hours_rate,
+#     label = stop_reason_short,
+#     color = col
+#   ),
+#   name = "Total Hours",
+#   showInLegend = TRUE) %>%
+# 
+#   hc_title(text = "LBPD spends most of its time on traffic stops",
+#  align="left" )%>%
+# 
+#   hc_caption(
+#     text = paste0(sourcenote)) %>%
+#   hc_add_theme(cc_theme)%>%
+#   hc_exporting(
+#     enabled = TRUE, sourceWidth=900, sourceHeight=600,
+#     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}')))))),
+#     filename = paste0("Hours spent on stops by stop reason","_Catalyst California, catalystcalifornia.org, 2023.")
+#   )%>%
+# 
+#   hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span>'),
+#             enable = TRUE,
+#             labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
+# 
+#  # hc
+# 
+# # add in margins so the graph isn't cut off
+# 
+# hc %>%
+#   hc_chart(
+#     marginRight = 100,
+#     marginLeft=100
+#   )
 
 
 
@@ -254,7 +254,7 @@ df%>%
     hc_legend(enabled = FALSE) %>%
   
   hc_caption(
-      text = paste0(sourcenote)
+      text = paste0(sourcenote," Analysis for all stops.")
       # , style=list(fontSize='8px')
     ) %>% 
   
@@ -320,7 +320,7 @@ hc<-hchart(
  align="left" )%>%
   
   hc_caption(
-    text = paste0(sourcenote)) %>% 
+    text = paste0(sourcenote," Analysis for all officer-initiated stops for traffic violations.")) %>% 
   hc_add_theme(cc_theme)%>%
   hc_exporting(
     enabled = TRUE, sourceWidth=900, sourceHeight=600, 
@@ -346,7 +346,7 @@ hc %>%
 
 #### Most common traffic stop citations
 
-```{r}
+```{r ft.align="left"}
 
 # read in df
 
@@ -387,14 +387,14 @@ fpp <- officer::fp_par(padding = 6,
 ft <-   ft_data%>%set_caption(
     as_paragraph(
       as_chunk("LBPD mostly gives traffic citations for infractions",
-               props = fp_text_default(font.family = main_font, font.size=21, bold=TRUE)),"<br>",
+               props = fp_text_default(font.family = main_font, font.size=15.75, bold=TRUE)),"<br>",
       as_chunk("Top Five Traffic Citations Given by LBPD",
-               props = fp_text_default(font.family = main_font, font.size=14))
+               props = fp_text_default(font.family = main_font, font.size=10.5))
       ), word_stylename = "Table Caption", align_with_table=F,
     fp_p = fpp)%>%
   add_footer_lines(as_paragraph(
-      as_chunk(paste0(sourcenote,"Analysis for all officer-initiated stops."),
-               props = fp_text_default(font.family = main_font,font.size=10),align="left")
+      as_chunk(paste0(sourcenote," Analysis for all officer-initiated stops for traffic violations."),
+               props = fp_text_default(font.family = main_font,font.size=7.5),align="left")
     ))
 
 # format number columns
@@ -417,6 +417,7 @@ ft<-font(
 
 # further customize
 ft<-border_remove(ft)
+ft<-bg(ft,bg=alabaster,part="all")
 ft<-bold(ft, bold = TRUE, j="Percent",part="all")
 ft<-color(ft,color=meteorite,j="Percent",part="all")
 ft<-bold(ft, bold = TRUE, j="Citation",part="body")
@@ -473,7 +474,7 @@ fx_barbubblechart(
   tooltip_text="For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate_per1k:.1f}</b> people perceived as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:,0f}</b> people.", # customize your tooltip as a statement, calling out rate and count
 
 
-  chart_caption = paste0(racenote,"<br>", sourcenote, "<br><br><br>"), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
+  chart_caption = paste0(racenote,"<br>", sourcenote, "<br>","Analysis for all officer-initiated stops.","<br><br>"), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
 
   yaxis_label = "''", #format for your y axis labels
    export_data_label=list(pointFormat='{point.stop_rate_per1k:.1f} per 1K')
@@ -527,7 +528,7 @@ fx_barbubblechart(
   tooltip_text="<b>{point.stop_denom_rate:,.1f}%</b> of stops of people perceived as <b>{point.race_label_short}</b> result in No Action, or a total of {point.stop_count:,.1f} stops", # customize your tooltip as a statement, calling out rate and count
 
   
-  chart_caption = paste0(racenote,"<br>", sourcenote, "<br><br><br>"), 
+  chart_caption = paste0(racenote,"<br>", sourcenote, "<br>","Analysis for all officer-initiated stops for traffic violations.","<br><br>"), 
   yaxis_label = "'%'", #format for your y axis labels
   export_data_label=list(pointFormat='{point.stop_denom_rate:.1f}%'))
 
