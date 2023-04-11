@@ -358,17 +358,19 @@ df_tot<-df%>%
   filter(grepl('total',race))
 
 df_tot<-df_tot%>%
-    mutate(label_simple=ifelse(label %in% "22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106", "Unsafe speed for prevailing conditions (speeding)",
-                     ifelse(label %in% "4000(A)(1) VC - NO REG:VEH/TRAILER/ETC (I) 54657", "No vehicle or trailer registration",
-                            ifelse(label %in% "22450(A) VC - FAIL STOP VEH:XWALK/ETC (I) 54167", "Failure to stop at a stop sign",
-                                   ifelse(label %in% "21453(A) VC - FAIL STOP LINE/ETC AT RED (I) 54098", "Failure to stop at a red light",
-                                           ifelse(label %in% "21461(A) VC - DRIVER FAIL OBEY SIGN/ETC (I) 54146", "Driver failure to obey signs/signals", 'NULL'
+    mutate(label_simple=ifelse(label %in% "22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106", "Unsafe speed for prevailing conditions (speeding) (I)",
+                     ifelse(label %in% "4000(A)(1) VC - NO REG:VEH/TRAILER/ETC (I) 54657", "No vehicle or trailer registration (I)",
+                            ifelse(label %in% "22450(A) VC - FAIL STOP VEH:XWALK/ETC (I) 54167", "Failure to stop at a stop sign (I)",
+                                   ifelse(label %in% "21453(A) VC - FAIL STOP LINE/ETC AT RED (I) 54098", "Failure to stop at a red light (I)",
+                                           ifelse(label %in% "21461(A) VC - DRIVER FAIL OBEY SIGN/ETC (I) 54146", "Driver failure to obey signs/signals (I)", 'NULL'
                      ))))))
-
-
+  
 # create top citations total table (not by race)
+# load library
+library(officer)
 
-ft<-df_tot%>%
+# create basic table
+ft_data<-df_tot%>%
   rename("Race"="race",
          "Citation"="label_simple",
          "Percent"="rate",
@@ -377,31 +379,31 @@ ft<-df_tot%>%
 flextable()
 
 # add padding to title
-
 fpp <- officer::fp_par(padding = 6,
-                       line_spacing = 2
+                       line_spacing = 1.5
                        )
 
-# add title 
-ft <-   ft%>%set_caption(
+# add title and footer
+ft <-   ft_data%>%set_caption(
     as_paragraph(
+      as_chunk("LBPD mostly gives traffic citations for infractions",
+               props = fp_text_default(font.family = main_font, font.size=21, bold=TRUE)),"<br>",
       as_chunk("Top Five Traffic Citations Given by LBPD",
-               props = fp_text_default(font.family = main_font ),align="left")
-    ), word_stylename = "Table Caption", align_with_table=F,
+               props = fp_text_default(font.family = main_font, font.size=14, bold=TRUE))
+      ), word_stylename = "Table Caption", align_with_table=F,
     fp_p = fpp)%>%
-  add_footer_lines(paste0(sourcenote))
-
-
+  add_footer_lines(as_paragraph(
+      as_chunk(paste0(sourcenote),
+               props = fp_text_default(font.family = main_font,font.size=10),align="left")
+    ))
 
 # format number columns
-
 ft <- colformat_double(
   x = ft,
-  big.mark = ",", digits = 2, na_str = "N/A"
+  big.mark = ",", digits = 1, na_str = "N/A"
 )
 
 # set font and styling
-
 ft<-font(
   ft,
   i = NULL,
@@ -412,14 +414,18 @@ ft<-font(
   hansi.family = main_font,
   eastasia.family = main_font
 )
-# ft<-align(ft, i = 1, j = NULL, align = "center", part = "header")
+
+# further customize
+ft<-bold(ft, bold = TRUE, j="Percent",part="body")
+ft<-color(ft,color=meteorite,part="header")
+ft<-bold(ft, bold = TRUE, part="header")
+ft<-border(ft,border.top=fp_border(color=gainsboro),border.bottom=fp_border(color=gainsboro),part="header")
+ft<-border(ft,border.bottom=fp_border(color=gainsboro),i=5)
 
 # set width
-
 ft<-autofit(ft)
 
 # display
-
 ft
 
 ```
