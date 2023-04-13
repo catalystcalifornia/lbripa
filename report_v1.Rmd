@@ -896,9 +896,6 @@ council_district_count <-  council_district %>%
     report_stoprates_cd_race_person
   ) 
 
-# multiply rate by 100
-#population_race_cd$rate <- population_race_cd$rate*100
-
 
 # get demographics by council district
 df_demographics <- population_race_cd %>% select(cd, race, count, rate) %>%  pivot_wider(
@@ -912,6 +909,17 @@ df_stop <- report_stoprates_cd_race_person %>% select(council_num, race, pop_cou
  names_glue = "{race}_{.value}",
  values_from = c(pop_count:stop_rate_per1k)
 )
+# round rates
+df_stop<-mutate(df_stop,
+                aian_stop_rate_per1k = round(aian_stop_rate_per1k,1),
+                latinx_stop_rate_per1k = round(latinx_stop_rate_per1k,1),
+                nh_asian_stop_rate_per1k = round(nh_asian_stop_rate_per1k,1),
+                nh_black_stop_rate_per1k = round(nh_black_stop_rate_per1k,1),
+                nh_twoormor_stop_rate_per1k=round(nh_tworomor_stop_rate_per1k,1),
+                nh_white_stop_rate_per1k = round(nh_white_stop_rate_per1k,1),
+                nhpi_stop_rate_per1k = round(nhpi_stop_rate_per1k,1),
+                mesa_stop_rate_per1k = round(mesa_stop_rate_per1k,1),
+                total_stop_rate_per1k = round(total_stop_rate_per1k,1))
 
 ## merge df_demographics with council_district-- get council_district_demographics
 council_district_demographics <- council_district %>% 
@@ -1206,7 +1214,9 @@ report_traffic_stoprates_cd_race_person <- dbGetQuery(con, "SELECT * FROM data.r
 # merge stop rates by council district shape-file -----------------------------------
 council_district$council_num <- as.character(council_district$council_num) # change council number to character to merge
 
-df <- report_traffic_stoprates_cd_race_person %>% select(council_num, race, pop_count, traffic_stop_count, traffic_stop_rate) %>%  pivot_wider(
+df <- report_traffic_stoprates_cd_race_person %>% select(council_num, race, pop_count, traffic_stop_count, traffic_stop_rate) %>%  
+  mutate(traffic_stop_rate=round(traffic_stop_rate,1))  %>%
+pivot_wider(
   names_from = race,
   names_glue = "{race}_{.value}",
   values_from = c(pop_count:traffic_stop_rate)
