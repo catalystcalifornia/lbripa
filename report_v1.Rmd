@@ -5,7 +5,6 @@ author: "Catalyst California"
 output:
   html_document:
     css: "W:\\RDA Team\\R\\cc_brandguide.css"
-    code_folding: hide
     toc: yes
     toc_depth: 2
     toc_float: yes
@@ -99,7 +98,7 @@ df %>%
    hc_subtitle(text = "Percent of Hours Spent on Calls for Service versus Officer-initiated Stops",
                      align="left") %>%
   hc_caption(
-    text = paste0(sourcenote))%>%
+    text = paste0(sourcenote," Analysis for all stops."))%>%
   hc_plotOptions(
     innersize="50%", 
     startAngle=90, 
@@ -134,8 +133,8 @@ The top five offenses that people are cited for are infractions related to movin
 
 #read in table
 
-df<-dbGetQuery(con, "SELECT * FROM report_timespent_reason_stop")%>%
-  arrange(-hours_rate)
+# df<-dbGetQuery(con, "SELECT * FROM report_timespent_reason_stop")%>%
+#   arrange(-hours_rate)
 
 #####  Lollipop #####
 
@@ -143,21 +142,21 @@ df<-dbGetQuery(con, "SELECT * FROM report_timespent_reason_stop")%>%
 
 # Apply Chart 
 
-fx_lollichart(
-  df, #name of dataframe
-  order_var=df$hours_rate, #variable you're sorting by
-  x='stop_reason_short', # x or independent variables
-  y='hours_rate', # y or dependent variable
-
-  top_finding=paste0("Officers spend most of their time on traffic stops and stops for reasonable suspicion"), # this is the top finding from the chart that gets used like a title
-
-  chart_title= paste0("Hours Spent on Stops by Stop Reason"), # this is the more standard chart title that gets used as a subtitle
-
-  tooltip_text="<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours",
-
-  chart_caption = paste0(sourcenote),
-  yaxis_label = "'%'", #format for your y axis labels
-  export_data_label=list(pointFormat='{point.hours_rate:.1f}% of hours spent'))
+# fx_lollichart(
+#   df, #name of dataframe
+#   order_var=df$hours_rate, #variable you're sorting by
+#   x='stop_reason_short', # x or independent variables
+#   y='hours_rate', # y or dependent variable
+# 
+#   top_finding=paste0("Officers spend most of their time on traffic stops and stops for reasonable suspicion"), # this is the top finding from the chart that gets used like a title
+# 
+#   chart_title= paste0("Hours Spent on Stops by Stop Reason"), # this is the more standard chart title that gets used as a subtitle
+# 
+#   tooltip_text="<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours",
+# 
+#   chart_caption = paste0(sourcenote,"Analysis for all stops."),
+#   yaxis_label = "'%'", #format for your y axis labels
+#   export_data_label=list(pointFormat='{point.hours_rate:.1f}% of hours spent'))
 
 
 ```
@@ -168,50 +167,50 @@ fx_lollichart(
 
   # mutate(hours_rate= round(hours_rate, 0))
 
-col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A")  
+# col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A")
 
-
-#### Item Chart 1: Traffic Stops + Results -rate of hours (/100) ####
-
-hc<-hchart(
-  df,
-  "item",
-    rows=6,
-  tooltip = list(headerFormat="", pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on stops for <b>{point.stop_reason_short}</b>"),
-  hcaes(
-    name = stop_reason_short,
-    y = hours_rate,
-    label = stop_reason_short,
-    color = col
-  ),
-  name = "Total Hours",
-  showInLegend = TRUE) %>%
-  
-  hc_title(text = "LBPD spends most of its time on traffic stops", 
- align="left" )%>%
-  
-  hc_caption(
-    text = paste0(sourcenote)) %>% 
-  hc_add_theme(cc_theme)%>%
-  hc_exporting(
-    enabled = TRUE, sourceWidth=900, sourceHeight=600, 
-    chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}')))))),
-    filename = paste0("Hours spent on stops by stop reason","_Catalyst California, catalystcalifornia.org, 2023.")
-  )%>%
-  
-  hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span>'),
-            enable = TRUE, 
-            labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
-
- # hc
-
-# add in margins so the graph isn't cut off
-
-hc %>%
-  hc_chart(
-    marginRight = 100,
-    marginLeft=100
-  )
+# 
+# #### Item Chart 1: Traffic Stops + Results -rate of hours (/100) ####
+# 
+# hc<-hchart(
+#   df,
+#   "item",
+#     rows=6,
+#   tooltip = list(headerFormat="", pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on stops for <b>{point.stop_reason_short}</b>"),
+#   hcaes(
+#     name = stop_reason_short,
+#     y = hours_rate,
+#     label = stop_reason_short,
+#     color = col
+#   ),
+#   name = "Total Hours",
+#   showInLegend = TRUE) %>%
+# 
+#   hc_title(text = "LBPD spends most of its time on traffic stops",
+#  align="left" )%>%
+# 
+#   hc_caption(
+#     text = paste0(sourcenote)) %>%
+#   hc_add_theme(cc_theme)%>%
+#   hc_exporting(
+#     enabled = TRUE, sourceWidth=900, sourceHeight=600,
+#     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}')))))),
+#     filename = paste0("Hours spent on stops by stop reason","_Catalyst California, catalystcalifornia.org, 2023.")
+#   )%>%
+# 
+#   hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span>'),
+#             enable = TRUE,
+#             labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
+# 
+#  # hc
+# 
+# # add in margins so the graph isn't cut off
+# 
+# hc %>%
+#   hc_chart(
+#     marginRight = 100,
+#     marginLeft=100
+#   )
 
 
 
@@ -255,7 +254,7 @@ df%>%
     hc_legend(enabled = FALSE) %>%
   
   hc_caption(
-      text = paste0(sourcenote)
+      text = paste0(sourcenote," Analysis for all stops.")
       # , style=list(fontSize='8px')
     ) %>% 
   
@@ -321,7 +320,7 @@ hc<-hchart(
  align="left" )%>%
   
   hc_caption(
-    text = paste0(sourcenote)) %>% 
+    text = paste0(sourcenote," Analysis for all officer-initiated stops for traffic violations.")) %>% 
   hc_add_theme(cc_theme)%>%
   hc_exporting(
     enabled = TRUE, sourceWidth=900, sourceHeight=600, 
@@ -347,7 +346,7 @@ hc %>%
 
 #### Most common traffic stop citations
 
-```{r}
+```{r ft.align="left"}
 
 # read in df
 
@@ -358,55 +357,53 @@ hc %>%
 df_tot<-df%>%
   filter(grepl('total',race))
 
-# df_tot<-df_tot%>%
-#     mutate(Citation=ifelse(measure %in% "rank_1_label", "Unsafe speed for prevailing conditions (speeding)",
-#                      ifelse(measure %in% "rank_2_label", "No vehicle or trailer registration",
-#                             ifelse(measure %in% "rank_3_label", "Failure to stop at a stop sign",
-#                                    ifelse(measure %in% "rank_4_label", "Failure to stop at a red light",
-#                                            ifelse(measure %in% "rank_5_label", "Driver failure to obey signs/signals", 'NULL'
-#                      ))))))
-#    
+df_tot<-df_tot%>%
+    mutate(label_simple=ifelse(label %in% "22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106", "Unsafe speed for prevailing conditions (speeding) (I)",
+                     ifelse(label %in% "4000(A)(1) VC - NO REG:VEH/TRAILER/ETC (I) 54657", "No vehicle or trailer registration (I)",
+                            ifelse(label %in% "22450(A) VC - FAIL STOP VEH:XWALK/ETC (I) 54167", "Failure to stop at a stop sign (I)",
+                                   ifelse(label %in% "21453(A) VC - FAIL STOP LINE/ETC AT RED (I) 54098", "Failure to stop at a red light (I)",
+                                           ifelse(label %in% "21461(A) VC - DRIVER FAIL OBEY SIGN/ETC (I) 54146", "Driver failure to obey signs/signals (I)", 'NULL'
+                     ))))))
   
-
-# keep final rows
-# df_tot<-df_tot[c(1,4,7,10,13),]
-
-
 # create top citations total table (not by race)
+# load library
+library(officer)
 
-ft<-df_tot%>%
+# create basic table
+ft_data<-df_tot%>%
   rename("Race"="race",
-         "Citation"="label",
+         "Citation"="label_simple",
          "Percent"="rate",
         "Total"= "count")%>%
   select(Citation, "Percent", Total)%>%
 flextable()
 
 # add padding to title
-
 fpp <- officer::fp_par(padding = 6,
-                       line_spacing = 2
+                       line_spacing = 1.5
                        )
 
-# add title 
-ft <-   ft%>%set_caption(
+# add title and footer
+ft <-   ft_data%>%set_caption(
     as_paragraph(
-      as_chunk("Top five traffic citations given by LBPD",
-               props = fp_text_default(font.family = main_font ))
-    ), word_stylename = "Table Caption",
-    fp_p = fpp)
-
-
+      as_chunk("LBPD mostly gives traffic citations for infractions",
+               props = fp_text_default(font.family = main_font, font.size=15.75, bold=TRUE)),"<br>",
+      as_chunk("Top Five Traffic Citations Given by LBPD",
+               props = fp_text_default(font.family = main_font, font.size=10.5))
+      ), word_stylename = "Table Caption", align_with_table=F,
+    fp_p = fpp)%>%
+  add_footer_lines(as_paragraph(
+      as_chunk(paste0(sourcenote," Analysis for all officer-initiated stops for traffic violations."),
+               props = fp_text_default(font.family = main_font,font.size=7.5),align="left")
+    ))
 
 # format number columns
-
 ft <- colformat_double(
   x = ft,
-  big.mark = ",", digits = 2, na_str = "N/A"
+  big.mark = ",", digits = 1, na_str = "N/A"
 )
 
 # set font and styling
-
 ft<-font(
   ft,
   i = NULL,
@@ -418,12 +415,24 @@ ft<-font(
   eastasia.family = main_font
 )
 
-# set width
+# further customize
+ft<-border_remove(ft)
+ft<-bg(ft,bg=alabaster,part="all")
+ft<-bold(ft, bold = TRUE, j="Percent",part="all")
+ft<-color(ft,color=meteorite,j="Percent",part="all")
+ft<-bold(ft, bold = TRUE, j="Citation",part="body")
+ft<-border(ft,border.top=fp_border(color=gainsboro),border.bottom=fp_border(color=gainsboro),part="header",j=c("Citation","Total"))
+ft<-border(ft,border.bottom=fp_border(color=gainsboro),i=5,j=c("Citation","Total"))
+# ft<-border(ft,border.top=black,border.right=black,border.left=black,part="header",j="Percent")
+ft<-surround(ft,j="Percent",part="header",border.top=fp_border(color=black,width=2),border.left=fp_border(color=black,width=2),border.right=fp_border(color=black,width=2))
+ft<-surround(ft,j="Percent",part="body",border.left=fp_border(color=black,width=2),border.right=fp_border(color=black,width=2))
+ft<-surround(ft,j="Percent",part="footer",border.top=fp_border(color=black,width=2))
+ft<-bg(ft,j="Percent",bg=lavender,part="all")
 
+# set width
 ft<-autofit(ft)
 
 # display
-
 ft
 
 ```
@@ -465,7 +474,7 @@ fx_barbubblechart(
   tooltip_text="For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate_per1k:.1f}</b> people perceived as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:,0f}</b> people.", # customize your tooltip as a statement, calling out rate and count
 
 
-  chart_caption = paste0(racenote,"<br>", sourcenote, "<br><br><br>"), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
+  chart_caption = paste0(racenote,"<br>", sourcenote, "<br>","Analysis for all officer-initiated stops.","<br><br>"), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
 
   yaxis_label = "''", #format for your y axis labels
    export_data_label=list(pointFormat='{point.stop_rate_per1k:.1f} per 1K')
@@ -487,7 +496,6 @@ Studies show that police encounters and harassment increase anxiety and trauma a
 df<-dbGetQuery(con, "SELECT * FROM report_stoprates_result_race_person")
 
 # filter for traffic
-
 traffic<-df%>%
   filter(grepl('Traffic Violation',reason))%>%
   filter(grepl('No Action',result))%>%
@@ -520,7 +528,7 @@ fx_barbubblechart(
   tooltip_text="<b>{point.stop_denom_rate:,.1f}%</b> of stops of people perceived as <b>{point.race_label_short}</b> result in No Action, or a total of {point.stop_count:,.1f} stops", # customize your tooltip as a statement, calling out rate and count
 
   
-  chart_caption = paste0(racenote,"<br>", sourcenote, "<br><br><br>"), 
+  chart_caption = paste0(racenote,"<br>", sourcenote, "<br>","Analysis for all officer-initiated stops for traffic violations.","<br><br>"), 
   yaxis_label = "'%'", #format for your y axis labels
   export_data_label=list(pointFormat='{point.stop_denom_rate:.1f}%'))
 
@@ -794,6 +802,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 #<span style='float: left; font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023.</span style>
 
 ```
+
 <style type="text/css">
 
 .info {
@@ -1059,8 +1068,10 @@ document.querySelector('.nh-twoormor-rate').innerHTML = popup.getAttribute('data
 })})})})
 
 ```
-<span style=' font-size: 12px;'>Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, MESA=Middle Eastern or South Asian; Observations by race may overlap in the point density map. </span> 
-<br> <span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span>
+
+<div align="left" style="line-height: 1em;"><span style="font-size: 10px;">Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, MESA=Middle Eastern or South Asian; Observations by race may overlap in the point density map. </span> <br> 
+<span style=' font-size: 10px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span> </div>
+
 
 
 ### More hours are spent on unnecessary stops in communities of color
@@ -1123,14 +1134,10 @@ leaflet(width = "100%", height = "600px") %>%
   setView(-118.16675, 	33.80462	, zoom = 12) #base and view 
   
 ```
-<span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span>
+<div align="left" style="line-height: 1em;"><span style=' font-size: 10px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span> </div>
 
 
 ## Traffic stops are an inefficient means of advancing safety and pose a greater burden on people of color
-
-A common narrative may be that traffic stops lead to safer streets with fewer injuries and less crime. In reality, communities of color are often the communities with higher rates of injuries from traffic collisions and profiling by police. Comparing traffic collisions to traffic stops shows officer-initiated stops do not necessarily make roadways safer nor do they correlate to areas with higher risk of road injuries. These stops are also ineffective in preventing serious crime. LBPD overwhelming conducts unnecessary searches of people through traffic stops, finding nothing of consequence. People of color bare the largest impact of these stops.
-
-### Traffic stops do not correlate to safer streets for communities impacted traffic injuries.
 
 A common narrative is that traffic stops and police presence are necessary for safety in our communities and roadways. In reality, built environment and street design improvements can be a more effective means for traffic safety and do not expose communities of color to unnecessary contact with law enforcement. 
 
@@ -1138,6 +1145,14 @@ Traffic stops and police presence increase trauma for communities of color alrea
 
 Data show that such trends prove true in Long Beach. Specifically, we map stop rates for traffic violations by council district and high-injury networks for motor vehicles, pedestrians, and bikes. We also analyze the hit rate, or percentage of searches among traffic stops that yield evidence or contraband, by race. The data show that traffic stops are concentrated in low-income communities of color most impacted by high-injury networks. Data also show that people of color are also most impacted by unnecessary searches made by LBPD.
 
+
+### Low-income communities of color are dually impacted by traffic stops and traffic injuries.
+
+Low-income communities and people of color are overrepresented in victims of traffic collisions based on research in Los Angeles and nationally.  In Long Beach, we compare 2019 traffic stops to high-injury corridors and intersections identified by the Safe Streets Long Beach initiative in 2013-17 to examine how communities of color are being impacted both by the burden of law enforcement stops and traffic injuries.^[The initiative identified these high-injury corridors and intersections based on 2013-17 data, but they remain the initiative’s action plan to guarantee equity in increasing road safety.]
+
+Council districts 1 and 6 have the highest number of high-injury corridors and highest rate of officer-initiated traffic stops. These districts also have high shares of people of color and coincide with areas in Long Beach that have lower median incomes.^[https://la.myneighborhooddata.org/2019/02/employment-inequality-across-long-beach-city/]  Notably, council districts 3, 4, and 5, the districts with the lowest percentages of people of color have fewer high-injury pedestrian or bike corridors. In other words, low-income communities of color in Long Beach are disproportionately impacted by traffic injuries and police stops. Public investments in traffic safety should be made based on the needs and priorities of these communities. Research has shown that more police stops do not reduce traffic injuries or fatalities. Based on data across 33 states, the National Institute of Health found no significant association between police stops and vehicle collision death rates.^[https://catalyst-ca.cdn.prismic.io/catalyst-ca/126c30a8-852c-416a-b8a7-55a90c77a04e_APCA+ACLU+REIMAGINING+COMMUNITY+SAFETY+2022_5.pdf] 
+
+Prior research and recommendations from transportation practitioners underscore how traffic safety can be increased without the additional trauma of police interactions. In Seattle, reducing speeds and increasing sign density lowered speeds and led to fewer crashes in the city.^[https://www.seattle.gov/Documents/Departments/SDOT/VisionZero/SpeedLimit_CaseStudies_Report.pdf]  And while street design can help with pedestrian safety, communities of color and low-income communities are less likely to have features of street design known to help with pedestrian safety.^[https://bridgingthegap.ihrp.uic.edu/_asset/02fpi3/btg_street_walkability_FINAL_03-09-12.pdf]  Highway siting decisions, traffic engineering practices, and other street design decisions can also result in substandard, dangerous streets for communities of color.^[https://nacto.org/wp-content/uploads/2020/07/NACTO_CityLimits_Spreads.pdf#page=7]  Rather than using traffic stops to enforce traffic safety, enhancing urban design (such as through street/sidewalk lighting, marked crosswalks, pedestrian-friendly medians, traffic islands, curb extensions and traffic circles) should be considered as a solution-driven alternative.^[https://bridgingthegap.ihrp.uic.edu/_asset/02fpi3/btg_street_walkability_FINAL_03-09-12.pdf] 
 
 ```{r, echo=FALSE}
 #### DS ####
@@ -1343,17 +1358,8 @@ leaflet(width = "100%", height = "600px") %>%
   
   hideGroup(c("Pedestrian/Bike"))
 ```
-<span style=' font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops for traffic violations.</span>
+<div align="left" style="line-height: 1em;"><span style=' font-size: 10px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops for traffic violations.</span> </div>
 
-
-
-### Low-income communities of color are dually impacted by traffic stops and traffic injuries
-
-Low-income communities and people of color are overrepresented in victims of traffic collisions based on research in Los Angeles and nationally.  In Long Beach, we compare 2019 traffic stops to high-injury corridors and intersections identified by the Safe Streets Long Beach initiative in 2013-17 to examine how communities of color are being impacted both by the burden of law enforcement stops and traffic injuries.^[The initiative identified these high-injury corridors and intersections based on 2013-17 data, but they remain the initiative’s action plan to guarantee equity in increasing road safety.]
-
-Council districts 1 and 6 have the highest number of high-injury corridors and highest rate of officer-initiated traffic stops. These districts also have high shares of people of color and coincide with areas in Long Beach that have lower median incomes.^[https://la.myneighborhooddata.org/2019/02/employment-inequality-across-long-beach-city/]  Notably, council districts 3, 4, and 5, the districts with the lowest percentages of people of color have fewer high-injury pedestrian or bike corridors. In other words, low-income communities of color in Long Beach are disproportionately impacted by traffic injuries and police stops. Public investments in traffic safety should be made based on the needs and priorities of these communities. Research has shown that more police stops do not reduce traffic injuries or fatalities. Based on data across 33 states, the National Institute of Health found no significant association between police stops and vehicle collision death rates.^[https://catalyst-ca.cdn.prismic.io/catalyst-ca/126c30a8-852c-416a-b8a7-55a90c77a04e_APCA+ACLU+REIMAGINING+COMMUNITY+SAFETY+2022_5.pdf] 
-
-Prior research and recommendations from transportation practitioners underscore how traffic safety can be increased without the additional trauma of police interactions. In Seattle, reducing speeds and increasing sign density lowered speeds and led to fewer crashes in the city.^[https://www.seattle.gov/Documents/Departments/SDOT/VisionZero/SpeedLimit_CaseStudies_Report.pdf]  And while street design can help with pedestrian safety, communities of color and low-income communities are less likely to have features of street design known to help with pedestrian safety.^[https://bridgingthegap.ihrp.uic.edu/_asset/02fpi3/btg_street_walkability_FINAL_03-09-12.pdf]  Highway siting decisions, traffic engineering practices, and other street design decisions can also result in substandard, dangerous streets for communities of color.^[https://nacto.org/wp-content/uploads/2020/07/NACTO_CityLimits_Spreads.pdf#page=7]  Rather than using traffic stops to enforce traffic safety, enhancing urban design (such as through street/sidewalk lighting, marked crosswalks, pedestrian-friendly medians, traffic islands, curb extensions and traffic circles) should be considered as a solution-driven alternative.[https://bridgingthegap.ihrp.uic.edu/_asset/02fpi3/btg_street_walkability_FINAL_03-09-12.pdf] 
 
 ### Traffic stops lead to unnecessary, intrusive encounters with LBPD
 
@@ -1400,6 +1406,12 @@ fx_barbubblechart(
 
 ```
 
+
 # The Solution
 
+[Forthcoming based on partner conversations] 
+
+
 # The Takeaway
+
+[Forthcoming based on partner conversations] 
