@@ -749,7 +749,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 }
 
 .leaflet-left {
-  width: 33%;
+  width: 35%;
 }
 
 .leaflet-left .leaflet-control {
