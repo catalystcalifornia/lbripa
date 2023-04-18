@@ -535,70 +535,6 @@ fx_barbubblechart(
 
 ```
 
-```{r, echo=FALSE}
-
-
-# # Read in table
-# 
-# df<-dbGetQuery(con, "SELECT * FROM report_stoprates_result_race_person")
-# 
-# # filter for traffic
-# 
-# traffic<-df%>%
-#   filter(grepl('Traffic Violation',reason))%>%
-#   filter(grepl('No Action|Warning',result))%>%
-#   filter(!grepl('Total',race_label_short))
-# 
-# 
-# # set order of grouped bars
-# 
-# traffic <- within(traffic, result <- factor(result, levels=c("Warning","No Action")))
-# 
-# # set color levels custom
-# 
-# color <-  c(meteorite, orange)
-# 
-# 
-# traffic%>%
-#   arrange(desc(result))%>%
-#   hchart("lollipop", invert = TRUE,
-#          hcaes(x=race_label_short,
-#                y=stop_pop_rate,
-#                group=result),
-#          color=color)%>%
-#   hc_xAxis( title = list(text = "") ) %>% 
-#   
-#   hc_yAxis( title = list(text = ""),
-#             labels = list(format = "{value}%")) %>%  
-#   
-#   # title elements
-#   hc_title(
-#     text = paste0("Black drivers are most likely to be stopped for minor traffic stops"),
-#     #margin = 20,
-#     align = "left", 
-#     style = list(useHTML = TRUE
-#     )
-#   ) %>% 
-#   hc_plotOptions(series=list(connectorWidth=1.2,
-#                              marker=list(symbol='circle')))%>%
-#   hc_subtitle(
-#     text = paste0("Rate of traffic stops that resulted in a warning no action by race"), align="left"
-#   ) %>% 
-#   hc_caption(
-#     text = paste0(racenote,"<br>", sourcenote)
-#   ) %>% 
-#   hc_add_theme(cc_theme)%>%
-#   hc_chart(inverted = T) %>%
-#   hc_exporting(
-#     enabled = TRUE, sourceWidth=900, sourceHeight=600, 
-#     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.stop_pop_rate:.1f}%')))))),
-#     filename = paste0("Rate of traffic stops that resulted in a warning no action by race","_Catalyst California, catalystcalifornia.org, 2023.")
-#   )
-# 
-# 
-
-```
-
 
 ## LBPD unjustly targets low-income   communities of color with unnecessary stops.  
 
@@ -633,9 +569,6 @@ council_district_count <-  council_district %>%
     report_stoprates_cd_race_person
   ) 
 
-# multiply rate by 100
-#population_race_cd$rate <- population_race_cd$rate*100
-
 
 # get demographics by council district
 df_demographics <- population_race_cd %>% select(cd, race, count, rate) %>%  pivot_wider(
@@ -657,10 +590,7 @@ council_district_demographics <- council_district %>%
   ) 
 
 ## merge with stop rate
-
 council_district_demographics <- council_district_demographics %>% left_join(df_stop)
-## only keep last name of rep
-####council_district_rate <- council_district_rate %>% mutate(representat = gsub(".* ", "", representat))
 
 
 # convert to scattered dots for plotting
@@ -688,10 +618,6 @@ colors_function <- function(colors, sizes, borders, shapes) {
   shapes <- gsub("square", "100%", shapes)
   paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:1px solid ", borders, "; border-radius:", shapes)
 }
-
-
-###
-
 
 
 ### Pop-ups ### ---------------
@@ -794,15 +720,6 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
         function() {
             $('.leaflet-control-layers-overlays').append('<label style=\"font-style:italic; font-size:10px;\">*Each dot represents<br>10 people stopped by LBPD.</label>');
         }")
-  # move location control to top right
-  # htmlwidgets::onRender("function(el, x) {
-  #       L.control.zoom({position: 'bottomright'}).addTo(this)
-  #   }")
-
- 
- #<span style=' font-size: 12px;'>Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, MESA=Middle Eastern or South Asian; Observations by race may overlap in the point density map.</span style>
-
-#<span style='float: left; font-size: 12px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023.</span style>
 
 ```
 
@@ -811,12 +728,6 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 .info {
     border-radius: 0;
 }
-
-<!-- .point-density-sidebar { -->
-<!--     opacity:  1; -->
-<!--     border-top:1px solid #737373; -->
-<!--     border-bottom:1px solid #737373; -->
-<!-- } -->
 
 .cd-header {
    margin-bottom: 8px; 
@@ -914,13 +825,6 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
   line-height: 1em;
 }
 
-<!-- .leaflet-touch .leaflet-control-layers { -->
-<!--   border-left:1px solid #737373; -->
-<!--     border-right:1px solid #737373; -->
-<!--     border-top:1px solid #737373; -->
-<!--     border-bottom:1px solid #737373; -->
-<!-- } -->
-
 .leaflet-popup-scrolled {
   height: 100%;
   overflow: auto;
@@ -956,10 +860,6 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 .leaflet-control-container {
   color: #000000;
 }
-<!-- .leaflet-control-layers .leaflet-control .leaflet-control-layers-expanded { -->
-<!--   background-color: white; -->
-<!--   opacity: 1.0; -->
-<!-- } -->
 
 .hidden {
   display: none;
