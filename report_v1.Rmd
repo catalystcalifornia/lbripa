@@ -1041,10 +1041,8 @@ pointdensity.parentElement.parentElement.parentElement.classList.add('hidden')
 })
   
 popups.forEach((popup) => {
-console.log(popup)
-console.log(popup.getAttribute('data-cd').trim())
-
-document.querySelector('.cd').innerHTML = popup.getAttribute('data-cd')
+district = popup.getAttribute('data-cd')
+document.querySelectorAll('.cd').forEach(node => node.innerHTML = district)
 document.querySelector('.nh-black-stop-rate').innerHTML = popup.getAttribute('data-nh-black-stop-rate')
 document.querySelector('.nh-black-rate').innerHTML = popup.getAttribute('data-nh-black-rate')
 document.querySelector('.latinx-stop-rate').innerHTML = popup.getAttribute('data-latinx-stop-rate')
