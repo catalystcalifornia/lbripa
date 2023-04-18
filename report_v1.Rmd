@@ -54,11 +54,13 @@ source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
 
 We all want to live in safe communities. We currently spend tremendous public dollars on law enforcement to achieve that goal. This approach assumes that investing in law enforcement is an efficient way to ensure safety. However, data on police activity show otherwise. When patrolling communities, police often spend most of their time stopping people for minor vehicle equipment and administrative issues, such as a broken taillight, an object hanging from a rearview mirror, or outdated registration. Research shows that dedicating public resources to such non-safety-related traffic stops undermines community safety and inflicts devastating harms on people of color (including trauma, dehumanization, and economic extraction). It also reduces our capacity for meaningful investments in the upstream drivers of traffic safety risks, such as making roadways and vehicles safer.  
 
-The Long Beach Police Department (LBPD) has historically over-policed and racially profiled people of color. This trend continues today. Using data collected based on the Racial & Identity Profiling Act (RIPA), we find that LBPD spent most of their patrol time stopping people for traffic infractions rather than responding to community concerns about more serious safety issues. These practices do not meaningfully improve safety, but also inflict significant harms on Black, Latinx, Native Hawaiian or Pacific Islander, and Middle Eastern and South Asian people. Now is the time for Long Beach to invest in alternatives to law enforcement that make communities safe for all people. 
+The Long Beach Police Department (LBPD) has historically over-policed and racially profiled people of color. This trend continues today. Using data collected based on the Racial & Identity Profiling Act (RIPA), we find that LBPD spent most of their patrol time stopping people for traffic infractions rather than responding to community concerns about more serious safety issues. These practices do not meaningfully improve safety, but also inflict significant harms on Black, Latinx, Native Hawaiian or Pacific Islander, and South Asian, Southwest Asian, or North African people. Now is the time for Long Beach to invest in alternatives to law enforcement that make communities safe for all people. 
+
 
 # The Data
 
 We use RIPA data to analyze LBPD patrol activities, including how their stops impact different communities. RIPA requires law enforcement agencies, like LBPD, to collect and report data on all pedestrian and vehicle stops, including the reason for the stop, the race of the person stopped as perceived by the officer, what actions occurred during the stop, among other information. We use 2019 stop data because it was the most recent year of data available at the time of analysis that was not affected by significant changes caused by the COVID-19 pandemic (such as “stay-at-home" orders and other policies that impacted daily life activities). We examine stops by the amount of time spent on different types of stops, stop results, and racial disparities amongst the people stopped in different geographic regions (i.e., city council districts). In sum, the data show that LBPD racially profiles people of color in Long Beach, burdening communities of color with exposure to police rather than contributing to community safety. 
+
 
 ## LBPD spends most of their patrol time on officer-initiated traffic stops that are racially biased and not a threat to safety
 
@@ -68,6 +70,7 @@ In RIPA data, officers must report if they made a stop in response to a call for
 
 In this analysis, we examine LBPD 2019 RIPA data to learn the reasons police used to make stops, how frequently stops were made, the amount of time spent on stops, and how stops varied by race. We find that LBPD patrol spends more time, and thereby public resources, on stops that are officer-initiated and not responses to calls from the community. These stops are also commonly for traffic violations that do not require an armed officer response and disproportionately affect people of color. 
 
+
 ### LBPD spends most of their patrol time on officer-initiated stops rather than responding to concerns from the community  
 
 Nearly 76% of LBPD patrol time (or 3 out of every 4 hours) is spent on officer-initiated stops, and only 24% (or 1 in 4 hours) is spent responding to calls for service from the community. Our analysis focuses on officer-initiated stops given the large percentage of time officers spend on these stops and to evaluate the results of stops officers initiated themselves.^[However, prior research shows even stops made in response to a call for service come with threats to the safety of people of color. Community members may choose to make unjustified 911 calls or calls to law enforcement based on their own biases, including racial bias against people of color, rather than real threats to safety. How officers and dispatchers respond to these calls is also affected by bias where reports from White people may be more valued than reports from people of color. These calls and responses to those calls by officers can lead to mental and physical trauma for people of color based on threat to their safety and reputation.
@@ -76,9 +79,7 @@ Alang et al., Police Brutality and Black Health: Setting the Agenda for Public H
 ]  
 
 ```{r, echo=FALSE}
-#### JZ ####
-
-##### Chart - % time spent on cfs vs. officer-initiated stops #####
+##### Donut Chart - time spent on cfs vs. officer-initiated stops % #####
 
 #read in table
 df<-dbGetQuery(con, "SELECT * FROM report_timespent_cfs_stop")
@@ -115,7 +116,6 @@ hc_add_theme(cc_theme)%>%
 ```
 
 
-
 ### Officer-initiated stops are largely dedicated to traffic violations for offenses that rarely require an arrest  {.tabset}
 
 Looking at officer-initiated stops, we analyze the time officers spent on stops by stop reason and then by result to determine if officers are making stops that help prevent serious threats to community safety. We find that stops are made mainly for traffic violations that are resolved with a citation, warning, or no action. LBPD makes almost 2 in 3 (or 61.7% of stops) for traffic violations. If we distribute these traffic stops across 100 hours and look at how officers spend their time based on the result of the stop, we see over half of those hours (54.5) goes towards stops resolved with a citation, 16.9 towards those resolved with a warning, and 11.3 resolved with no action at all. Only 4.6 out of 100 hours, are spent on stops that result in an arrest. 
@@ -124,98 +124,6 @@ The top five offenses that people are cited for are infractions related to movin
 
 #### Time spent on stops by reason
 
-```{r, echo=FALSE, include=FALSE}
-
-###JZ###
-
-#  Chart - % time spent on stops by stop reason:
-# ideally these charts should be on a carousel (https://www.r-bloggers.com/2017/04/slickr/)
-
-#read in table
-
-# df<-dbGetQuery(con, "SELECT * FROM report_timespent_reason_stop")%>%
-#   arrange(-hours_rate)
-
-#####  Lollipop #####
-
-# apply lollypop chart function
-
-# Apply Chart 
-
-# fx_lollichart(
-#   df, #name of dataframe
-#   order_var=df$hours_rate, #variable you're sorting by
-#   x='stop_reason_short', # x or independent variables
-#   y='hours_rate', # y or dependent variable
-# 
-#   top_finding=paste0("Officers spend most of their time on traffic stops and stops for reasonable suspicion"), # this is the top finding from the chart that gets used like a title
-# 
-#   chart_title= paste0("Hours Spent on Stops by Stop Reason"), # this is the more standard chart title that gets used as a subtitle
-# 
-#   tooltip_text="<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b>, or a total of {point.hours_count:,.1f} hours",
-# 
-#   chart_caption = paste0(sourcenote,"Analysis for all stops."),
-#   yaxis_label = "'%'", #format for your y axis labels
-#   export_data_label=list(pointFormat='{point.hours_rate:.1f}% of hours spent'))
-
-
-```
-
-```{r, include=FALSE}
-
-####Item chart####
-
-  # mutate(hours_rate= round(hours_rate, 0))
-
-# col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A")
-
-# 
-# #### Item Chart 1: Traffic Stops + Results -rate of hours (/100) ####
-# 
-# hc<-hchart(
-#   df,
-#   "item",
-#     rows=6,
-#   tooltip = list(headerFormat="", pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on stops for <b>{point.stop_reason_short}</b>"),
-#   hcaes(
-#     name = stop_reason_short,
-#     y = hours_rate,
-#     label = stop_reason_short,
-#     color = col
-#   ),
-#   name = "Total Hours",
-#   showInLegend = TRUE) %>%
-# 
-#   hc_title(text = "LBPD spends most of its time on traffic stops",
-#  align="left" )%>%
-# 
-#   hc_caption(
-#     text = paste0(sourcenote)) %>%
-#   hc_add_theme(cc_theme)%>%
-#   hc_exporting(
-#     enabled = TRUE, sourceWidth=900, sourceHeight=600,
-#     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}')))))),
-#     filename = paste0("Hours spent on stops by stop reason","_Catalyst California, catalystcalifornia.org, 2023.")
-#   )%>%
-# 
-#   hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span>'),
-#             enable = TRUE,
-#             labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
-# 
-#  # hc
-# 
-# # add in margins so the graph isn't cut off
-# 
-# hc %>%
-#   hc_chart(
-#     marginRight = 100,
-#     marginLeft=100
-#   )
-
-
-
-```
-
 ```{r}
 
 #read in table
@@ -223,7 +131,7 @@ The top five offenses that people are cited for are infractions related to movin
 df<-dbGetQuery(con, "SELECT * FROM report_timespent_reason_stop")%>%
   arrange(-hours_rate)
 
-### Tree map###
+#### Tree Map - Time spent by reason % ####
 
 # define colors
 col <-c(meteorite, "#9B9A9A",  lavender, orange,peridot,"#177FEB", "#733256" )  
@@ -297,7 +205,7 @@ col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A", "
         "#FF9E0D")
 
 
-#### Item Chart 1: Traffic Stops + Results -rate of hours (/100) ####
+#### Item Chart - Traffic Stops by Results -rate of hours (/100) ####
 
 hc<-hchart(
   df_traffic,
@@ -344,10 +252,11 @@ hc %>%
 
 ```
 
+
 #### Most common traffic stop citations
 
 ```{r ft.align="left"}
-
+#### Flex table - Top citations % ####
 # read in df
 
  df<-dbGetQuery(con, "SELECT * FROM report_rates_citations_race_person_long")
@@ -440,15 +349,10 @@ ft
 
 ### Stops are racially biased and disproportionately impact people of color 
 
-Officer-initiated stops are more likely to impact people of color in Long Beach. As a part of RIPA data collection, officers are required to report the race of the person they stopped, based on the officer’s perception. The data show LBPD officers stop people they perceive as Black, Native Hawaiian or Pacific Islander (NHPI), and Middle Eastern or South Asian (MESA) at the highest rates. For example, LBPD officers stopped 169 Black people for every 1000 Black people in Long Beach. By comparison, only 61 out of every 1000 White people were stopped.  
+Officer-initiated stops are more likely to impact people of color in Long Beach. As a part of RIPA data collection, officers are required to report the race of the person they stopped, based on the officer’s perception. The data show LBPD officers stop people they perceive as Black, Native Hawaiian or Pacific Islander (NHPI), and South Asian, Southwest Asian, or North African (SSWANA) at the highest rates.^[RIPA data includes a category for officers to identify someone they perceived as Middle Eastern or South Asian. However, that term is not commonly used among people who identify with the communities the data aim to include. We use the term South Asian, Southwest Asian, or North African (SSWANA) to better represent this diverse community and their geographical origins, and move away from the use of the term Middle Eastern.] For example, LBPD officers stopped 169 Black people for every 1000 Black people in Long Beach. By comparison, only 61 out of every 1000 White people were stopped.  
 
 ```{r, echo=FALSE}
-#### DS ####
-
-##### Chart - stop rates per 1K by race for LB #####
-#### DS ####
-
-##### Chart - stop rates per 1K by race for LB #####
+##### Bubble Chart - stop rates per 1K by race for LB #####
 # add a comma to stop count
 
 # Apply Chart
@@ -467,7 +371,7 @@ fx_barbubblechart(
 
   z='stop_count',
 
-  top_finding=paste0("LBPD stopped Black, NHPI, and MESA people at higher rates than other community members."), # this is the top finding from the chart that gets used like a title
+  top_finding=paste0("LBPD stopped Black, NHPI, and SSWANA people at higher rates than other community members."), # this is the top finding from the chart that gets used like a title
 
   chart_title= paste0("Number of Officer-initiated Stops per 1K of Same Population by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
 
@@ -483,7 +387,7 @@ fx_barbubblechart(
 
 We narrow in on traffic stops that resulted in no action to evaluate whether racial disparities in stops are connected to pretextual stops. A pretextual stop occurs when an officer has a “hunch” that a person may be connected to an illegal activity, but that “hunch” is insufficient to stop the person. To justify the stop, the officer then identifies a minor traffic violation or other infraction (i.e., “pretext”), and then subjects the person to an investigation for more serious criminal activity. Pretextual stops are a central pathway for racial profiling because those “hunches” are often based on racial biases.  
 
-A stop that results in no action (i.e., no citation, warning, or arrest) is an indicator of pretext because if there was a serious safety risk, presumably, a citation, arrest, or other enforcement action would occur. We find that people LBPD perceived as two or more races, or as Black, were stopped at the highest rates for stops resulting in no action.^[While people perceived as MESA and AIAN have the lowest rate of traffic stops with no action, like other groups, they are no more likely to have a stop result in an arrest. Stops of people perceived as MESA are more likely to result in a citation for an infraction, but data show these citations are for traffic infractions like speeding and failing to stop at a stop sign that do not require an armed officer response.]  In   2019, over 1 in 5 traffic stops of officers perceived as Black resulted in no action. These figures are important because every additional police encounter has implications for community health and wellbeing. 
+A stop that results in no action (i.e., no citation, warning, or arrest) is an indicator of pretext because if there was a serious safety risk, presumably, a citation, arrest, or other enforcement action would occur. We find that people LBPD perceived as two or more races, or as Black, were stopped at the highest rates for stops resulting in no action.^[While people perceived as SSWANA and AIAN have the lowest rate of traffic stops with no action, like other groups, they are no more likely to have a stop result in an arrest. Stops of people perceived as SSWANA are more likely to result in a citation for an infraction, but data show these citations are for traffic infractions like speeding and failing to stop at a stop sign that do not require an armed officer response.]  In   2019, over 1 in 5 traffic stops of officers perceived as Black resulted in no action. These figures are important because every additional police encounter has implications for community health and wellbeing. 
 
 Studies show that police encounters and harassment increase anxiety and trauma among people of color, particularly Black people.^[Alang et al., Police Brutality and Black Health: Setting the Agenda for Public Health Scholars (2017) 107 Am. J. Pub. Health 662 <https://www.researchgate.net/publication/315510199_Police_Brutality_and_Black_ Health_Setting_the_Agenda_for_Public_Health_Scholars> [as of Nov. 29, 2022]] In one study in New York City, young men who reported more police contact and intrusive encounters showed higher levels of trauma and anxiety symptoms because of their experiences.^[https://scholarship.law.columbia.edu/cgi/viewcontent.cgi?article=2851&context=faculty_scholarship]  In Baltimore City following the high-profile murder of Freddie Gray, researchers found that Black residents associated the stress and fear of police harassment with community fragmentation and poor community health.^[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4824692/pdf/11524_2015_Article_22.pdf]   Another study in New York found a significant association between more invasive pedestrian stops and the prevalence of chronic health conditions, including diabetes, high blood pressure, asthma, obesity, where neighborhoods with more invasive encounters also had poorer health outcomes.^[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4824697/] 
 
@@ -502,7 +406,7 @@ traffic<-df%>%
   filter(!grepl('Total',race_label_short))%>%
   arrange(desc(stop_denom_rate))
 
-#####  Lollipop #####
+#####  Bubble Chart - Stops that result in no action % #####
 
 # apply lollypop chart function
 
@@ -525,7 +429,7 @@ fx_barbubblechart(
   chart_title= paste0("Percent of Traffic Stops that Resulted in No Action by Race"), # this is the more standard chart title that gets used as a subtitle
 
  
-  tooltip_text="<b>{point.stop_denom_rate:,.1f}%</b> of stops of people perceived as <b>{point.race_label_short}</b> result in No Action, or a total of {point.stop_count:,.1f} stops", # customize your tooltip as a statement, calling out rate and count
+  tooltip_text="<b>{point.stop_denom_rate:,.1f}%</b> of stops of people perceived as <b>{point.race_label_short}</b> result in No Action, or a total of {point.stop_count:,.0f} stops", # customize your tooltip as a statement, calling out rate and count
 
   
   chart_caption = paste0(racenote,"<br>", sourcenote, "<br>","Analysis for all officer-initiated stops for traffic violations.","<br><br>"), 
@@ -536,7 +440,7 @@ fx_barbubblechart(
 ```
 
 
-## LBPD unjustly targets low-income   communities of color with unnecessary stops.  
+## LBPD unjustly targets low-income communities of color with unnecessary stops.  
 
 We also analyze variations in where LBPD officer-initiated stops occur to understand how stops differ across communities. We map the approximate location of officer-initiated stops by council district, race, and result based on location information. 
 
@@ -548,13 +452,15 @@ Higher stop rates in a district does not translate to a greater likelihood of st
 ### People of color are stopped at higher rates across council districts.  {.tabset .tabset-pills}
 
 Across council districts, LBPD stops people of color at the highest rates.  Plotting stops by race and council districts, we find a greater density of stops of Black and Latinx people across the city. 
-People LBPD perceived as Black have the highest stop rates in five out of nine council districts despite making up only a small portion of the population. For example, in Council District 3, which is in the East side of Long Beach, Black people only make up 5.6% of the population while White people make up 59% of the population; but LBPD stops people they perceive as Black at a rate 3.6 times higher than White people. In   Council District 9, Black people make up 14.5% of the population; but LBPD stops 103.8 people perceived as Black for every 1,000 Black people in the district. 
 
-People LBPD perceived as MESA and NHPI also experience the highest rate of stops in two council districts each. LBPD stops people they perceive as NHPI at higher rates than other people in districts 6 and 8. In districts 7 and 9, they stop people perceived as MESA at the highest rates. In each of these districts, MESA and NHPI people make up a small percentage of the population but are more likely to be stopped than other community members. In Council District 9, MESA people make up only 0.7% of the population but have the highest stop rate, with a stop rate of 106.1 per 1,000 people who identify as MESA. In Council District 8, LBPD stops people perceived as NHPI at a rate of 159.7  per 1,000 people who identify as NHPI despite making up only 1% of the population in the district.
+People LBPD perceived as Black have the highest stop rates in six out of nine council districts despite making up only a small portion of the population. For example, in Council District 3, which is in the East side of Long Beach, Black people only make up 5.6% of the population while White people make up 59% of the population; but LBPD stops people they perceive as Black at a rate 3.6 times higher than White people. In   Council District 9, Black people make up 14.5% of the population; but LBPD stops 103.8 people perceived as Black for every 1,000 Black people in the district. 
 
-The east side region of Long Beach, consisting of council districts 3,4, and 5, have a larger White population compared to other parts of the city and have higher rates of stops for people of color. In particular, people LBPD perceived as Latinx have the second highest stop rate in Council Districts 3 & 4 and the third highest stop rate in District 5. Additionally, people LBPD perceived as Black have the highest stop rate in all of these regions. Lastly, people LBPD perceived as NHPI have the third highest stop rate in Council Districts 3  & 4 and the second highest stop rate in Council District 5. In summary, people of color, specifically people LBPD perceived as Black, NHPI, MESA, and Latinx   still end up with the highest stop rates in majority white-districts in Long Beach. 
+People LBPD perceived as SSWANA and NHPI also experience the highest rate of stops in three council districts total. LBPD stops people they perceive as NHPI at higher rates than other people in districts 6 and 8. In Council District 9, they stop people perceived as SSWANA at the highest rates. In each of these districts, SSWANA and NHPI people make up a small percentage of the population but are more likely to be stopped than other community members. In Council District 9, SSWANA people make up only 0.7% of the population but have the highest stop rate, with a stop rate of 106.1 per 1,000 people who identify as SSWANA. In Council District 8, LBPD stops people perceived as NHPI at a rate of 159.7  per 1,000 people who identify as NHPI despite making up only 1% of the population in the district.
+
+The east side region of Long Beach, consisting of council districts 3,4, and 5, have a larger White population compared to other parts of the city and have higher rates of stops for people of color. In particular, people LBPD perceived as Latinx have the second highest stop rate in Council Districts 3 & 4 and the third highest stop rate in District 5. Additionally, people LBPD perceived as Black have the highest stop rate in all of these regions. Lastly, people LBPD perceived as NHPI have the third highest stop rate in Council Districts 3  & 4 and the second highest stop rate in Council District 5. In summary, people of color, specifically people LBPD perceived as Black, NHPI, SSWANA, and Latinx still end up with the highest stop rates in majority white-districts in Long Beach. 
 
 ```{r}
+#### Point density map - officer-initiated stops by cd # ####
 council_district <- st_read(con, query = "SELECT * FROM data.colb_council_districts_place_2022")
 report_stoprates_cd_race_person <- st_read(con, query = "SELECT * FROM data.report_stoprates_cd_race_person")
 
@@ -577,11 +483,14 @@ df_demographics <- population_race_cd %>% select(cd, race, count, rate) %>%  piv
   values_from = c(count:rate)
 )
 
-df_stop <- report_stoprates_cd_race_person %>% select(council_num, race, pop_count, stop_count, stop_rate_per1k) %>%  pivot_wider(
+df_stop <- report_stoprates_cd_race_person %>% select(council_num, race, pop_count, stop_count, stop_rate_per1k) %>%  
+  mutate(stop_rate_per1k=round(stop_rate_per1k,1))%>%
+  pivot_wider(
  names_from = race,
  names_glue = "{race}_{.value}",
  values_from = c(pop_count:stop_rate_per1k)
 )
+
 
 ## merge df_demographics with council_district-- get council_district_demographics
 council_district_demographics <- council_district %>% 
@@ -642,6 +551,7 @@ demographic_popup <- paste0("<div class='pointdensity'> <div class='leaflet-data
                "' ></div></div>")
 
 
+
 # colors according to our brand guide: https://catalystcalifornia.sharepoint.com/sites/Portal/AP%20Projects/Forms/AllItems.aspx?FolderCTID=0x012000EF0283621C7FE048A8E68512F119353B&id=%2Fsites%2FPortal%2FAP%20Projects%2FCommunications%2FCatalyst%20California%2FBranding%20Materials%20%2B%20Templates%2FVisual%20Brand%20Guide%2FCatalyst%20California%20Brand%20Guide%5FSeptember%202022%2Epdf&viewid=1aaeb4a9%2D2232%2D41c7%2Da71c%2D727af9e1f5d7&parent=%2Fsites%2FPortal%2FAP%20Projects%2FCommunications%2FCatalyst%20California%2FBranding%20Materials%20%2B%20Templates%2FVisual%20Brand%20Guide
 
 # Base Color 00
@@ -663,7 +573,7 @@ dark_silver <- c('#6F6F6F')
         options = leafletOptions(zoomControl = FALSE, minZoom=11.75, maxZoom=11.75)) %>%
    
    # create sidebar and add html for content
-addControl(html="<div class='leaflet-popup-scrolled point-density-sidebar'><div class ='cd-header'>Council District <span class='cd' style='font-weight: 600; font-size: 14px; color: #000000;'></span></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-black-stop-rate nh-black-color'></span> <span class='nh-black-color'>Black people per 1K Black people.</span> They are <span class='nh-black-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='latinx-stop-rate latinx-color'></span> <span class='latinx-color'>Latinx people per 1K Latinx people.</span> They are <span class='latinx-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-asian-stop-rate nh-asian-color'></span> <span class='nh-asian-color'>Asian people per 1K Asian people.</span> They are <span class='nh-asian-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-white-stop-rate nh-white-color'></span> <span class='nh-white-color'>White people per 1K White people.</span> They are <span class='nh-white-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='mesa-stop-rate mesa-color'></span> <span class='mesa-color'>MESA people per 1K MESA people.</span> They are <span class='mesa-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nhpi-stop-rate nhpi-color'></span> <span class='nhpi-color'>NHPI people per 1K NHPI people.</span> They are <span class='nhpi-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='aian-stop-rate aian-color'></span> <span class='aian-color'>AIAN people per 1K AIAN people.</span> They are <span class='aian-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-twoormor-stop-rate nh-twoormor-color'></span> <span class='nh-twoormor-color'>people of Two Or More Races per 1K people of Two or More Races.</span> They are <span class='nh-twoormor-rate'></span> of CD<span class='cd'></span>'s population.</div>", position = "topleft") %>%
+addControl(html="<div class='leaflet-popup-scrolled point-density-sidebar'><div class ='cd-header'>Council District <span class='cd' style='font-weight: 600; font-size: 14px; color: #000000;'></span></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-black-stop-rate nh-black-color'></span> <span class='nh-black-color'>Black people per 1K Black people.</span> They are <span class='nh-black-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='latinx-stop-rate latinx-color'></span> <span class='latinx-color'>Latinx people per 1K Latinx people.</span> They are <span class='latinx-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-asian-stop-rate nh-asian-color'></span> <span class='nh-asian-color'>Asian people per 1K Asian people.</span> They are <span class='nh-asian-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-white-stop-rate nh-white-color'></span> <span class='nh-white-color'>White people per 1K White people.</span> They are <span class='nh-white-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='mesa-stop-rate mesa-color'></span> <span class='mesa-color'>SSWANA people per 1K SSWANA people.</span> They are <span class='mesa-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nhpi-stop-rate nhpi-color'></span> <span class='nhpi-color'>NHPI people per 1K NHPI people.</span> They are <span class='nhpi-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='aian-stop-rate aian-color'></span> <span class='aian-color'>AIAN people per 1K AIAN people.</span> They are <span class='aian-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-twoormor-stop-rate nh-twoormor-color'></span> <span class='nh-twoormor-color'>people of Two Or More Races per 1K people of Two or More Races.</span> They are <span class='nh-twoormor-rate'></span> of CD<span class='cd'></span>'s population.</div>", position = "topleft") %>%
 
     ### add latinx dots
   
@@ -968,7 +878,7 @@ document.querySelector('.nh-twoormor-rate').innerHTML = popup.getAttribute('data
 
 ```
 
-<div align="left" style="line-height: 1em;"><span style="font-size: 10px;">Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, MESA=Middle Eastern or South Asian; Observations by race may overlap in the point density map. </span> <br> 
+<div align="left" style="line-height: 1em;"><span style="font-size: 10px;">Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, SSWANA=South Asian, Southwest Asian, or North African; Observations by race may overlap. </span> <br> 
 <span style=' font-size: 10px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span> </div>
 
 
@@ -980,11 +890,10 @@ Higher stop rates in communities do not necessarily translate to a higher likeli
 Council districts 1, 9, 6, and 8 have  higher rates of stops that result in no action (i.e., no citation, arrest, etc.). Council districts 8 and 9 have a large concentration of residents who identify as Latinx and Black. These districts are located in the North side of Long Beach and have a lower median income compared to the East side of the city based on data from the Neighborhood Data for Social Change (NDSC).^[“Although the 2016 median family income for the City of Long Beach was $55,151 – relatively similar to the county average – income levels varied greatly across the city’s census tracts. In the west side of the city, median household income levels were as low as $11,736. Meanwhile, median household income levels were as high as $122,526 in the east side of the city, a difference more than 10 times the other.” Neighborhood Data for Social Change (NSDC). (n.d.). Addressing Employment Inequality in the City of Long Beach. Retrieved from https://la.myneighborhooddata.org/2019/02/employment-inequality-across-long-beach-city/] The east side region of Long Beach, consisting of council districts 3, 4, and 5, have a larger White population compared to other parts of the city and have lower rates of stops that result in no action. In these council districts, officers are spending less than 10 percent of their hours (or less than 1 in 10 hours) on officer-initiated stops on stops that result in no action compared to more than 18 percent of their hours (or almost 1 in 5 hours) on stops that result in no action in District 9. 
 
 ```{r, echo=FALSE}
-#### DS ####
+#### Choropleth map - officer-initiated stops with no action by cd % ####
 report_timespent_officerinitiated_cd_stop <- st_read(con, query = "SELECT * FROM report_timespent_result_cd_stop")
 council_district <- st_read(con, query = "SELECT * FROM data.colb_council_districts_place_2022")
 
-##### Map - officer initiated stops that resulted with no action  by council district #####
 council_district_noaction <- council_district %>% 
     mutate(council_num=as.character(council_num))%>% 
   left_join(
@@ -1003,7 +912,7 @@ cc_brand <- c("#E2D9FF", "#BDAFE9","#8E7ACA", "#362178","#211447")
 hours_rate_noaction_cap_popup <- paste0((
 label = paste0(
    "In Council District  <span style='font-size: 14px; font-weight: bold;'>",  
- council_district_noaction$council_num,"</span>"," ,officers spent <span style='font-size: 12px; font-weight: bold;'>", 
+ council_district_noaction$council_num,"</span>",",officers spent <span style='font-size: 12px; font-weight: bold;'>", 
  scales::comma(council_district_noaction$hours_count_noaction_cap, accuracy = 0.1), "</span> hours in stops that resulted in no action, a rate of <span style='font-size: 14px; font-weight: bold;'> ", scales::comma(council_district_noaction$hours_rate_noaction_cap, accuracy = 0.1), "</span>%.")))
 
 
@@ -1054,7 +963,7 @@ Council districts 1 and 6 have the highest number of high-injury corridors and h
 Prior research and recommendations from transportation practitioners underscore how traffic safety can be increased without the additional trauma of police interactions. In Seattle, reducing speeds and increasing sign density lowered speeds and led to fewer crashes in the city.^[https://www.seattle.gov/Documents/Departments/SDOT/VisionZero/SpeedLimit_CaseStudies_Report.pdf]  And while street design can help with pedestrian safety, communities of color and low-income communities are less likely to have features of street design known to help with pedestrian safety.^[https://bridgingthegap.ihrp.uic.edu/_asset/02fpi3/btg_street_walkability_FINAL_03-09-12.pdf]  Highway siting decisions, traffic engineering practices, and other street design decisions can also result in substandard, dangerous streets for communities of color.^[https://nacto.org/wp-content/uploads/2020/07/NACTO_CityLimits_Spreads.pdf#page=7]  Rather than using traffic stops to enforce traffic safety, enhancing urban design (such as through street/sidewalk lighting, marked crosswalks, pedestrian-friendly medians, traffic islands, curb extensions and traffic circles) should be considered as a solution-driven alternative.^[https://bridgingthegap.ihrp.uic.edu/_asset/02fpi3/btg_street_walkability_FINAL_03-09-12.pdf] 
 
 ```{r, echo=FALSE}
-#### DS ####
+#### Choropleth/line map - traffic stops compared to high injury network rate per 1k ####
 
 high_injury_motor_corridors_line_sf <- st_read(con, query = "SELECT * FROM data.high_injury_motor_corridors_spatial") %>% st_as_sf()
 high_injury_motor_intersections_spdf <- st_read(con, query = "SELECT * FROM data.high_injury_motor_intersections_spatial")
@@ -1063,13 +972,14 @@ high_injury_ped_intersections_spdf <- st_read(con, query = "SELECT * FROM data.h
 report_traffic_stoprates_cd_race_person <- dbGetQuery(con, "SELECT * FROM data.report_traffic_stoprates_cd_race_person") 
  
 
-##### Map - map comparing traffic stop rates to injury networks #####
 #source("W:/Project/ECI/LB RIPA/R/3. Safety/report_highinjury_corridors_intersections.R")
 
-# merge stop rates by council district shape-file -----------------------------------
+##### merge stop rates by council district shape-file -----------------------------------
 council_district$council_num <- as.character(council_district$council_num) # change council number to character to merge
 
-df <- report_traffic_stoprates_cd_race_person %>% select(council_num, race, pop_count, traffic_stop_count, traffic_stop_rate) %>%  pivot_wider(
+df <- report_traffic_stoprates_cd_race_person %>% select(council_num, race, pop_count, traffic_stop_count, traffic_stop_rate) %>%  
+  mutate(traffic_stop_rate=round(traffic_stop_rate,1))  %>%
+pivot_wider(
   names_from = race,
   names_glue = "{race}_{.value}",
   values_from = c(pop_count:traffic_stop_rate)
@@ -1101,9 +1011,8 @@ high_injury_ped_corridors_line_sf <- high_injury_ped_corridors_line_sf  %>% muta
 
 
 
-###############
-####Pop-Ups####
-###############
+##### High injury pop-ups#####
+
 
 high_injury_motor_intersections_popup <- paste0((
   label = paste0(
@@ -1139,7 +1048,7 @@ high_injury_ped_intersections_popup <- paste0((
     high_injury_ped_intersections_spdf$address,".")))
 
 
-#### traffic stop rate pop_up ####
+##### traffic stop rate pop_up #####
 
 total_traffic_rate_popup <- paste0((
  label = paste0(
@@ -1264,13 +1173,13 @@ leaflet(width = "100%", height = "600px") %>%
 
 Instead of creating safer communities, officers use routine traffic stops to profile and harass people of color. Data on traffic and pretextual stops consistently show that stops are ineffective in finding evidence of a crime and disproportionately impact people of color.^[https://www.ppic.org/publication/racial-disparities-in-law-enforcement-stops/] Traffic stops also have little efficacy in preventing or reducing crime. In one case study, when police conducted fewer stops in response to law enforcement scrutiny, there was no observable increase in total, violent, or property crimes.^[https://www.sciencedirect.com/science/article/abs/pii/S0047235217301289]
 
-In Long Beach, LBPD officers use routine traffic stops to search people, but this practice overwhelmingly yields ineffective results. We find most searches, nearly 4 in 5 across all community members, lead to no contraband or evidence found for a crime. In addition to these searches being ineffective generally, they are even more ineffective when applied to people of color. In over 85% of searches done during traffic stops of MESA, Black, Multi-racial, Asian, and AIAN individuals, LBPD officers found no contraband or evidence.
+In Long Beach, LBPD officers use routine traffic stops to search people, but this practice overwhelmingly yields ineffective results. We find most searches, nearly 4 in 5 across all community members, lead to no contraband or evidence found for a crime. In addition to these searches being ineffective generally, they are even more ineffective when applied to people of color. In over 85% of searches done during traffic stops of SSWANA, Black, Multi-racial, Asian, and AIAN individuals, LBPD officers found no contraband or evidence.
 
 ```{r, echo=FALSE}
+##### Bubble Chart - unfounded searches by race for traffic violations % #####
+
 report_hitrates_race_person <- dbGetQuery(con, "SELECT * FROM data.report_hitrates_race_person") 
-#### DS ####
 report_hitrates_race_person<-report_hitrates_race_person%>%filter(race!="total")
-##### Chart - unfounded searches by race for traffic violations #####
 
 # Apply Chart
 
