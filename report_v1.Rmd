@@ -573,7 +573,7 @@ dark_silver <- c('#6F6F6F')
         options = leafletOptions(zoomControl = FALSE, minZoom=11.75, maxZoom=11.75)) %>%
    
    # create sidebar and add html for content
-addControl(html="<div class='leaflet-popup-scrolled point-density-sidebar'><div class ='cd-header'>Council District <span class='cd' style='font-weight: 600; font-size: 14px; color: #000000;'></span></div><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-black-stop-rate nh-black-color'></span> <span class='nh-black-color'>Black people per 1K Black people.</span> They are <span class='nh-black-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='latinx-stop-rate latinx-color'></span> <span class='latinx-color'>Latinx people per 1K Latinx people.</span> They are <span class='latinx-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-asian-stop-rate nh-asian-color'></span> <span class='nh-asian-color'>Asian people per 1K Asian people.</span> They are <span class='nh-asian-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-white-stop-rate nh-white-color'></span> <span class='nh-white-color'>White people per 1K White people.</span> They are <span class='nh-white-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='mesa-stop-rate mesa-color'></span> <span class='mesa-color'>SSWANA people per 1K SSWANA people.</span> They are <span class='mesa-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nhpi-stop-rate nhpi-color'></span> <span class='nhpi-color'>NHPI people per 1K NHPI people.</span> They are <span class='nhpi-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='aian-stop-rate aian-color'></span> <span class='aian-color'>AIAN people per 1K AIAN people.</span> They are <span class='aian-rate'></span> of CD<span class='cd'></span>'s population.<br><br><span style='color: #000000; font-weight: 400;line-height: 1em;'>LBPD stopped <span class='nh-twoormor-stop-rate nh-twoormor-color'></span> <span class='nh-twoormor-color'>people of Two Or More Races per 1K people of Two or More Races.</span> They are <span class='nh-twoormor-rate'></span> of CD<span class='cd'></span>'s population.</div>", position = "topleft") %>%
+addControl(html="<div class='leaflet-popup-scrolled point-density-sidebar'><div class='popup-instruction'><b>Please click on a council district to see stop data below.</b></div><div class ='cd-header'>In Council District <span class='cd' style='font-weight: 600; font-size: 12px; color: #000000;'></span>, LBPD stopped:</div><ul class='popup-list'><li class='popup-list-item'><span class='nh-black-stop-rate nh-black-color'></span> <span class='nh-black-color'>Black people per 1K Black people.</span> They are <span class='nh-black-rate'></span> of CD<span class='cd'></span>'s population.</li><li class='popup-list-item'><span style='color: #000000; font-weight: 400;'><span class='latinx-stop-rate latinx-color'></span> <span class='latinx-color'>Latinx people per 1K Latinx people.</span> They are <span class='latinx-rate'></span> of CD<span class='cd'></span>'s population.</li><li class='popup-list-item'><span style='color: #000000; font-weight: 400;'><span class='nh-asian-stop-rate nh-asian-color'></span> <span class='nh-asian-color'>Asian people per 1K Asian people.</span> They are <span class='nh-asian-rate'></span> of CD<span class='cd'></span>'s population.</li><li class='popup-list-item'><span style='color: #000000; font-weight: 400;'><span class='nh-white-stop-rate nh-white-color'></span> <span class='nh-white-color'>White people per 1K White people.</span> They are <span class='nh-white-rate'></span> of CD<span class='cd'></span>'s population.</li><li class='popup-list-item'><span style='color: #000000; font-weight: 400;'><span class='mesa-stop-rate mesa-color'></span> <span class='mesa-color'>SSWANA people per 1K SSWANA people.</span> They are <span class='mesa-rate'></span> of CD<span class='cd'></span>'s population.</li><li class='popup-list-item'><span style='color: #000000; font-weight: 400;'><span class='nhpi-stop-rate nhpi-color'></span> <span class='nhpi-color'>NHPI people per 1K NHPI people.</span> They are <span class='nhpi-rate'></span> of CD<span class='cd'></span>'s population.</li><li class='popup-list-item'><span style='color: #000000; font-weight: 400;'><span class='aian-stop-rate aian-color'></span> <span class='aian-color'>AIAN people per 1K AIAN people.</span> They are <span class='aian-rate'></span> of CD<span class='cd'></span>'s population.</li><li class='popup-list-item'><span style='color: #000000; font-weight: 400;'><span class='nh-twoormor-stop-rate nh-twoormor-color'></span> <span class='nh-twoormor-color'>people of Two Or More Races per 1K people of Two or More Races.</span> They are <span class='nh-twoormor-rate'></span> of CD<span class='cd'></span>'s population.</li></ul></div>", position = "topleft") %>%
 
     ### add latinx dots
   
@@ -641,9 +641,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 
 .cd-header {
    margin-bottom: 8px; 
-   margin-top: 8px; 
    font-weight: 600; 
-   font-size: 14px;
    color: #000000;
 }
 
@@ -655,7 +653,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 .nh-black-rate {
   color: #000000; 
   font-weight: 400;
-  line-height: 1em;
+  
 }
 
 .latinx-color {
@@ -666,7 +664,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 .latinx-rate {
   color: #000000; 
   font-weight: 400;
-  line-height: 1em;
+  
 }
 
 .nh-asian-color {
@@ -677,7 +675,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 .nh-asian-rate {
   color: #000000; 
   font-weight: 400;
-  line-height: 1em;
+  
 }
 
 .nh-white-color {
@@ -688,7 +686,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 .nh-white-rate {
   color: #000000; 
   font-weight: 400;
-  line-height: 1em;
+  
 }
 
 .mesa-color {
@@ -699,7 +697,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 .mesa-rate {
   color: #000000; 
   font-weight: 400;
-  line-height: 1em;
+  
 }
 
 .nhpi-color {
@@ -710,7 +708,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 .nhpi-rate {
   color: #000000; 
   font-weight: 400;
-  line-height: 1em;
+  
 }
 
 .aian-color {
@@ -721,7 +719,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 .aian-rate {
   color: #000000; 
   font-weight: 400;
-  line-height: 1em;
+  
 }
 
 .nh-twoormor-color {
@@ -732,7 +730,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 .nh-twoormor-rate {
   color: #000000; 
   font-weight: 400;
-  line-height: 1em;
+  
 }
 
 .leaflet-popup-scrolled {
@@ -753,6 +751,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 }
 
 .leaflet-left .leaflet-control {
+  font-size: 12px;
   margin-left: 0;
   border-left: 1px solid #ddd;
   border-top: 1px solid #ddd;
@@ -830,6 +829,31 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 .nh-twoormor-visual-color {
   background-color: #211447;
   border-top-color: #211447;
+}
+
+.popup-list {
+  padding-left: 1.2em;
+  line-height: 1.2em;
+}
+
+.popup-list-item {
+  padding-bottom: 1.2em;
+  font-weight: 400; 
+  font-size: 1em; 
+  line-height: 1.2em;
+  color: #000000;
+}
+
+.popup-instruction {
+  font-style: italic;
+  font-weight: 400; 
+  font-size: 1em; 
+  line-height: 1.2em;
+  color: #000000;
+  border-bottom: 1px solid #000000;
+  padding-top: 1.2em;
+  padding-bottom: 1.2em;
+  margin-bottom: 1.2em;
 }
 
 
