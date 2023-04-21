@@ -138,7 +138,7 @@ col <-c(meteorite, "#9B9A9A",  lavender, orange,peridot,"#177FEB", "#733256" )
 
 
 # graph
-df%>%
+tree_chart <- df%>%
   hchart(
     "treemap", 
     hcaes(x = stop_reason_short, value = hours_rate))%>%
@@ -175,7 +175,7 @@ df%>%
       filename = paste0("Hours spent on stops by stop reason_Catalyst California, catalystcalifornia.org, 2023.")
     )
  
-
+tree_chart
 
 
 ```
@@ -207,7 +207,7 @@ col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A", "
 
 #### Item Chart - Traffic Stops by Results -rate of hours (/100) ####
 
-hc<-hchart(
+item_chart<-hchart(
   df_traffic,
   "item",
   rows=8,
@@ -238,17 +238,16 @@ hc<-hchart(
   
   hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span>'),
             enable = TRUE, 
-            labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
+            labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')%>%
 
 # add in margins so the graph isn't cut off
 
-hc %>%
   hc_chart(
     marginRight = 100,
     marginLeft=100
   )
 
-
+item_chart
 
 ```
 
@@ -346,6 +345,27 @@ ft
 
 ```
 
+## Carousel
+Combines last three charts
+```{r echo=FALSE}
+library(slickR)
+
+htmlwidgets::saveWidget(tree_chart,'tree_chart.html', selfcontained = FALSE)
+htmlwidgets::saveWidget(item_chart,'item_chart.html', selfcontained = FALSE)
+
+tree_widget <- includeHTML('tree_chart.html')
+item_widget <- includeHTML('item_chart.html')
+flextable_widget <- to_html(ft) # to_html works specifically with flextables
+
+carousel <- slickR::slickR(c(tree_widget, item_widget, flextable_widget), 
+               slideType="iframe",
+               width='90%',
+               height=600) +
+  settings(infinite=FALSE,
+           dots=TRUE)
+
+carousel
+```
 
 ### Stops are racially biased and disproportionately impact people of color 
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<style>body{background-color:white;}</style>
+<script src="tree_chart_files/htmlwidgets-1.6.1/htmlwidgets.js"></script>
+<script src="tree_chart_files/jquery-3.5.1/jquery.min.js"></script>
+<script src="tree_chart_files/proj4js-2.3.15/proj4.js"></script>
+<link href="tree_chart_files/highcharts-9.3.1/css/motion.css" rel="stylesheet" />
+<script src="tree_chart_files/highcharts-9.3.1/highcharts.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/highcharts-3d.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/highcharts-more.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/stock.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/map.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/data.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/exporting.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/offline-exporting.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/drilldown.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/item-series.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/overlapping-datalabels.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/annotations.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/export-data.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/funnel.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/heatmap.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/treemap.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/sankey.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/dependency-wheel.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/organization.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/solid-gauge.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/streamgraph.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/sunburst.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/vector.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/wordcloud.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/xrange.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/tilemap.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/venn.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/gantt.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/timeline.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/parallel-coordinates.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/bullet.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/coloraxis.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/dumbbell.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/lollipop.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/series-label.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/plugins/motion.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/custom/reset.js"></script>
+<script src="tree_chart_files/highcharts-9.3.1/modules/boost.js"></script>
+<script src="tree_chart_files/highchart-binding-0.9.4/highchart.js"></script>
+  <title>highchart</title>
+</head>
+<body>
+<div id="htmlwidget_container">
+  <div class="highchart html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-a802939a734728f89bb0" style="width:100%;height:500px;"></div>
+</div>
+<script type="application/json" data-for="htmlwidget-a802939a734728f89bb0">{"x":{"hc_opts":{"chart":{"reflow":true},"title":{"text":"LBPD spends most of its time on traffic stops","align":"left"},"yAxis":{"title":{"text":[]},"type":"linear"},"credits":{"enabled":false},"exporting":{"enabled":true,"sourceWidth":900,"sourceHeight":600,"chartOptions":{"plotOptions":{"series":{"dataLabels":{"enabled":true,"format":"{point.stop_reason_short}:<br>{point.hours_rate:.1f}% hours"}}}},"filename":"Hours spent on stops by stop reason_Catalyst California, catalystcalifornia.org, 2023."},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"showInLegend":false},"treemap":{"layoutAlgorithm":"squarified","colorByPoint":true},"scatter":{"marker":{"symbol":"circle"}}},"series":[{"group":"group","data":[{"stop_reason_short":"Traffic Violation","stop_count":24574,"stop_rate":76.3381069242956,"hours_count":3941.73824788158,"hours_rate":61.7149771082475,"stop_reason_long":"Traffic Violation","value":61.7149771082475,"name":"Traffic Violation"},{"stop_reason_short":"Reasonable Suspicion","stop_count":6265,"stop_rate":19.4619614177876,"hours_count":1842.72041135404,"hours_rate":28.8510907756834,"stop_reason_long":"Reasonable Suspicion","value":28.8510907756834,"name":"Reasonable Suspicion"},{"stop_reason_short":"Parole/Probation","stop_count":508,"stop_rate":1.57808083004567,"hours_count":166.356288382838,"hours_rate":2.60460585754964,"stop_reason_long":"Known to be on Parole / Probation / PRCS / Mandatory Supervision","value":2.60460585754964,"name":"Parole/Probation"},{"stop_reason_short":"Outstanding Arrest Warrant","stop_count":241,"stop_rate":0.748656456773632,"hours_count":151.727597781226,"hours_rate":2.37556748695583,"stop_reason_long":"Knowledge of outstanding arrest warrant/wanted person","value":2.37556748695583,"name":"Outstanding Arrest Warrant"},{"stop_reason_short":"Truancy Investigation","stop_count":306,"stop_rate":0.950576248019633,"hours_count":125.293996126459,"hours_rate":1.96170207570251,"stop_reason_long":"Investigation to determine whether the person was truant","value":1.96170207570251,"name":"Truancy Investigation"},{"stop_reason_short":"Two or More Reasons","stop_count":183,"stop_rate":0.568481873815663,"hours_count":101.204975915939,"hours_rate":1.58454528918799,"stop_reason_long":"Two or More Reasons","value":1.58454528918799,"name":"Two or More Reasons"},{"stop_reason_short":"Other","stop_count":114,"stop_rate":0.354136249262216,"hours_count":57.9627926588717,"hours_rate":0.907511406673147,"stop_reason_long":"Consensual Encounter resulting in a search, Possible conduct warranting discipline under Education Code sections 48900, 48900.2, 48900.3, 48900.4 and 48900.7","value":0.907511406673147,"name":"Other"}],"type":"treemap"}],"xAxis":{"type":"category","title":{"text":"stop_reason_short"},"categories":null},"tooltip":{"pointFormat":"<b>{point.hours_rate:.1f}%<\/b> of hours are spent on <b>{point.stop_reason_short}<\/b> stops, or a total of {point.hours_count:,.1f} hours"},"colors":["#3A207D","#9B9A9A","#CEC4E2","#F25922","#CEEA01","#177FEB","#733256"],"colorAxis":{"dataClasses":[{"from":"Traffic Violation","to":"Reasonable Suspicion","color":"#440154"},{"from":"Reasonable Suspicion","to":"Parole/Probation","color":"#363A6A"},{"from":"Parole/Probation","to":"Outstanding Arrest Warrant","color":"#287380"},{"from":"Outstanding Arrest Warrant","to":"Truancy Investigation","color":"#4DA177"},{"from":"Truancy Investigation","to":"Two or More Reasons","color":"#A5C44E"},{"from":"Two or More Reasons","to":"Other","color":"#FDE725"}]},"subtitle":{"text":"Hours Spent on Stops by Stop Reason","align":"left"},"legend":{"enabled":false},"caption":{"text":"Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019), catalystcalifornia.org, 2023. Analysis for all stops."}},"theme":{"colors":["#3A207D","#CEC4E2","#F25922","#CEEA01"],"chart":{"backgroundColor":"#FBFBFB","style":{"fontFamily":"Inter","color":"#FBFBFB"}},"plotOptions":{"line":{"marker":[]}},"title":{"style":{"color":"#3A207D","fontFamily":"Inter","fontWeight":800,"textAlign":"left","fontSize":"21px"}},"subtitle":{"style":{"color":"#3A207D","fontFamily":"Inter","fontWeight":400,"fontSize":"14px"}},"caption":{"style":{"color":"#3A207D","fontFamily":"Inter","fontWeight":400,"textAlign":"left","fontSize":"10px"},"useHTML":true},"axis":{"style":{"color":"#DEDEDE","fontFamily":"Inter","fontWeight":600,"fontSize":"12px"}},"xAxis":{"labels":{"style":{"color":"#000000","fontFamily":"Inter","fontWeight":600,"width":120,"spacingLeft":"150px","fontSize":"12px"}},"lineColor":"#DEDEDE"},"yAxis":{"labels":{"style":{"color":"#000000","fontFamily":"Inter","fontWeight":400,"fontSize":"12px","margin":50}},"gridLineWidth":0,"visible":true,"lineWidth":1,"lineColor":"#DEDEDE"},"legend":{"itemStyle":{"fontFamily":"Inter","fontWeight":400,"color":"#000000"},"itemHoverStyle":{"fontFamily":"Inter","fontWeight":400,"color":"#000000"},"plotLines":{"color":"#DEDEDE"}}},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":",","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":"Inter","debug":false},"evals":[],"jsHooks":[]}</script>
+<script type="application/htmlwidget-sizing" data-for="htmlwidget-a802939a734728f89bb0">{"viewer":{"width":"100%","height":350,"padding":0,"fill":true},"browser":{"width":"100%","height":500,"padding":0,"fill":true}}</script>
+</body>
+</html>
