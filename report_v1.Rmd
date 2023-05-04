@@ -105,52 +105,7 @@ A stop that results in no action (i.e., no citation, warning, or arrest) is an i
 
 Studies show that police encounters and harassment increase anxiety and trauma among people of color, particularly Black people.^[Alang et al., Police Brutality and Black Health: Setting the Agenda for Public Health Scholars (2017) 107 Am. J. Pub. Health 662 <https://www.researchgate.net/publication/315510199_Police_Brutality_and_Black_ Health_Setting_the_Agenda_for_Public_Health_Scholars> [as of Nov. 29, 2022]] In one study in New York City, young men who reported more police contact and intrusive encounters showed higher levels of trauma and anxiety symptoms because of their experiences.^[https://scholarship.law.columbia.edu/cgi/viewcontent.cgi?article=2851&context=faculty_scholarship]  In Baltimore City following the high-profile murder of Freddie Gray, researchers found that Black residents associated the stress and fear of police harassment with community fragmentation and poor community health.^[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4824692/pdf/11524_2015_Article_22.pdf]   Another study in New York found a significant association between more invasive pedestrian stops and the prevalence of chronic health conditions, including diabetes, high blood pressure, asthma, obesity, where neighborhoods with more invasive encounters also had poorer health outcomes.^[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4824697/] 
 
-```{r, echo=FALSE}
-
-### JZ ###
-
-# Read in table
-
-df<-dbGetQuery(con, "SELECT * FROM report_stoprates_result_race_person")
-
-# filter for traffic
-traffic<-df%>%
-  filter(grepl('Traffic Violation',reason))%>%
-  filter(grepl('No Action',result))%>%
-  filter(!grepl('Total',race_label_short))%>%
-  arrange(desc(stop_denom_rate))
-
-#####  Bubble Chart - Stops that result in no action % #####
-
-# apply lollypop chart function
-
-# Apply Chart 
-
-fx_barbubblechart(
-
-  db=traffic, #name of dataframe
-
-  order_var=traffic$stop_denom_rate, #variable you're sorting by
-
-  x='race_label_short', # x or independent variables
-
-  y='stop_denom_rate', # y or dependent variable
-
-  z='stop_count',
-
-  top_finding=paste0("LBPD is most likely to stop Multiracial and Black people for minor traffic stops"), # this is the top finding from the chart that gets used like a title
-
-  chart_title= paste0("Percent of Traffic Stops that Resulted in No Action by Race"), # this is the more standard chart title that gets used as a subtitle
-
- 
-  tooltip_text="<b>{point.stop_denom_rate:,.1f}%</b> of stops of people perceived as <b>{point.race_label_short}</b> resulted in No Action, or a total of {point.stop_count:,.0f} stops", # customize your tooltip as a statement, calling out rate and count
-
-  
-  chart_caption = paste0(racenote,"<br>", sourcenote, "<br>","Analysis for all officer-initiated stops for traffic violations.","<br><br>"), 
-  yaxis_label = "'%'", #format for your y axis labels
-  export_data_label=list(pointFormat='{point.stop_denom_rate:.1f}%'))
-
-
+```{r, child= 'report_embeds/stop_results_race_rate.Rmd'}
 ```
 
 

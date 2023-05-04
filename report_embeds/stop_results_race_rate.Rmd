@@ -1,0 +1,82 @@
+---
+output:
+  html_document:
+    css: "W:\\RDA Team\\R\\cc_brandguide.css"
+---
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+
+#### Load libraries ####
+library(usethis)
+library(highcharter)
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(sp)
+library(htmltools) # for html escape
+library(magrittr)
+library(flextable)
+
+library(htmlwidgets)
+
+
+#### Add database connection ####
+source("W:\\RDA Team\\R\\credentials_source.R")
+
+con <- connect_to_db("eci_lb_ripa")
+
+## Source the Chart Template
+
+source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
+```
+
+```{r bubblepop2, echo=FALSE}
+
+### JZ ###
+
+# Read in table
+
+df<-dbGetQuery(con, "SELECT * FROM report_stoprates_result_race_person")
+
+# filter for traffic
+traffic<-df%>%
+  filter(grepl('Traffic Violation',reason))%>%
+  filter(grepl('No Action',result))%>%
+  filter(!grepl('Total',race_label_short))%>%
+  arrange(desc(stop_denom_rate))
+
+#####  Bubble Chart - Stops that result in no action % #####
+
+# apply lollypop chart function
+
+# Apply Chart 
+
+fx_barbubblechart(
+
+  db=traffic, #name of dataframe
+
+  order_var=traffic$stop_denom_rate, #variable you're sorting by
+
+  x='race_label_short', # x or independent variables
+
+  y='stop_denom_rate', # y or dependent variable
+
+  z='stop_count',
+
+  top_finding=paste0("LBPD is most likely to stop Multiracial and Black people for minor traffic stops"), # this is the top finding from the chart that gets used like a title
+
+  chart_title= paste0("Percent of Traffic Stops that Resulted in No Action by Race"), # this is the more standard chart title that gets used as a subtitle
+
+ 
+  tooltip_text="<b>{point.stop_denom_rate:,.1f}%</b> of stops of people perceived as <b>{point.race_label_short}</b> resulted in No Action, or a total of {point.stop_count:,.0f} stops", # customize your tooltip as a statement, calling out rate and count
+
+  
+  chart_caption = paste0(racenote,"<br>", sourcenote, "<br>","Analysis for all officer-initiated stops for traffic violations.","<br><br>"), 
+  yaxis_label = "'%'", #format for your y axis labels
+  export_data_label=list(pointFormat='{point.stop_denom_rate:.1f}%'))
+
+
+```
