@@ -1,0 +1,62 @@
+#### Install set-up
+list.of.packages <- c("usethis", "highcharter", "tidyverse", "sf", "leaflet", "sp", "htmltools", "magrittr", "flextable", "htmlwidgets")
+
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
+
+#### Load libraries ####
+library(usethis)
+library(highcharter)
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(sp)
+library(htmltools) # for html escape
+library(magrittr)
+library(flextable)
+library(htmlwidgets)
+
+
+#### Add database connection ####
+source("W:\\RDA Team\\R\\credentials_source.R")
+
+con <- connect_to_db("eci_lb_ripa")
+
+
+#### Source the Chart Template
+source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
+
+#### Create chart
+
+#read in table
+df<-dbGetQuery(con, "SELECT * FROM report_timespent_cfs_stop")
+
+# create donut chart
+
+result <- df %>%
+  hchart(
+    "pie", hcaes(x = label, y = hours_rate_cap),
+    name = "",
+    tooltip = list(headerFormat="", pointFormat = "<b>{point.hours_rate_cap:.1f}%</b> of hours are spent on <b>{point.label}</b>, or a total of {point.hours_count_cap:,.1f} hours"),
+    innerSize="65%",
+    center = c(50, 50), 
+  )%>% 
+  hc_title(text = "Three in four hours are spent on officer-initiated stops not calls for service",
+           align="left")%>%
+  hc_subtitle(text = "Percent of Hours Spent on Calls for Service versus Officer-initiated Stops",
+              align="left") %>%
+  hc_caption(
+    text = paste0(sourcenote," Analysis for all stops."))%>%
+  hc_plotOptions(
+    innersize="50%", 
+    startAngle=90, 
+    endAngle=90,
+    center=list('50%', '75%'),
+    size='120%')%>%
+  hc_add_theme(cc_theme)%>%
+  hc_exporting(
+    enabled = TRUE, sourceWidth=900, sourceHeight=600, 
+    chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format='{point.hours_rate_cap:.1f}%')))),
+    filename = paste0("Percent of hours spent on calls for service versus officer-initiated stops","_Catalyst California, catalystcalifornia.org, 2023.")
+  )
