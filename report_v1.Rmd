@@ -96,38 +96,7 @@ The top five offenses that people are cited for are infractions related to movin
 
 Officer-initiated stops are more likely to impact people of color in Long Beach. As a part of RIPA data collection, officers are required to report the race of the person they stopped, based on the officer’s perception. The data show LBPD officers stop people they perceive as Black, Native Hawaiian or Pacific Islander (NHPI), and South Asian, Southwest Asian, or North African (SSWANA) at the highest rates.^[RIPA data includes a category for officers to identify someone they perceived as Middle Eastern or South Asian. However, that term is not commonly used among people who identify with the communities the data aim to include. We use the term South Asian, Southwest Asian, or North African (SSWANA) to better represent this diverse community and their geographical origins, and move away from the use of the term Middle Eastern.] For example, LBPD officers stopped 169 Black people for every 1000 Black people in Long Beach. By comparison, only 61 out of every 1000 White people were stopped.  
 
-```{r, echo=FALSE}
-##### Bubble Chart - stop rates per 1K by race for LB #####
-# add a comma to stop count
-
-# Apply Chart
-report_stoprates_race_person <- dbGetQuery(con, "SELECT * FROM data.report_stoprates_race_person")  %>%filter(race!="total")
-
-
-fx_barbubblechart(
-
-  db=report_stoprates_race_person, #name of dataframe
-
-  order_var=report_stoprates_race_person$stop_rate_per1k, #variable you're sorting by
-
-  x='race_label_short', # x or independent variables
-
-  y='stop_rate_per1k', # y or dependent variable
-
-  z='stop_count',
-
-  top_finding=paste0("LBPD stops Black, NHPI, and SSWANA people at higher rates than other community members."), # this is the top finding from the chart that gets used like a title
-
-  chart_title= paste0("Number of Officer-initiated Stops per 1K of Same Population by Race and Ethnicity"), # this is the more standard chart title that gets used as a subtitle
-
-  tooltip_text="For every 1K <b>{point.race_label_long:.1f}</b> people in Long Beach, LBPD stopped <b>{point.stop_rate_per1k:.1f}</b> people perceived as <b>{point.race_label_long:.1f}</b>, a total of <b>{point.stop_count:,0f}</b> people.", # customize your tooltip as a statement, calling out rate and count
-
-
-  chart_caption = paste0(racenote,"<br>", sourcenote, "<br>","Analysis for all officer-initiated stops.","<br><br>"), # if necessary add a method note between the racenote and sourcenote with a line break, use racenote if graph includes data by race, and always use sourcenote. Each of these are standard objects across all charts
-
-  yaxis_label = "''", #format for your y axis labels
-   export_data_label=list(pointFormat='{point.stop_rate_per1k:.1f} per 1K')
-)
+```{r, child= 'report_embeds/stop_rates_race_per1k.Rmd'}
 ```
 
 We narrow in on traffic stops that resulted in no action to evaluate whether racial disparities in stops are connected to pretextual stops. A pretextual stop occurs when an officer has a “hunch” that a person may be connected to an illegal activity, but that “hunch” is insufficient to stop the person. To justify the stop, the officer then identifies a minor traffic violation or other infraction (i.e., “pretext”), and then subjects the person to an investigation for more serious criminal activity. Pretextual stops are a central pathway for racial profiling because those “hunches” are often based on racial biases.  
