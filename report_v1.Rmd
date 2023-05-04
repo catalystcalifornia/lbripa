@@ -78,43 +78,7 @@ See Racial and Identity Profiling Advisory Board, Annual Report (2021) p. 101 <h
 Alang et al., Police Brutality and Black Health: Setting the Agenda for Public Health Scholars (2017) 107 Am. J. Pub. Health 662 <https://www.researchgate.net/publication/315510199_Police_Brutality_and_Black_ Health_Setting_the_Agenda_for_Public_Health_Scholars> [as of Nov. 29, 2022]
 ]  
 
-```{r, echo=FALSE}
-##### Donut Chart - time spent on cfs vs. officer-initiated stops % #####
-source("report_embeds/hours_spent_on_cfs.R")
-
-result
-# #read in table
-# df<-dbGetQuery(con, "SELECT * FROM report_timespent_cfs_stop")
-# 
-# # create donut chart
-# 
-# df %>%
-#   hchart(
-#     "pie", hcaes(x = label, y = hours_rate_cap),
-#     name = "",
-#     tooltip = list(headerFormat="", pointFormat = "<b>{point.hours_rate_cap:.1f}%</b> of hours are spent on <b>{point.label}</b>, or a total of {point.hours_count_cap:,.1f} hours"),
-#      innerSize="65%",
-#      center = c(50, 50), 
-#     )%>% 
-#   hc_title(text = "Three in four hours are spent on officer-initiated stops not calls for service",
-#  align="left")%>%
-#    hc_subtitle(text = "Percent of Hours Spent on Calls for Service versus Officer-initiated Stops",
-#                      align="left") %>%
-#   hc_caption(
-#     text = paste0(sourcenote," Analysis for all stops."))%>%
-#   hc_plotOptions(
-#     innersize="50%", 
-#     startAngle=90, 
-#     endAngle=90,
-#     center=list('50%', '75%'),
-#     size='120%')%>%
-# hc_add_theme(cc_theme)%>%
-#   hc_exporting(
-#     enabled = TRUE, sourceWidth=900, sourceHeight=600, 
-#     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format='{point.hours_rate_cap:.1f}%')))),
-#     filename = paste0("Percent of hours spent on calls for service versus officer-initiated stops","_Catalyst California, catalystcalifornia.org, 2023.")
-#   )
-
+```{r donut-chart, child= 'report_embeds/time_spent_cfs.Rmd'}
 ```
 
 
