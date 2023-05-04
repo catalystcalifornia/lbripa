@@ -137,62 +137,8 @@ Higher stop rates in communities do not necessarily translate to a higher likeli
 
 Council districts 1, 9, 6, and 8 have  higher rates of stops that result in no action (i.e., no citation, arrest, etc.). Council districts 8 and 9 have a large concentration of residents who identify as Latinx and Black. These districts are located in the North side of Long Beach and have a lower median income compared to the East side of the city based on data from the Neighborhood Data for Social Change (NDSC).^[“Although the 2016 median family income for the City of Long Beach was $55,151 – relatively similar to the county average – income levels varied greatly across the city’s census tracts. In the west side of the city, median household income levels were as low as $11,736. Meanwhile, median household income levels were as high as $122,526 in the east side of the city, a difference more than 10 times the other.” Neighborhood Data for Social Change (NSDC). (n.d.). Addressing Employment Inequality in the City of Long Beach. Retrieved from https://la.myneighborhooddata.org/2019/02/employment-inequality-across-long-beach-city/] The east side region of Long Beach, consisting of council districts 3, 4, and 5, have a larger White population compared to other parts of the city and have lower rates of stops that result in no action. In these council districts, officers are spending less than 10 percent of their hours (or less than 1 in 10 hours) on officer-initiated stops on stops that result in no action compared to more than 18 percent of their hours (or almost 1 in 5 hours) on stops that result in no action in District 9. 
 
-#### Officer-initiated Stop Hours that Result in No Action
-```{r, echo=FALSE}
-#### Choropleth map - officer-initiated stops with no action by cd % ####
-report_timespent_officerinitiated_cd_stop <- st_read(con, query = "SELECT * FROM report_timespent_result_cd_stop")
-council_district <- st_read(con, query = "SELECT * FROM data.colb_council_districts_place_2022")
-
-council_district_noaction <- council_district %>% 
-    mutate(council_num=as.character(council_num))%>% 
-  left_join(
-    report_timespent_officerinitiated_cd_stop
-  ) 
-## only keep last name of rep
-council_district_noaction <- council_district_noaction %>% mutate(representat = gsub(".* ", "", representat))
-
-## add link
-council_district_noaction$link <- c("https://www.longbeach.gov/district4/", "https://www.longbeach.gov/district5/","https://www.longbeach.gov/district3/","https://www.longbeach.gov/district1/","https://www.longbeach.gov/district8/","https://www.longbeach.gov/district6/","https://www.longbeach.gov/district9/","https://www.longbeach.gov/district7/","https://www.longbeach.gov/district2/")
-
-
-cc_brand <- c("#E2D9FF", "#BDAFE9","#8E7ACA", "#362178","#211447")
-
-
-hours_rate_noaction_cap_popup <- paste0((
-label = paste0(
-   "In Council District  <span style='font-size: 14px; font-weight: bold;'>",  
- council_district_noaction$council_num,"</span>",",officers spent <span style='font-size: 12px; font-weight: bold;'>", 
- scales::comma(council_district_noaction$hours_count_noaction_cap, accuracy = 0.1), "</span> hours in stops that resulted in no action, a rate of <span style='font-size: 14px; font-weight: bold;'> ", scales::comma(council_district_noaction$hours_rate_noaction_cap, accuracy = 0.1), "</span>%.")))
-
-
-
-#'<a href=',  p_spdf$Link, '>', p_spdf$Link, '</a>'
-
-
-#palette purples
-pal_stop_hours_rate_noaction_cap <- colorQuantile(cc_brand,council_district_noaction$hours_rate_noaction_cap, n = 5)
-
-
-leaflet(width = "100%", height = "600px") %>%
-  # add Long beach district layer with stop rates
-  addPolygons(data =  council_district_noaction,  label=~htmlEscape(paste0("Council District ", council_num)), color = "black", weight = 2, smoothFactor = 0.5, opacity = 1, fillOpacity = 0.5, popup = ~paste0(hours_rate_noaction_cap_popup),
-              fillColor = ~pal_stop_hours_rate_noaction_cap(hours_rate_noaction_cap), highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE), group = "") %>%
-  
-  ## add legend for stop hours
-  addLegend(position = "bottomleft", pal = pal_stop_hours_rate_noaction_cap, values = council_district_noaction$hours_rate_noaction_cap, opacity = .5, title = "Percent of Hours Spent on Stops with No Action", na.label = NA, labFormat = function(type, cuts, p) {
-    n = length(cuts)
-    paste0(scales::comma(cuts, accuracy = .1)[-n], " &ndash; ", scales::comma(cuts, accuracy = .1)[-1], "%")
-  }) %>%
-
-  
-  #base and view
-  
-  addProviderTiles("CartoDB.Positron")%>%
-  setView(-118.16675, 	33.80462	, zoom = 12) #base and view 
-  
+```{r, child= 'report_embeds/officer_stops_no_action_cd.Rmd'}
 ```
-<div align="left" style="line-height: 1em;"><span style=' font-size: 10px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span> </div>
-
 
 ## Traffic stops are an inefficient means of advancing safety and pose a greater burden on people of color
 

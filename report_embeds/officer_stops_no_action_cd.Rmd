@@ -1,0 +1,90 @@
+---
+output:
+  html_document:
+    css: "W:\\RDA Team\\R\\cc_brandguide.css"
+---
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+
+#### Load libraries ####
+library(usethis)
+library(highcharter)
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(sp)
+library(htmltools) # for html escape
+library(magrittr)
+library(flextable)
+
+library(htmlwidgets)
+
+
+#### Add database connection ####
+source("W:\\RDA Team\\R\\credentials_source.R")
+
+con <- connect_to_db("eci_lb_ripa")
+
+## Source the Chart Template
+
+source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
+```
+
+#### Officer-initiated Stop Hours that Result in No Action
+```{r map2, echo=FALSE}
+#### Choropleth map - officer-initiated stops with no action by cd % ####
+report_timespent_officerinitiated_cd_stop <- st_read(con, query = "SELECT * FROM report_timespent_result_cd_stop")
+council_district <- st_read(con, query = "SELECT * FROM data.colb_council_districts_place_2022")
+
+council_district_noaction <- council_district %>% 
+    mutate(council_num=as.character(council_num))%>% 
+  left_join(
+    report_timespent_officerinitiated_cd_stop
+  ) 
+## only keep last name of rep
+council_district_noaction <- council_district_noaction %>% mutate(representat = gsub(".* ", "", representat))
+
+## add link
+council_district_noaction$link <- c("https://www.longbeach.gov/district4/", "https://www.longbeach.gov/district5/","https://www.longbeach.gov/district3/","https://www.longbeach.gov/district1/","https://www.longbeach.gov/district8/","https://www.longbeach.gov/district6/","https://www.longbeach.gov/district9/","https://www.longbeach.gov/district7/","https://www.longbeach.gov/district2/")
+
+
+cc_brand <- c("#E2D9FF", "#BDAFE9","#8E7ACA", "#362178","#211447")
+
+
+hours_rate_noaction_cap_popup <- paste0((
+label = paste0(
+   "In Council District  <span style='font-size: 14px; font-weight: bold;'>",  
+ council_district_noaction$council_num,"</span>",",officers spent <span style='font-size: 12px; font-weight: bold;'>", 
+ scales::comma(council_district_noaction$hours_count_noaction_cap, accuracy = 0.1), "</span> hours in stops that resulted in no action, a rate of <span style='font-size: 14px; font-weight: bold;'> ", scales::comma(council_district_noaction$hours_rate_noaction_cap, accuracy = 0.1), "</span>%.")))
+
+
+
+#'<a href=',  p_spdf$Link, '>', p_spdf$Link, '</a>'
+
+
+#palette purples
+pal_stop_hours_rate_noaction_cap <- colorQuantile(cc_brand,council_district_noaction$hours_rate_noaction_cap, n = 5)
+
+
+leaflet(width = "100%", height = "600px") %>%
+  # add Long beach district layer with stop rates
+  addPolygons(data =  council_district_noaction,  label=~htmlEscape(paste0("Council District ", council_num)), color = "black", weight = 2, smoothFactor = 0.5, opacity = 1, fillOpacity = 0.5, popup = ~paste0(hours_rate_noaction_cap_popup),
+              fillColor = ~pal_stop_hours_rate_noaction_cap(hours_rate_noaction_cap), highlight = highlightOptions(color = "white", weight = 3, bringToFront = TRUE, sendToBack = FALSE), group = "") %>%
+  
+  ## add legend for stop hours
+  addLegend(position = "bottomleft", pal = pal_stop_hours_rate_noaction_cap, values = council_district_noaction$hours_rate_noaction_cap, opacity = .5, title = "Percent of Hours Spent on Stops with No Action", na.label = NA, labFormat = function(type, cuts, p) {
+    n = length(cuts)
+    paste0(scales::comma(cuts, accuracy = .1)[-n], " &ndash; ", scales::comma(cuts, accuracy = .1)[-1], "%")
+  }) %>%
+
+  
+  #base and view
+  
+  addProviderTiles("CartoDB.Positron")%>%
+  setView(-118.16675, 	33.80462	, zoom = 12) #base and view 
+  
+```
+<div align="left" style="line-height: 1em;"><span style=' font-size: 10px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span> </div>
