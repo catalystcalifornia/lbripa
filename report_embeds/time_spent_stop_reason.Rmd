@@ -37,7 +37,7 @@ source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
 ### {.tabset}
 #### Time spent on stops by reason
 
-```{r}
+```{r tabbed-chart1}
 
 #read in table
 
@@ -96,7 +96,7 @@ df%>%
 
 #### Time spent on traffic stops by result
 
-```{r, echo=FALSE}
+```{r tabbed-chart2, echo=FALSE}
 
 ### JZ ###
 
@@ -168,7 +168,7 @@ hc %>%
 
 #### Most common traffic stop citations
 
-```{r ft.align="left"}
+```{r tabbed-chart3, ft.align="left"}
 #### Flex table - Top citations % ####
 # read in df
 
