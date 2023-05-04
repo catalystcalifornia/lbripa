@@ -1,4 +1,39 @@
+---
+output:
+  html_document:
+    css: "W:\\RDA Team\\R\\cc_brandguide.css"
+---
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+
+#### Load libraries ####
+library(usethis)
+library(highcharter)
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(sp)
+library(htmltools) # for html escape
+library(magrittr)
+library(flextable)
+
+library(htmlwidgets)
+
+
+#### Add database connection ####
+source("W:\\RDA Team\\R\\credentials_source.R")
+
+con <- connect_to_db("eci_lb_ripa")
+
+## Source the Chart Template
+
+source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
+
+
+```
 
 ```{r donut-chart-child}
 #### Create chart
