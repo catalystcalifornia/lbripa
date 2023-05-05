@@ -65,6 +65,8 @@ fx_barbubblechart(
   yaxis_label = "''", #format for your y axis labels
    export_data_label=list(pointFormat='{point.stop_rate_per1k:.1f} per 1K')
 )
+
+dbDisconnect(con)
 ```
 
 <script>
