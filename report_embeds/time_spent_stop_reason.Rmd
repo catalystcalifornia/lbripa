@@ -258,3 +258,11 @@ ft<-autofit(ft)
 ft
 
 ```
+
+<script>
+  widg = document.getElementsByClassName('html-widget'); //find widgets
+  for (let i = 0; i < widg.length; i++) { //loop through
+    document.getElementsByClassName('highchart')[i].style.width = '100%'; //adjust width
+    document.getElementsByClassName('highchart')[i].style.height = '100%'; //adjust height
+  }
+</script>
