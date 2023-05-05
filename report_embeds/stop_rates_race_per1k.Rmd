@@ -66,7 +66,7 @@ fx_barbubblechart(
    export_data_label=list(pointFormat='{point.stop_rate_per1k:.1f} per 1K')
 )
 
-dbDisconnect(con)
+invisible(dbDisconnect(con))
 ```
 
 <script>

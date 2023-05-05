@@ -78,7 +78,7 @@ fx_barbubblechart(
   yaxis_label = "'%'", #format for your y axis labels
   export_data_label=list(pointFormat='{point.stop_denom_rate:.1f}%'))
 
-
+invisible(dbDisconnect(con))
 ```
 
 <script>

@@ -70,7 +70,7 @@ fx_barbubblechart(
   export_data_label=list(pointFormat='{point.hit_rates:.1f}%') # format for your data labels on export images
 )
 
-dbDisconnect(con)
+invisible(dbDisconnect(con))
 
 ```
 
