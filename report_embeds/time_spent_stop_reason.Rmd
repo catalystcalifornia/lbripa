@@ -1,0 +1,260 @@
+---
+output:
+  html_document:
+    css: "W:\\RDA Team\\R\\cc_brandguide.css"
+---
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+
+#### Load libraries ####
+library(usethis)
+library(highcharter)
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(sp)
+library(htmltools) # for html escape
+library(magrittr)
+library(flextable)
+
+library(htmlwidgets)
+
+
+#### Add database connection ####
+source("W:\\RDA Team\\R\\credentials_source.R")
+
+con <- connect_to_db("eci_lb_ripa")
+
+## Source the Chart Template
+
+source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
+
+
+```
+### {.tabset}
+#### Time spent on stops by reason
+
+```{r tabbed-chart1}
+
+#read in table
+
+df<-dbGetQuery(con, "SELECT * FROM report_timespent_reason_stop")%>%
+  arrange(-hours_rate)
+
+#### Tree Map - Time spent by reason % ####
+
+# define colors
+col <-c(meteorite, "#9B9A9A",  lavender, orange,peridot,"#177FEB", "#733256" )  
+
+
+# graph
+df%>%
+  hchart(
+    "treemap", 
+    hcaes(x = stop_reason_short, value = hours_rate))%>%
+
+  hc_tooltip(pointFormat = "<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b> stops, or a total of {point.hours_count:,.1f} hours")%>%
+
+ hc_plotOptions(treemap = list(colorByPoint = TRUE))%>%
+                               
+                               # dataLabels=list(useHTML=TRUE, format='<p class="truncate"><b>{point.stop_reason_short}</b></a>',style=list( fontSize='12px')))) %>%      
+  
+    hc_colors(col) %>%   #with this we can set the colors, note: 1st color is given to first row in the data frame (not necessarily the biggest box)
+  
+    hc_colorAxis(dataClasses = color_classes(df$stop_reason_short)) %>%      
+  
+  hc_title(text = "LBPD spends most of its time on traffic stops",
+           align = "left") %>%
+ 
+   hc_subtitle(text = "Hours Spent on Stops by Stop Reason",
+               align = "left")%>%
+  
+    hc_legend(enabled = FALSE) %>%
+  
+  hc_caption(
+      text = paste0(sourcenote," Analysis for all stops.")
+      # , style=list(fontSize='8px')
+    ) %>% 
+  
+      hc_add_theme(cc_theme)%>%
+
+  
+   hc_exporting(
+      enabled = TRUE, sourceWidth=900, sourceHeight=600, 
+      chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.stop_reason_short}:<br>{point.hours_rate:.1f}% hours')))))),
+      filename = paste0("Hours spent on stops by stop reason_Catalyst California, catalystcalifornia.org, 2023.")
+    )
+ 
+
+
+
+```
+
+
+#### Time spent on traffic stops by result
+
+```{r tabbed-chart2, echo=FALSE}
+
+### JZ ###
+
+#read in table
+
+df<-dbGetQuery(con, "SELECT * FROM report_timespent_result_stop ")
+
+
+# for now filter just traffic and reasonable suspicion as separate dfs
+
+df_traffic<-df%>%
+  filter(grepl('Traffic Violation',stop_reason_short))%>%
+  arrange(-hours_rate)
+   
+  
+  # mutate(hours_rate= round(hours_rate, 0))
+
+col <-c(meteorite, lavender, orange, peridot, "#177FEB", "#733256", "#9B9A9A", "#211447",
+        "#FF9E0D")
+
+
+#### Item Chart - Traffic Stops by Results -rate of hours (/100) ####
+
+hc<-hchart(
+  df_traffic,
+  "item",
+  rows=8,
+  tooltip = list(headerFormat="", pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on traffic stops that resulted in <b>{point.stop_result_short}</b>"),
+  hcaes(
+    name = stop_result_short,
+    y = hours_rate,
+    label = stop_result_short,
+    color = col
+  ),
+  name = "Total Hours",
+  showInLegend = TRUE) %>%
+  
+  hc_title(text = "The majority of hours spent on traffic stops result in citations, warnings, or no action", 
+ align="left" )%>%
+  
+   hc_subtitle(text = "Hours Spent on Traffic Stops by Result", 
+ align="left" )%>%
+  
+  hc_caption(
+    text = paste0(sourcenote," Analysis for all officer-initiated stops for traffic violations.")) %>% 
+  hc_add_theme(cc_theme)%>%
+  hc_exporting(
+    enabled = TRUE, sourceWidth=900, sourceHeight=600, 
+    chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format=paste0(list(pointFormat='{point.hours_rate:.1f}')))))),
+    filename = paste0("Hours Spent on Traffic Stops by Result","_Catalyst California, catalystcalifornia.org, 2023.")
+  )%>%
+  
+  hc_legend(title=list(text='<span style="font-size: 12px; color: #000000; font-weight: bold">Single dot represents 1 hour out of 100 hours</span><br/><span style="font-size: 10px; color: #666; font-style: italic">Click to hide</span>'),
+            enable = TRUE, 
+            labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')
+
+# add in margins so the graph isn't cut off
+
+hc %>%
+  hc_chart(
+    marginRight = 100,
+    marginLeft=100
+  )
+
+
+
+```
+
+
+#### Most common traffic stop citations
+
+```{r tabbed-chart3, ft.align="left"}
+#### Flex table - Top citations % ####
+# read in df
+
+ df<-dbGetQuery(con, "SELECT * FROM report_rates_citations_race_person_long")
+
+# convert to long format and only keep 'total' group
+
+df_tot<-df%>%
+  filter(grepl('total',race))
+
+df_tot<-df_tot%>%
+    mutate(label_simple=ifelse(label %in% "22350 VC - UNSAFE SPEED:PREVAIL COND (I) 54106", "Unsafe speed for prevailing conditions (speeding) (I)",
+                     ifelse(label %in% "4000(A)(1) VC - NO REG:VEH/TRAILER/ETC (I) 54657", "No vehicle or trailer registration (I)",
+                            ifelse(label %in% "22450(A) VC - FAIL STOP VEH:XWALK/ETC (I) 54167", "Failure to stop at a stop sign (I)",
+                                   ifelse(label %in% "21453(A) VC - FAIL STOP LINE/ETC AT RED (I) 54098", "Failure to stop at a red light (I)",
+                                           ifelse(label %in% "21461(A) VC - DRIVER FAIL OBEY SIGN/ETC (I) 54146", "Driver failure to obey signs/signals (I)", 'NULL'
+                     ))))))
+  
+# create top citations total table (not by race)
+# load library
+library(officer)
+
+# create basic table
+ft_data<-df_tot%>%
+  rename("Race"="race",
+         "Citation"="label_simple",
+         "Percent"="rate",
+        "Total"= "count")%>%
+  select(Citation, "Percent", Total)%>%
+flextable()
+
+# add padding to title
+fpp <- officer::fp_par(padding = 6,
+                       line_spacing = 1.5
+                       )
+
+# add title and footer
+ft <-   ft_data%>%set_caption(
+    as_paragraph(
+      as_chunk("LBPD mostly gives traffic citations for infractions",
+               props = fp_text_default(font.family = main_font, font.size=15.75, bold=TRUE)),"<br>",
+      as_chunk("Top Five Traffic Citations Given by LBPD",
+               props = fp_text_default(font.family = main_font, font.size=10.5))
+      ), word_stylename = "Table Caption", align_with_table=F,
+    fp_p = fpp)%>%
+  add_footer_lines(as_paragraph(
+      as_chunk(paste0(sourcenote," Analysis for all officer-initiated stops for traffic violations."),
+               props = fp_text_default(font.family = main_font,font.size=7.5),align="left")
+    ))
+
+# format number columns
+ft <- colformat_double(
+  x = ft,
+  big.mark = ",", digits = 1, na_str = "N/A"
+)
+
+# set font and styling
+ft<-font(
+  ft,
+  i = NULL,
+  j = NULL,
+  main_font,
+  part = "all",
+  cs.family = main_font,
+  hansi.family = main_font,
+  eastasia.family = main_font
+)
+
+# further customize
+ft<-border_remove(ft)
+ft<-bg(ft,bg=alabaster,part="all")
+ft<-bold(ft, bold = TRUE, j="Percent",part="all")
+ft<-color(ft,color=meteorite,j="Percent",part="all")
+ft<-bold(ft, bold = TRUE, j="Citation",part="body")
+ft<-border(ft,border.top=fp_border(color=gainsboro),border.bottom=fp_border(color=gainsboro),part="header",j=c("Citation","Total"))
+ft<-border(ft,border.bottom=fp_border(color=gainsboro),i=5,j=c("Citation","Total"))
+# ft<-border(ft,border.top=black,border.right=black,border.left=black,part="header",j="Percent")
+ft<-surround(ft,j="Percent",part="header",border.top=fp_border(color=black,width=2),border.left=fp_border(color=black,width=2),border.right=fp_border(color=black,width=2))
+ft<-surround(ft,j="Percent",part="body",border.left=fp_border(color=black,width=2),border.right=fp_border(color=black,width=2))
+ft<-surround(ft,j="Percent",part="footer",border.top=fp_border(color=black,width=2))
+ft<-bg(ft,j="Percent",bg=lavender,part="all")
+
+# set width
+ft<-autofit(ft)
+
+# display
+ft
+
+```

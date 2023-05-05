@@ -1,0 +1,243 @@
+---
+output:
+  html_document:
+    css: "W:\\RDA Team\\R\\cc_brandguide.css"
+---
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+
+#### Load libraries ####
+library(usethis)
+library(highcharter)
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(sp)
+library(htmltools) # for html escape
+library(magrittr)
+library(flextable)
+
+library(htmlwidgets)
+
+
+#### Add database connection ####
+source("W:\\RDA Team\\R\\credentials_source.R")
+
+con <- connect_to_db("eci_lb_ripa")
+
+## Source the Chart Template
+
+source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
+```
+
+#### Traffic Stop Rates and High Injury Networks
+```{r map3, echo=FALSE}
+council_district <- st_read(con, query = "SELECT * FROM data.colb_council_districts_place_2022")
+
+#### Choropleth/line map - traffic stops compared to high injury network rate per 1k ####
+
+high_injury_motor_corridors_line_sf <- st_read(con, query = "SELECT * FROM data.high_injury_motor_corridors_spatial") %>% st_as_sf()
+high_injury_motor_intersections_spdf <- st_read(con, query = "SELECT * FROM data.high_injury_motor_intersections_spatial")
+high_injury_ped_corridors_line_sf  <- st_read(con, query = "SELECT * FROM data.high_injury_ped_corridors_spatial")  %>% st_as_sf()
+high_injury_ped_intersections_spdf <- st_read(con, query = "SELECT * FROM data.high_injury_ped_intersections_spatial")
+report_traffic_stoprates_cd_race_person <- dbGetQuery(con, "SELECT * FROM data.report_traffic_stoprates_cd_race_person") 
+ 
+
+#source("W:/Project/ECI/LB RIPA/R/3. Safety/report_highinjury_corridors_intersections.R")
+
+##### merge stop rates by council district shape-file -----------------------------------
+council_district$council_num <- as.character(council_district$council_num) # change council number to character to merge
+
+df <- report_traffic_stoprates_cd_race_person %>% select(council_num, race, pop_count, traffic_stop_count, traffic_stop_rate) %>%  
+  mutate(traffic_stop_rate=round(traffic_stop_rate,1))  %>%
+pivot_wider(
+  names_from = race,
+  names_glue = "{race}_{.value}",
+  values_from = c(pop_count:traffic_stop_rate)
+)
+
+## get traffic stop rate by council number
+council_district$council_num <- as.character(council_district$council_num)
+
+# merge
+council_district_traffic_rate <- council_district %>% 
+  left_join(
+    df
+  ) 
+
+## only keep last name of rep
+#council_district_traffic_rate <- council_district_traffic_rate %>% mutate(representat = gsub(".* ", "", representat))
+
+
+council_district_traffic_rate$link <- c("https://www.longbeach.gov/district4/", "https://www.longbeach.gov/district5/","https://www.longbeach.gov/district3/","https://www.longbeach.gov/district1/","https://www.longbeach.gov/district8/","https://www.longbeach.gov/district6/","https://www.longbeach.gov/district9/","https://www.longbeach.gov/district7/","https://www.longbeach.gov/district2/")
+
+### remove Long Beach, CA from pop-up
+
+high_injury_motor_intersections_spdf <- high_injury_motor_intersections_spdf  %>% mutate(address= gsub(", Long Beach, CA, USA", "", address))
+high_injury_ped_intersections_spdf <- high_injury_ped_intersections_spdf  %>% mutate(address= gsub(", Long Beach, CA, USA", "", address))
+high_injury_motor_corridors_line_sf <- high_injury_motor_corridors_line_sf %>% mutate(address_1= gsub(", Long Beach, CA, USA", "", address_1),
+                                                                   address_2= gsub(", Long Beach, CA, USA", "", address_2),)
+high_injury_ped_corridors_line_sf <- high_injury_ped_corridors_line_sf  %>% mutate(address_1= gsub(", Long Beach, CA, USA", "", address_1),
+                                                                   address_2= gsub(", Long Beach, CA, USA", "", address_2),)
+
+
+
+##### High injury pop-ups#####
+
+
+high_injury_motor_intersections_popup <- paste0((
+  label = paste0(
+    "There were approximately <span style='font-weight: bold;'>", high_injury_motor_intersections_spdf$num_killed_or_seriously_injured, "</span> killed or seriously injured, <span style='font-size: 12px; font-weight: bold;'>",  
+    high_injury_motor_intersections_spdf$num_vehicle_crashes, "</span> vehicle crash(es), and <span style='font-size: 12px; font-weight: bold;'>", high_injury_motor_intersections_spdf$num_motorcycle_crashes,"</span> motorcycle crash(es) at the intersection of <span style='font-size: 12px; font-weight: bold;'>",  
+    high_injury_motor_intersections_spdf$address,".")))
+
+
+high_injury_ped_corridors_popup <- paste0((
+  label = paste0(
+    "There were approximately <span style='font-weight: bold;'>", high_injury_ped_corridors_line_sf$num_killed_or_seriously_injured, "</span> killed or seriously injured and <span style='font-size: 12px; font-weight: bold;'>",  
+    high_injury_ped_corridors_line_sf$num_crashes, "</span> pedestrian or bicycle crash(es), at corridor <span style='font-size: 12px; font-weight: bold;'>",
+    high_injury_ped_corridors_line_sf$corridor, "</span>. This corridor runs from <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_corridors_line_sf$address_1, "</span> to <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_corridors_line_sf$address_2, ".")))
+
+
+
+
+
+
+high_injury_motor_corridors_popup <- paste0((
+  label = paste0(
+    "There were approximately <span style='font-weight: bold;'>", high_injury_motor_corridors_line_sf$num_killed_or_seriously_injured, "</span> killed or seriously injured and <span style='font-size: 12px; font-weight: bold;'>",  
+    high_injury_motor_corridors_line_sf$num_crashes, "</span> vehicle or motorcycle crash(es), at corridor <span style='font-size: 12px; font-weight: bold;'>",
+    high_injury_motor_corridors_line_sf$corridor, "</span>. This corridor runs from <span style='font-size: 12px; font-weight: bold;'>", high_injury_motor_corridors_line_sf$address_1, "</span> to <span style='font-size: 12px; font-weight: bold;'>", high_injury_motor_corridors_line_sf$address_2,".")))
+
+
+
+
+high_injury_ped_intersections_popup <- paste0((
+  label = paste0(
+    "There were approximately <span style='font-weight: bold;'>", high_injury_ped_intersections_spdf$num_killed_or_seriously_injured, "</span> killed or seriously injured, <span style='font-size: 12px; font-weight: bold;'>",  
+    high_injury_ped_intersections_spdf$num_ped_crashes, "</span> pedestrian crash(es), and <span style='font-size: 12px; font-weight: bold;'>", high_injury_ped_intersections_spdf$num_bike_crashes,"</span> bike crash(es) at the intersection of <span style='font-size: 12px; font-weight: bold;'>",  
+    high_injury_ped_intersections_spdf$address,".")))
+
+
+##### traffic stop rate pop_up #####
+
+total_traffic_rate_popup <- paste0((
+ label = paste0(
+    "For every 1K <span style='font-weight: bold;'>Total</span> people in Council District <span style='font-size: 12px; font-weight: bold;'>",  council_district_traffic_rate$council_num, "</span>", ", LBPD stopped <span style='font-size: 12px; font-weight: bold;'>",council_district_traffic_rate$total_traffic_stop_rate, "</span>  people, a total of <span style='font-size: 12px; font-weight: bold;'> ", scales::comma(council_district_traffic_rate$total_traffic_stop_count), "</span> people. ")))
+  
+  
+
+
+## palette #2
+
+#cc_brand2 <- c('#FFbDA6', '#FF9873', '#FA7B4D', '#F25922', '#DF4007')
+
+#palette colors for dots/lines
+
+papaya_orange <- c("#DF4007")
+american_yellow <- c("#EABB00")
+
+#peridot <- c("#CEEA01")
+
+cc_brand <- c("#E2D9FF", "#BDAFE9","#8E7ACA", "#362178","#211447")
+
+pal_total <- colorQuantile(cc_brand, council_district_traffic_rate$total_traffic_stop_rate, n = 5)
+
+## function to change the legend shape and color
+
+#colors_function_circle <- function(colors, sizes, borders, shapes) {
+ # shapes <- gsub("circle", "100%", shapes)
+ # paste0(colors, "; width:", sizes, "px; height:", sizes, "px; border:1px solid ", borders, "; border-radius:", shapes)
+#}
+
+
+
+leaflet(width = "100%", height = "600px") %>%
+  
+  
+  # add Long beach district layer with stop rates
+  addPolygons(data = council_district_traffic_rate,  label=~htmlEscape(paste0("Council District ", council_num)), color = "#444444", weight = 2, smoothFactor = 0.5,  opacity = 1, fillOpacity = 0.5,  fillColor = ~pal_total(total_traffic_stop_rate),
+              popup = ~paste0(total_traffic_rate_popup), highlight = highlightOptions(color = "white", weight = 3, bringToFront = FALSE), group = "Council Districts") %>%
+  
+  ## add motor corridors 
+  addPolylines(data = high_injury_motor_corridors_line_sf, group = "High Injury Motor Intersections/Corridors",
+               popup= ~paste0(high_injury_motor_corridors_popup),
+               label= ~htmlEscape(paste0("High Injury Motor Intersections/Corridors")),
+             
+              color = american_yellow, weight = 2, opacity =1) %>%
+  
+  ## add pedestrian/bike corridors
+  addPolylines(data = high_injury_ped_corridors_line_sf, group = "High Injury Pedestrian or Bike Intersections/Corridors",
+               popup= ~paste0(high_injury_ped_corridors_popup),
+               label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
+              
+               color = papaya_orange, weight = 2, opacity = 1) %>%
+  
+  
+  
+  ## add motor intersections
+  addCircleMarkers(data = high_injury_motor_intersections_spdf, lat = ~lat, lng = ~lon,
+                   group="High Injury Motor Intersections/Corridors",
+                   popup= ~paste0(high_injury_motor_intersections_popup),
+                   label= ~htmlEscape(paste0("High Injury Motor Vehicle/Motorcycle Intersection")),
+                   weight = 2, fillOpacity = 1, radius=4,
+                    color = "black", fillColor= american_yellow, stroke = TRUE
+  ) %>%
+  
+  ## add pedestrian/bike intersections
+  addCircleMarkers(data = high_injury_ped_intersections_spdf, lat = ~lat, lng = ~lon,
+                   group="High Injury Pedestrian or Bike Intersections/Corridors",
+                   popup= ~paste0(high_injury_ped_intersections_popup),
+                   label= ~htmlEscape(paste0("High Injury Pedestrian or Bike Intersections/Corridors")),
+                   weight = 2, fillOpacity = 1, radius=4,
+                   color="black",  fillColor= papaya_orange, stroke = TRUE
+  ) %>%
+  
+  
+  
+  ## add legend for stop rate
+  addLegend(layerId = "Total", position = "bottomleft", group = "Total", pal = pal_total, values = council_district_traffic_rate$total_traffic_stop_rate, opacity = .5, title = "Traffic Stop Rate Per 1K Total Residents", na.label = NA, labFormat = function(type, cuts, p) {
+    n = length(cuts)
+    paste0(cuts[-n], " &ndash; ", cuts[-1])
+  })  %>%
+  
+ #### CORRIDOR LEGEND
+
+## add legend for corridors
+##  addLegendLine(position = "bottomleft",values = 0, title = "Motor Corridors",  group = "High Injury Motor Intersections/Corridors",  baseSize = 5, width = 50, color = peridot) %>%
+  
+    ## add legend for corridors
+#  addLegendLine(position = "bottomleft",values = 0, title = "Pedestrian or Bike Corridors",  group = "High Injury Pedestrian or Bike Intersections/Corridors",  baseSize = 5, width = 50, color = papaya_orange) %>%
+  
+  ### PEDESTRIAN LEGEND
+  
+  ## add legend for intersections
+#   addLegend(position = "bottomleft",   title = "", group = "High Injury Pedestrian or Bike Intersections/Corridors", labels = "Pedestrian or Bike Intersections", colors = colors_function_circle(colors =papaya_orange, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+
+ #  addLegend(position = "bottomleft",   title = "", group = "High Injury Motor Intersections/Corridors", labels = "Motor Intersections", colors = colors_function_circle(colors =peridot, sizes = "10", shapes = "circle", borders = NULL) ) %>%
+  
+  
+  #layer control
+  
+  addLayersControl(overlayGroups =  
+                     c("High Injury Motor Intersections/Corridors", "High Injury Pedestrian or Bike Intersections/Corridors"), 
+                   options = layersControlOptions(collapsed = FALSE)) %>%  
+  
+  #  htmlwidgets::onRender("
+  #     function() {
+  #         $('.leaflet-control-layers-list').prepend('<label style=\"text-align:center\">High Injury Corridors and Intersections</label>');
+  #      }
+  #  ") %>%
+  
+  #base and view
+  
+  addProviderTiles("CartoDB.Positron") %>%
+  setView(-118.16675, 	33.80462	, zoom = 12) %>% #base and view 
+  
+  hideGroup(c("Pedestrian/Bike"))
+```
+<div align="left" style="line-height: 1em;"><span style=' font-size: 10px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops for traffic violations.</span> </div>
