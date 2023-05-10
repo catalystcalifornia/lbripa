@@ -239,5 +239,7 @@ leaflet(width = "100%", height = "600px") %>%
   setView(-118.16675, 	33.80462	, zoom = 12) %>% #base and view 
   
   hideGroup(c("Pedestrian/Bike"))
+
+invisible(dbDisconnect(con))
 ```
 <div align="left" style="line-height: 1em;"><span style=' font-size: 10px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops for traffic violations.</span> </div>

@@ -72,6 +72,8 @@ result <- df %>%
   
   result
   
+invisible(dbDisconnect(con))
+  
 ```
 
 <script>

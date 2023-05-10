@@ -257,6 +257,8 @@ ft<-autofit(ft)
 # display
 ft
 
+invisible(dbDisconnect(con))
+
 ```
 
 <script>

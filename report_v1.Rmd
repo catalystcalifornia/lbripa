@@ -46,6 +46,8 @@ con <- connect_to_db("eci_lb_ripa")
 
 source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
 
+## Reknit all embeds so git will recognize file changes
+source("report_embeds/run_embeds.R")
 
 ```
 
@@ -78,7 +80,7 @@ See Racial and Identity Profiling Advisory Board, Annual Report (2021) p. 101 <h
 Alang et al., Police Brutality and Black Health: Setting the Agenda for Public Health Scholars (2017) 107 Am. J. Pub. Health 662 <https://www.researchgate.net/publication/315510199_Police_Brutality_and_Black_ Health_Setting_the_Agenda_for_Public_Health_Scholars> [as of Nov. 29, 2022]
 ]  
 
-```{r donut-chart, child= 'report_embeds/time_spent_cfs.Rmd'}
+```{r donut-chart, child= 'report_embeds/time_spent_cfs.Rmd', echo=FALSE}
 ```
 
 

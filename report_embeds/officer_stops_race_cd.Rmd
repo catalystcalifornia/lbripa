@@ -205,6 +205,8 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
         function() {
             $('.leaflet-control-layers-overlays').append('<label style=\"font-style:italic; font-size:10px;\">*Each dot represents<br>10 people stopped by LBPD.</label>');
         }")
+ 
+invisible(dbDisconnect(con))
 
 ```
 
