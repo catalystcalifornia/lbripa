@@ -309,8 +309,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 }
 
 .leaflet-popup-scrolled {
-  height: 100%;
-  overflow: auto;
+  max-height: 580px;
   opacity: 1;
   border-bottom: 0;
   border-top: 0;
