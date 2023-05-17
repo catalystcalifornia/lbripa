@@ -406,7 +406,7 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
 }
 
 .popup-list {
-  padding-left: 1.2em;
+  padding-left: 1.3em;
   line-height: 1.2em;
 }
 
