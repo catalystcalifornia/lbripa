@@ -44,7 +44,7 @@ con <- connect_to_db("eci_lb_ripa")
 
 ## Source the Chart Template
 
-source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
+source("report_embeds/chart_functions.R")
 
 ## Reknit all embeds so git will recognize file changes
 source("report_embeds/run_embeds.R")
