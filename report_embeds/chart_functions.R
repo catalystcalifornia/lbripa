@@ -52,7 +52,7 @@ cc_theme <- hc_theme(
             )
         )
     ),
-  title = list(
+  title = list(widthAdjust = -50,
     style = list(
       color = meteorite,
       fontFamily = main_font, # font_title

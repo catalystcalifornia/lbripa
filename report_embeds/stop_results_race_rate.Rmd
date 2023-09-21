@@ -66,7 +66,7 @@ fx_barbubblechart(
 
   z='stop_count',
 
-  top_finding=paste0("LBPD is most likely to stop Multiracial and Black people for minor traffic stops"), # this is the top finding from the chart that gets used like a title
+  top_finding=paste0("LBPD is most likely to stop Multiracial and Black people for minor traffic stops."), # this is the top finding from the chart that gets used like a title
 
   chart_title= paste0("Percent of Traffic Stops that Resulted in No Action by Race"), # this is the more standard chart title that gets used as a subtitle
 

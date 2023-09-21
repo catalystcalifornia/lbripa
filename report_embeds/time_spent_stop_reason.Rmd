@@ -66,7 +66,7 @@ df%>%
   
     hc_colorAxis(dataClasses = color_classes(df$stop_reason_short)) %>%      
   
-  hc_title(text = "LBPD spends most of its time on traffic stops",
+  hc_title(text = "LBPD spends most of its time on traffic stops.",
            widthAdjust = -50,
            align = "left") %>%
  
@@ -209,7 +209,7 @@ fpp <- officer::fp_par(padding = 6,
 # add title and footer
 ft <-   ft_data%>%set_caption(
     as_paragraph(
-      as_chunk("LBPD mostly gives traffic citations for infractions",
+      as_chunk("LBPD mostly gives traffic citations for infractions.",
                props = fp_text_default(font.family = main_font, font.size=15.75, bold=TRUE)),"<br>",
       as_chunk("Top Five Traffic Citations Given by LBPD",
                props = fp_text_default(font.family = main_font, font.size=10.5))
