@@ -29,9 +29,7 @@ source("W:\\RDA Team\\R\\credentials_source.R")
 con <- connect_to_db("eci_lb_ripa")
 
 ## Source the Chart Template
-# 
-# source("report_embeds/chart_functions.R")
-source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
+source("chart_functions.R")
 
 ```
 

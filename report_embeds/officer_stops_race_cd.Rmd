@@ -29,8 +29,8 @@ source("W:\\RDA Team\\R\\credentials_source.R")
 con <- connect_to_db("eci_lb_ripa")
 
 ## Source the Chart Template
+source("chart_functions.R")
 
-source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
 ```
 
 #### Officer-initiated Stops by Council District and Race
@@ -480,5 +480,5 @@ document.querySelector('.nh-twoormor-rate').innerHTML = popup.getAttribute('data
 ```
 
 <div align="left" style="line-height: 1em;"><span style="font-size: 10px;">Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, SSWANA=South Asian, Southwest Asian, or North African; Observations by race may overlap. </span> <br> 
-<span style=' font-size: 10px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019); <u>[Catalyst California](https://www.catalystcalifornia.org)</u>, 2023. Analysis for all officer-initiated stops.</span> </div>
+<span style=' font-size: 10px;'>Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019), catalystcalifornia.org, 2023. Analysis for all officer-initiated stops.</span> </div>
 
