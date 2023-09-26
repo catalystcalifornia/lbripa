@@ -29,9 +29,7 @@ source("W:\\RDA Team\\R\\credentials_source.R")
 con <- connect_to_db("eci_lb_ripa")
 
 ## Source the Chart Template
-
-source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
-
+source("chart_functions.R")
 
 ```
 
@@ -51,7 +49,8 @@ result <- df %>%
     innerSize="65%",
     center = c(50, 50), 
   )%>% 
-  hc_title(text = "Three in four hours are spent on officer-initiated stops not calls for service",
+  hc_title(text = "LBPD spends 3 in 4 patrol hours on officer-initiated stops.",      
+           widthAdjust = -50,
            align="left")%>%
   hc_subtitle(text = "Percent of Hours Spent on Calls for Service versus Officer-initiated Stops",
               align="left") %>%
@@ -77,9 +76,10 @@ invisible(dbDisconnect(con))
 ```
 
 <script>
-  widg = document.getElementsByClassName('html-widget'); //find widgets
-  for (let i = 0; i < widg.length; i++) { //loop through
-    document.getElementsByClassName('highchart')[i].style.width = '100%'; //adjust width
-    document.getElementsByClassName('highchart')[i].style.height = '100%'; //adjust height
-  }
+  document.querySelectorAll('.highchart').forEach((e) => {
+    e.style.width = '100%';
+  })
+  document.querySelectorAll('.highchart').forEach((e) => {
+    e.style.height = '100%';
+  })
 </script>

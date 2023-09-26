@@ -29,9 +29,7 @@ source("W:\\RDA Team\\R\\credentials_source.R")
 con <- connect_to_db("eci_lb_ripa")
 
 ## Source the Chart Template
-
-source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
-
+source("chart_functions.R")
 
 ```
 ### {.tabset}
@@ -66,7 +64,8 @@ df%>%
   
     hc_colorAxis(dataClasses = color_classes(df$stop_reason_short)) %>%      
   
-  hc_title(text = "LBPD spends most of its time on traffic stops",
+  hc_title(text = "LBPD spends most of its time on traffic stops.",
+           widthAdjust = -50,
            align = "left") %>%
  
    hc_subtitle(text = "Hours Spent on Stops by Stop Reason",
@@ -135,7 +134,8 @@ hc<-hchart(
     color = col),
   name = "Total Hours",
   showInLegend = TRUE) %>%
-  hc_title(text = "The majority of hours spent on traffic stops result in citations, warnings, or no action", 
+  hc_title(text = "The majority of hours LBPD spends on traffic stops only result in citations, warnings, or no action.", 
+           widthAdjust = -50,
  align="left" )%>%
   hc_subtitle(text = "Hours Spent on Traffic Stops by Result", 
  align="left" ) %>%
@@ -207,7 +207,7 @@ fpp <- officer::fp_par(padding = 6,
 # add title and footer
 ft <-   ft_data%>%set_caption(
     as_paragraph(
-      as_chunk("LBPD mostly gives traffic citations for infractions",
+      as_chunk("LBPD mostly gives traffic citations for infractions.",
                props = fp_text_default(font.family = main_font, font.size=15.75, bold=TRUE)),"<br>",
       as_chunk("Top Five Traffic Citations Given by LBPD",
                props = fp_text_default(font.family = main_font, font.size=10.5))
@@ -261,9 +261,10 @@ invisible(dbDisconnect(con))
 ```
 
 <script>
-  widg = document.getElementsByClassName('html-widget'); //find widgets
-  for (let i = 0; i < widg.length; i++) { //loop through
-    document.getElementsByClassName('highchart')[i].style.width = '100%'; //adjust width
-    document.getElementsByClassName('highchart')[i].style.height = '100%'; //adjust height
-  }
+  document.querySelectorAll('.highchart').forEach((e) => {
+    e.style.width = '100%';
+  })
+  document.querySelectorAll('.highchart').forEach((e) => {
+    e.style.height = '100%';
+  })
 </script>

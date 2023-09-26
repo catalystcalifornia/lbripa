@@ -29,8 +29,7 @@ source("W:\\RDA Team\\R\\credentials_source.R")
 con <- connect_to_db("eci_lb_ripa")
 
 ## Source the Chart Template
-
-source("W:/Project/ECI/LB RIPA/R/chart_functions.R")
+source("chart_functions.R")
 ```
 
 ```{r bubblepop1, echo=FALSE}
@@ -70,9 +69,10 @@ invisible(dbDisconnect(con))
 ```
 
 <script>
-  widg = document.getElementsByClassName('html-widget'); //find widgets
-  for (let i = 0; i < widg.length; i++) { //loop through
-    document.getElementsByClassName('highchart')[i].style.width = '100%'; //adjust width
-    document.getElementsByClassName('highchart')[i].style.height = '100%'; //adjust height
-  }
+  document.querySelectorAll('.highchart').forEach((e) => {
+    e.style.width = '100%';
+  })
+  document.querySelectorAll('.highchart').forEach((e) => {
+    e.style.height = '100%';
+  })
 </script>
