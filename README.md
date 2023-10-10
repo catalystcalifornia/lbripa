@@ -39,6 +39,8 @@
 
 In this section, include the summary and project purpose.
 
+Note: The code does not include lines relating to importing of the data. We pull tables from our private PostgreSQL database using credentials accessed through a separate script before running any of the code below. The database is accessible only by our Research & Data Analysis team.
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
