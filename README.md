@@ -16,12 +16,8 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#data-methodology">Data Methodology</a>
-      <ul>
-        <li><a href="#data-dictionary">Data Dictionary</a></li>
-      </ul>
-    </li>
-    <li><a href="#contributors">Contributors</a></li>
+    <li><a href="#data-methodology">Data Methodology</a></li>
+    <li><a href="#contributors">Acknowledgements</a></li>
     <li><a href="#contact-us">Contact Us</a></li>
     <li><a href="#about-catalyst-california">About Catalyst California</a>
       <ul>
@@ -37,9 +33,9 @@
 
 ## About The Project
 
-In this section, include the summary and project purpose.
+The Long Beach RIPA project demonstrates the inefficiencies and racial profiling in the Long Beach Police Department's (LBPD) police actions through analysis of LBPD's Racial & Identity Profiling Act (RIPA) data. The data shows that LBPD spends more time and money racially profiling folks in North and Central Long Beach than they spend actually protecting the community. Most of this profiling is conducted via traffic stops. These stops do not make the community safer, and they mean the LBPD spends less time responding to calls for service.
 
-Note: The code does not include lines relating to importing of the data. We pull tables from our private PostgreSQL database using credentials accessed through a separate script before running any of the code below. The database is accessible only by our Research & Data Analysis team.
+Note: The code does not include lines relating to importing of the data. We pull tables from our private PostgreSQL database using credentials accessed through a separate script before running any of the code below. The database is accessible only by our Research & Data Analysis team. 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
