@@ -95,38 +95,32 @@ library(tidyr)
 
 ## Data Methodology
 
-Use this space to show useful examples of how a project can be used (e.g. iframes, citation, etc). Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-### Data Dictionary
-| field                         | type    | description                                                                                                                                                                                      |
-| ----------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `county`                      | string  | The name of the county.                                                                                                                                                                          |
-| `total_pop`                   | integer | The total population in the county.                                                                                                                                                              |           
-| `total_rate`                  | integer | The total rate for the entire population for the given [indicator](https://www.racecounts.org/issue/crime-and-justice)(ex: Total % of Adults Who Reported Feeling Safe in their Neighborhood).   | 
-| `nh_white_rate`               | integer | The total rate for Non-Hispanic Whites for the given indicator (ex: Total % of White Adults Who Reported Feeling Safe in their Neighborhood.)                                                    |
-| `black_diff`                  | integer | The difference in rate between Non-Hispanic Black and the group with the 'Best Rate' for the given indicator.                                                                                    |
+You can read our full methodology [here](https://github.com/catalystcalifornia/lbripa/blob/main/Methodology_Racial_Bias_LBPD_2023.pdf) 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Contributors
+## Acknowledgements
 
-* [Alexandra Baker](https://github.com/bakeralexan)
-* [Leila Forouzan](https://github.com/lforouzan)
-* [Hillary Khan](https://github.com/hillaryk-ap)
-* [Maria Khan](https://github.com/mariatkhan)
+We would like to express our deepest appreciation to the Long Beach People’s Budget Coalition for their tremendous help and guidance in this research project. Over the years, the Coalition has been at the forefront of efforts to reimagine and redefine public safety, by trying to eradicate racial profiling and eliminate threats to human life posed by law enforcement. 
+
+Our research project was done with the explicit aim of providing the Coalition with a comprehensive insight into local policing practices. This effort marks the first step in a long journey to meaningfully engage the community in finding alternatives to traditional policing approaches. By shifting the focus towards investing in upstream services and fostering thriving communities, we collectively aspire to create a safer and more equitable future for all residents of Long Beach. 
+
+The following individuals from Catalyst California contributed to the data analysis, visualization, and writing of this work:
+
 * [Elycia Mulholland-Graves](https://github.com/elyciamg)
 * [Chris Ringewald](https://github.com/cringewald)
-* [David Segovia](https://github.com/davidseg1997)
+* [Hillary Khan](https://github.com/hillaryk-ap)
 * [Jennifer Zhang](https://github.com/jzhang514)
+* [David Segovia](https://github.com/davidseg1997)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Contact Us
 
-[Chris Ringewald](https://www.linkedin.com/in/chris-ringewald-6766369/) - cringewald[at]catalystcalifornia.org  <br>
+[Elycia Mulholland Graves](https://www.linkedin.com/in/elycia-mulholland-graves-54578258/) - egraves[at]catalystcalifornia.org  <br>
 
 
-[Leila Forouzan](https://www.linkedin.com/in/leilaforouzan/) - lforouzan[at]catalystcalifornia.org
+[Jennifer Zhang](www.linkedin.com/in/jenniferzhang3) - jzhang[at]catalystcalifornia.org
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
