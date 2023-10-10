@@ -20,7 +20,7 @@
           <ul>
         <li><a href="#data-sources">Data Sources</a></li>
       </ul>
-    <li><a href="#contributors">Acknowledgements</a></li>
+    <li><a href="#acknowledgements">Acknowledgements</a></li>
     <li><a href="#contact-us">Contact Us</a></li>
     <li><a href="#about-catalyst-california">About Catalyst California</a>
       <ul>
@@ -28,7 +28,6 @@
         <li><a href="#our-mission">Our Mission</a></li>
       </ul>
     </li>
-    <li><a href="#citation">Citation</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#partners">Partners</a></li>
   </ol>
@@ -121,8 +120,7 @@ The following individuals from Catalyst California contributed to the data analy
 ## Contact Us
 
 [Elycia Mulholland Graves](https://www.linkedin.com/in/elycia-mulholland-graves-54578258/) - egraves[at]catalystcalifornia.org  <br>
-
-
+[Chris Ringewald](https://www.linkedin.com/in/chris-ringewald-6766369/) -cringewald[at]catalystcalifornia.org <br>
 [Jennifer Zhang](www.linkedin.com/in/jenniferzhang3) - jzhang[at]catalystcalifornia.org
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -147,10 +145,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Partners
 
-Use this space for any additional acknowledgments (project partners, etc)
+* [Long Beach People’s Budget Coalition](URL)
 
-* [Partner org](URL)
-* [Partner org](URL)
-* [Partner org](URL)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
