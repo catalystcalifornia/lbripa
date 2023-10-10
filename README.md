@@ -17,6 +17,9 @@
       </ul>
     </li>
     <li><a href="#data-methodology">Data Methodology</a></li>
+          <ul>
+        <li><a href="#data-sources">Data Sources</a></li>
+      </ul>
     <li><a href="#contributors">Acknowledgements</a></li>
     <li><a href="#contact-us">Contact Us</a></li>
     <li><a href="#about-catalyst-california">About Catalyst California</a>
@@ -48,7 +51,6 @@ Note: The code does not include lines relating to importing of the data. We pull
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
@@ -80,20 +82,23 @@ library(tidyr)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-### Installation
-
-1. Add installation instructions here such as what programs, packages, and APIs to use and how to access or download them
-2. Step 2
-3. Step 3
-4. Step 4
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
 ## Data Methodology
 
-You can read our full methodology [here](https://github.com/catalystcalifornia/lbripa/blob/main/Methodology_Racial_Bias_LBPD_2023.pdf) 
+Our analysis focused on stops that occured in 2019, as this was the most recent data available that was not impacted by the COVID-19 pandemic. You can access our full methodology [here](https://github.com/catalystcalifornia/lbripa/blob/main/Methodology_Racial_Bias_LBPD_2023.pdf).
+
+### Data Sources
+
+Police Stop Data	
+* City of Long Beach, Long Beach Police Department, 2019, Police Stop Data (RIPA). Retrieved from https://www.longbeach.gov/police/about-the-lbpd/lbpd-stop-data/.
+
+Population Estimates by Race
+* U.S. Census Bureau, 2016-2020, American Community Survey, 5-Year Estimates. Tables DP05, B04006, B02018. Retrieved from https://data.census.gov/cedsci/.   
+* U.S. Census Bureau, 2020, TIGER/Line Shapefiles, Census Tracts. Retrieved from https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2020.html#list-tab-790442341. 
+* City of Long Beach, 2022, City Council Districts. Retrieved from https://longbeach.opendatasoft.com/explore/dataset/colb-council-districts/information/
+
+High-Injury Corridors and Intersections 
+* City of Long Beach, Safe Streets Long Beach: A Vision Zero Action Plan (July 2020), 2013-2017, Top 20 High-Injury Pedestrian/Bicycle and Motor Vehicle/Motorcycle Corridors and Intersections. Retrieved from https://www.longbeach.gov/globalassets/go-active-lb/media-library/documents/programs/safe-streets-lb-action-plan---final.
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
