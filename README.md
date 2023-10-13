@@ -19,6 +19,7 @@
     <li><a href="#data-methodology">Data Methodology</a></li>
           <ul>
         <li><a href="#data-sources">Data Sources</a></li>
+        <li><a href="#data-limitations">Data Limitations</a></li>
       </ul>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
     <li><a href="#contact-us">Contact Us</a></li>
@@ -64,6 +65,8 @@ We used several R packages to analyze data and perform different functions, incl
 * sf
 * tidyr
 * usethis
+* highcharter
+* leaflet
 
 ```
 list.of.packages <- c("usethis","dplyr","data.table", "sf", tidyr")
@@ -77,6 +80,8 @@ library(dplyr)
 library(data.table)
 library(sf)
 library(tidyr)
+library(highcharter)
+library(leaflet)
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -98,6 +103,9 @@ Population Estimates by Race
 High-Injury Corridors and Intersections 
 * City of Long Beach, Safe Streets Long Beach: A Vision Zero Action Plan (July 2020), 2013-2017, Top 20 High-Injury Pedestrian/Bicycle and Motor Vehicle/Motorcycle Corridors and Intersections. Retrieved from https://www.longbeach.gov/globalassets/go-active-lb/media-library/documents/programs/safe-streets-lb-action-plan---final.
 
+### Data Limitations
+
+As with all data, the findings and trends seen in this analysis are dependent on the quality and limitations of the data used. We strongly encourage readers to consider the limitations of RIPA data when interpreting findings. RIPA data are based on officers’ reports, meaning the information attached to each stop is solely based on officer disclosure and perceptions of what occurred during the stop. This also includes the officers' perception of the characteristics of the person(s) being stopped, including their age, gender, and race. For a full discussion of limitations, please see our [Methodology document](https://github.com/catalystcalifornia/lbripa/blob/main/Methodology_Racial_Bias_LBPD_2023.pdf)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -107,9 +115,15 @@ We would like to express our deepest appreciation to the Long Beach People’s B
 
 Our research project was done with the explicit aim of providing the Coalition with a comprehensive insight into local policing practices. This effort marks the first step in a long journey to meaningfully engage the community in finding alternatives to traditional policing approaches. By shifting the focus towards investing in upstream services and fostering thriving communities, we collectively aspire to create a safer and more equitable future for all residents of Long Beach. 
 
-The following individuals from Catalyst California contributed to the data analysis, visualization, and writing of this work:
+The following individuals from Catalyst California contributed to the framing and writing of the report:
 
-* [Elycia Mulholland-Graves](https://github.com/elyciamg)
+* Jacky Guerrero
+* Kianna Ruff
+* Chauncee Smith
+
+The following individuals from Catalyst California contributed to the data analysis and visualizations that show in up in the report:
+
+* [Elycia Mulholland Graves](https://github.com/elyciamg)
 * [Chris Ringewald](https://github.com/cringewald)
 * [Hillary Khan](https://github.com/hillaryk-ap)
 * [Jennifer Zhang](https://github.com/jzhang514)
@@ -119,9 +133,13 @@ The following individuals from Catalyst California contributed to the data analy
 
 ## Contact Us
 
-[Elycia Mulholland Graves](https://www.linkedin.com/in/elycia-mulholland-graves-54578258/) - egraves[at]catalystcalifornia.org  <br>
-[Chris Ringewald](https://www.linkedin.com/in/chris-ringewald-6766369/) -cringewald[at]catalystcalifornia.org <br>
-[Jennifer Zhang](www.linkedin.com/in/jenniferzhang3) - jzhang[at]catalystcalifornia.org
+For policy-related inquiries:
+* [Jacky Guerrero](https://www.linkedin.com/in/jackyguerrero/) -jguerrero[at]catalystcalifiornia.org
+
+For data-related inquiries: 
+
+* [Elycia Mulholland Graves](https://www.linkedin.com/in/elycia-mulholland-graves-54578258/) - egraves[at]catalystcalifornia.org 
+* [Jennifer Zhang](www.linkedin.com/in/jenniferzhang3) - jzhang[at]catalystcalifornia.org
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
