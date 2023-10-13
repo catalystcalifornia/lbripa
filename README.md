@@ -163,7 +163,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Partners
 
-* [The People’s Budget Long Beach]((https://lbforward.org/campaigns/peoplesbudget/)
+* [The People’s Budget Long Beach](https://lbforward.org/campaigns/peoplesbudget/)
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
