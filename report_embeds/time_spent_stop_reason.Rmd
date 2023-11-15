@@ -57,8 +57,6 @@ df%>%
   hc_tooltip(pointFormat = "<b>{point.hours_rate:.1f}%</b> of hours are spent on <b>{point.stop_reason_short}</b> stops, or a total of {point.hours_count:,.1f} hours")%>%
 
  hc_plotOptions(treemap = list(colorByPoint = TRUE))%>%
-                               
-                               # dataLabels=list(useHTML=TRUE, format='<p class="truncate"><b>{point.stop_reason_short}</b></a>',style=list( fontSize='12px')))) %>%      
   
     hc_colors(col) %>%   #with this we can set the colors, note: 1st color is given to first row in the data frame (not necessarily the biggest box)
   
@@ -75,10 +73,10 @@ df%>%
   
   hc_caption(
       text = paste0(sourcenote," Analysis for all stops.")
-      # , style=list(fontSize='8px')
     ) %>% 
   
       hc_add_theme(cc_theme)%>%
+  hc_size(height=510) %>%
 
   
    hc_exporting(
@@ -139,7 +137,7 @@ hc<-hchart(
  align="left" )%>%
   hc_subtitle(text = "Hours Spent on Traffic Stops by Result", 
  align="left" ) %>%
-  hc_size(height=450) %>%
+  hc_size(height=510) %>%
 hc_caption(text = paste0(sourcenote," Analysis for all officer-initiated stops for traffic violations.")) %>%
 hc_add_theme(cc_theme)%>%
 hc_exporting(enabled = TRUE, sourceWidth=900, sourceHeight=600,
@@ -151,13 +149,8 @@ hc_exporting(enabled = TRUE, sourceWidth=900, sourceHeight=600,
             enable = TRUE,
             labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')  %>%
   hc_tooltip(headerFormat="", 
-             pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on traffic stops that resulted in <b>{point.stop_result_short}</b>") %>%
+             pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on traffic stops that resulted in <b>{point.stop_result_short}</b>") 
 
-# add in margins so the graph isn't cut off
-hc_chart(
-  marginRight = 20,
-  marginLeft=20
-)
 
 hc
 

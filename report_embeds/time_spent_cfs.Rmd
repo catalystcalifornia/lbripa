@@ -63,6 +63,7 @@ result <- df %>%
     center=list('50%', '75%'),
     size='120%')%>%
   hc_add_theme(cc_theme)%>%
+  hc_size(height=510) %>%
   hc_exporting(
     enabled = TRUE, sourceWidth=900, sourceHeight=600, 
     chartOptions=list(plotOptions=list(series=list(dataLabels=list(enabled=TRUE, format='{point.hours_rate_cap:.1f}%')))),

@@ -58,7 +58,7 @@ cc_theme <- hc_theme(
       fontFamily = main_font, # font_title
       fontWeight = black_font_weight,
       textAlign="left",
-      fontSize='21px'
+      fontSize='4vmin'
     )
   ),
   subtitle = list(
@@ -66,7 +66,7 @@ cc_theme <- hc_theme(
       color = meteorite, 
       fontFamily = main_font, # font_subtitle
       fontWeight = regular_font_weight,
-      fontSize='14px'
+      fontSize='2vmin'
     )
   ),
   caption = list(
@@ -75,7 +75,7 @@ cc_theme <- hc_theme(
       fontFamily = main_font, # font_caption
       fontWeight = regular_font_weight,
       textAlign = "left",
-      fontSize="10px"
+      fontSize = "1vmin"
     ),
     useHTML = TRUE
   ),
@@ -84,7 +84,7 @@ cc_theme <- hc_theme(
       color = gainsboro,
       fontFamily = main_font, # font_axis_label
       fontWeight = semi_bold_font_weight,
-      fontSize='12px'
+      fontSize="1.5vmin"
     )
   ),
   
@@ -95,8 +95,8 @@ cc_theme <- hc_theme(
         fontFamily = main_font, # font_x_label
         fontWeight = semi_bold_font_weight,
         width=120,  #argument to modify the width of the labels,
-        spacingLeft = "150px",
-        fontSize="12px")),
+        # spacingLeft = "150px",
+        fontSize="1.5vmin")),
     lineColor=gainsboro
   ),
   
@@ -106,7 +106,7 @@ cc_theme <- hc_theme(
         color=black,
         fontFamily = main_font, # font_axis_label
         fontWeight = regular_font_weight,
-        fontSize="12px",
+        fontSize="1.5vmin",
         margin = 50)),
     gridLineWidth=0, # removes vertical grid lines
     visible=TRUE, # makes axis line visible
@@ -114,19 +114,20 @@ cc_theme <- hc_theme(
     lineColor=gainsboro
   ),
   
-  
   legend = list(
     itemStyle = list(
       fontFamily = main_font, # font_axis_label
       fontWeight = regular_font_weight,
-      color = black
+      color = black,
+      fontSize = '1.5vmin'
     ),
+    
     itemHoverStyle = list(
       fontFamily = main_font, # font_table_text
       fontWeight = regular_font_weight,
       color = black
     ),
-    # tooltip=list(headerFormat=""),
+    
     plotLines=list(color=gainsboro)
   )
 )
@@ -134,7 +135,7 @@ cc_theme <- hc_theme(
 
 #### Standard notes ####
 sourcenote<-paste0("Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019), catalystcalifornia.org, 2023.")
-racenote<-paste0("Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander,<br>SSWANA=South Asian, Southwest Asian, or North African, including Middle Eastern or North African.")
+racenote<-paste0("Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, SSWANA=South Asian, Southwest <br>Asian, or North African.")
 
 #### Combined Bar and Bubble Chart - Bubblepop chart ####
 
@@ -204,8 +205,7 @@ fx_barbubblechart <- function(
                                marker=list(fillColor=lavender, 
                                            lineColor=meteorite,
                                            fillOpacity=1),
-                               states=list(inactive=list(opacity=1))), # disables transparency of bars when hovering over bubbles
-                   spacingLeft=200) %>%
+                               states=list(inactive=list(opacity=1)))) %>% # disables transparency of bars when hovering over bubbles
     
     # title elements
     hc_title(
@@ -216,13 +216,11 @@ fx_barbubblechart <- function(
     hc_subtitle(text = paste0(chart_title), 
                 align="left") %>%
     hc_caption(
-      text = paste0(chart_caption),
-      margin=30,
-      floating=FALSE,
-      style=list(fontSize='8px')
+      text = paste0(chart_caption)
     ) %>%
     hc_add_theme(cc_theme)%>%
     hc_chart(inverted = T) %>%
+    hc_size(height=510) %>%
     hc_exporting(
       enabled = TRUE, sourceWidth=900, sourceHeight=600,
       chartOptions=list(plotOptions=list(
