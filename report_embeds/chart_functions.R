@@ -58,7 +58,7 @@ cc_theme <- hc_theme(
       fontFamily = main_font, # font_title
       fontWeight = black_font_weight,
       textAlign="left",
-      fontSize='21px'
+      fontSize='4vmin'
     )
   ),
   subtitle = list(
@@ -66,7 +66,7 @@ cc_theme <- hc_theme(
       color = meteorite, 
       fontFamily = main_font, # font_subtitle
       fontWeight = regular_font_weight,
-      fontSize='14px'
+      fontSize='2vmin'
     )
   ),
   caption = list(
@@ -75,7 +75,7 @@ cc_theme <- hc_theme(
       fontFamily = main_font, # font_caption
       fontWeight = regular_font_weight,
       textAlign = "left",
-      fontSize="10px"
+      fontSize = "1.5vmin"
     ),
     useHTML = TRUE
   ),
@@ -84,7 +84,7 @@ cc_theme <- hc_theme(
       color = gainsboro,
       fontFamily = main_font, # font_axis_label
       fontWeight = semi_bold_font_weight,
-      fontSize='12px'
+      fontSize="1.5vmin"
     )
   ),
   
@@ -96,7 +96,7 @@ cc_theme <- hc_theme(
         fontWeight = semi_bold_font_weight,
         width=120,  #argument to modify the width of the labels,
         spacingLeft = "150px",
-        fontSize="12px")),
+        fontSize="1.5vmin")),
     lineColor=gainsboro
   ),
   
@@ -106,7 +106,7 @@ cc_theme <- hc_theme(
         color=black,
         fontFamily = main_font, # font_axis_label
         fontWeight = regular_font_weight,
-        fontSize="12px",
+        fontSize="1.5vmin",
         margin = 50)),
     gridLineWidth=0, # removes vertical grid lines
     visible=TRUE, # makes axis line visible
@@ -119,7 +119,8 @@ cc_theme <- hc_theme(
     itemStyle = list(
       fontFamily = main_font, # font_axis_label
       fontWeight = regular_font_weight,
-      color = black
+      color = black,
+      fontSize = '1.5vmin'
     ),
     itemHoverStyle = list(
       fontFamily = main_font, # font_table_text
@@ -223,6 +224,7 @@ fx_barbubblechart <- function(
     ) %>%
     hc_add_theme(cc_theme)%>%
     hc_chart(inverted = T) %>%
+    hc_size(height=510) %>%
     hc_exporting(
       enabled = TRUE, sourceWidth=900, sourceHeight=600,
       chartOptions=list(plotOptions=list(
