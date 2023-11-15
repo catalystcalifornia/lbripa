@@ -79,6 +79,7 @@ df%>%
     ) %>% 
   
       hc_add_theme(cc_theme)%>%
+  hc_size(height=510) %>%
 
   
    hc_exporting(
