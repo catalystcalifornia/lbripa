@@ -95,7 +95,7 @@ cc_theme <- hc_theme(
         fontFamily = main_font, # font_x_label
         fontWeight = semi_bold_font_weight,
         width=120,  #argument to modify the width of the labels,
-        spacingLeft = "150px",
+        # spacingLeft = "150px",
         fontSize="1.5vmin")),
     lineColor=gainsboro
   ),
@@ -114,7 +114,6 @@ cc_theme <- hc_theme(
     lineColor=gainsboro
   ),
   
-  
   legend = list(
     itemStyle = list(
       fontFamily = main_font, # font_axis_label
@@ -122,12 +121,13 @@ cc_theme <- hc_theme(
       color = black,
       fontSize = '1.5vmin'
     ),
+    
     itemHoverStyle = list(
       fontFamily = main_font, # font_table_text
       fontWeight = regular_font_weight,
       color = black
     ),
-    # tooltip=list(headerFormat=""),
+    
     plotLines=list(color=gainsboro)
   )
 )
