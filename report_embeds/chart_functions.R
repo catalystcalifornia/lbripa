@@ -205,8 +205,7 @@ fx_barbubblechart <- function(
                                marker=list(fillColor=lavender, 
                                            lineColor=meteorite,
                                            fillOpacity=1),
-                               states=list(inactive=list(opacity=1))), # disables transparency of bars when hovering over bubbles
-                   spacingLeft=200) %>%
+                               states=list(inactive=list(opacity=1)))) %>% # disables transparency of bars when hovering over bubbles
     
     # title elements
     hc_title(
@@ -217,10 +216,7 @@ fx_barbubblechart <- function(
     hc_subtitle(text = paste0(chart_title), 
                 align="left") %>%
     hc_caption(
-      text = paste0(chart_caption),
-      margin=30,
-      floating=FALSE,
-      style=list(fontSize='8px')
+      text = paste0(chart_caption)
     ) %>%
     hc_add_theme(cc_theme)%>%
     hc_chart(inverted = T) %>%
