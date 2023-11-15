@@ -135,7 +135,7 @@ cc_theme <- hc_theme(
 
 #### Standard notes ####
 sourcenote<-paste0("Catalyst California's calculations based on City of Long Beach's Police Stop Data (2019), catalystcalifornia.org, 2023.")
-racenote<-paste0("Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander, SSWANA=South Asian, Southwest <br>Asian, or North African.")
+racenote<-paste0("Race/ethnicity: AIAN=American Indian or Alaska Native, NHPI=Native Hawaiian or Pacific Islander,<br>SSWANA=South Asian, Southwest Asian, or North African, including Middle Eastern or North African.")
 
 #### Combined Bar and Bubble Chart - Bubblepop chart ####
 
@@ -220,7 +220,7 @@ fx_barbubblechart <- function(
     ) %>%
     hc_add_theme(cc_theme)%>%
     hc_chart(inverted = T) %>%
-    hc_size(height=510) %>%
+    hc_size(height=472) %>%
     hc_exporting(
       enabled = TRUE, sourceWidth=900, sourceHeight=600,
       chartOptions=list(plotOptions=list(
