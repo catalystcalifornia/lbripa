@@ -75,7 +75,7 @@ cc_theme <- hc_theme(
       fontFamily = main_font, # font_caption
       fontWeight = regular_font_weight,
       textAlign = "left",
-      fontSize = "1.5vmin"
+      fontSize = "1vmin"
     ),
     useHTML = TRUE
   ),
