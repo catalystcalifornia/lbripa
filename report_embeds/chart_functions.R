@@ -58,7 +58,7 @@ cc_theme <- hc_theme(
       fontFamily = main_font, # font_title
       fontWeight = black_font_weight,
       textAlign="left",
-      fontSize='4.55vmin'
+      fontSize='4.5vmin'
     )
   ),
   subtitle = list(
