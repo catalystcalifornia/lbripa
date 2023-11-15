@@ -149,13 +149,8 @@ hc_exporting(enabled = TRUE, sourceWidth=900, sourceHeight=600,
             enable = TRUE,
             labelFormat = '{name} <span style="opacity: 0.4">{hours_rate:.1f}</span>')  %>%
   hc_tooltip(headerFormat="", 
-             pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on traffic stops that resulted in <b>{point.stop_result_short}</b>") %>%
+             pointFormat = "Out of 100 hours, LBPD spent <b>{point.hours_rate:.1f}</b> hours on traffic stops that resulted in <b>{point.stop_result_short}</b>") 
 
-# add in margins so the graph isn't cut off
-hc_chart(
-  marginRight = 20,
-  marginLeft=20
-)
 
 hc
 
