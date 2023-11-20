@@ -212,7 +212,7 @@ fx_barbubblechart <- function(
     ) %>%
     hc_add_theme(cc_theme)%>%
     hc_chart(inverted = T) %>%
-    hc_size(height=472) %>%
+    hc_size(height=472, width=830) %>%
     hc_exporting(
       enabled = TRUE, sourceWidth=900, sourceHeight=600,
       chartOptions=list(plotOptions=list(
