@@ -57,16 +57,14 @@ cc_theme <- hc_theme(
       color = meteorite,
       fontFamily = main_font, # font_title
       fontWeight = black_font_weight,
-      textAlign="left",
-      fontSize='4.5vmin'
+      textAlign="left"
     )
   ),
   subtitle = list(
     style = list(
       color = meteorite, 
       fontFamily = main_font, # font_subtitle
-      fontWeight = regular_font_weight,
-      fontSize='3vmin'
+      fontWeight = regular_font_weight
     )
   ),
   caption = list(
@@ -74,8 +72,7 @@ cc_theme <- hc_theme(
       color = meteorite,
       fontFamily = main_font, # font_caption
       fontWeight = regular_font_weight,
-      textAlign = "left",
-      fontSize = "1.5vmin"
+      textAlign = "left"
     ),
     useHTML = TRUE
   ),
@@ -83,8 +80,7 @@ cc_theme <- hc_theme(
     style = list(
       color = gainsboro,
       fontFamily = main_font, # font_axis_label
-      fontWeight = semi_bold_font_weight,
-      fontSize="3vmin"
+      fontWeight = semi_bold_font_weight
     )
   ),
   
@@ -94,9 +90,7 @@ cc_theme <- hc_theme(
         color=black,
         fontFamily = main_font, # font_x_label
         fontWeight = semi_bold_font_weight,
-        width=120,  #argument to modify the width of the labels,
-        # spacingLeft = "150px",
-        fontSize="3vmin")),
+        width=120)),  #argument to modify the width of the labels
     lineColor=gainsboro
   ),
   
@@ -106,7 +100,6 @@ cc_theme <- hc_theme(
         color=black,
         fontFamily = main_font, # font_axis_label
         fontWeight = regular_font_weight,
-        fontSize="3min",
         margin = 50)),
     gridLineWidth=0, # removes vertical grid lines
     visible=TRUE, # makes axis line visible
@@ -118,8 +111,7 @@ cc_theme <- hc_theme(
     itemStyle = list(
       fontFamily = main_font, # font_axis_label
       fontWeight = regular_font_weight,
-      color = black,
-      fontSize = '3vmin'
+      color = black
     ),
     
     itemHoverStyle = list(
