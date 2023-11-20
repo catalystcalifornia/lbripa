@@ -50,7 +50,6 @@ result <- df %>%
     center = c(50, 50), 
   )%>% 
   hc_title(text = "LBPD spends 3 in 4 patrol hours on officer-initiated stops.",      
-           widthAdjust = -50,
            align="left")%>%
   hc_subtitle(text = "Percent of Hours Spent on Calls for Service versus Officer-initiated Stops",
               align="left") %>%
