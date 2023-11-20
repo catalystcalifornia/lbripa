@@ -75,7 +75,7 @@ df%>%
     ) %>% 
   
       hc_add_theme(cc_theme)%>%
-  hc_size(height=472) %>%
+  hc_size(height=430, width=830) %>%
 
   
    hc_exporting(
@@ -135,7 +135,7 @@ hc<-hchart(
  align="left" )%>%
   hc_subtitle(text = "Hours Spent on Traffic Stops by Result", 
  align="left" ) %>%
-  hc_size(height=472) %>%
+  hc_size(height=430, width=830) %>%
 hc_caption(text = paste0(sourcenote," Analysis for all officer-initiated stops for traffic violations.")) %>%
 hc_add_theme(cc_theme)%>%
 hc_exporting(enabled = TRUE, sourceWidth=900, sourceHeight=600,
