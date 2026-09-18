@@ -196,7 +196,17 @@ addCircleMarkers(data = nh_black_dots, group = "Black", label = NULL, weight = 2
   
   #base and view
   
-  addProviderTiles("CartoDB.Positron")%>%
+  # addProviderTiles("CartoDB.Positron")%>%
+   # new code: add base map
+    addTiles(
+      urlTemplate = paste0("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png?key=", carto_key),
+      attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    ) %>%
+    addTiles(
+      urlTemplate = paste0("https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png?key=", carto_key),
+      # attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      options = providerTileOptions(pane = "markerPane") # retain unique setting 
+    ) %>%
   setView(-118.20475, 33.81962, zoom=11.75) %>% #base and view 
   
   hideGroup(c("White"))  %>% # hide white group
